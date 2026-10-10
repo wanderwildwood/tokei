@@ -1,1 +1,0 @@
-Temel özelliklere sahip kullanışlı, hafif ve açık kaynaklı saat uygulaması.

@@ -1,6 +1,1 @@
-# EventBus
--keepattributes *Annotation*
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
+# Nothing reflective; R8 defaults cover it.

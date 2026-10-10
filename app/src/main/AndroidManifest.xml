@@ -1,498 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- No internet: nothing the app holds can leave the phone through it. -->
+
+    <!-- Alarms that ring at the minute they are set for. On Android 12 this is given at install;
+         if it is taken away, the first screen says so and asks for it back. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <!-- An alarm does not survive a restart: this is how they are set again. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- The ringing screen over the lock screen. -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-    <uses-permission
-        android:name="android.permission.SCHEDULE_EXACT_ALARM"
-        android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <!-- The service that plays the sound until the alarm is answered. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Keeps the phone awake while it rings, so the sound and the stop after the set time both happen. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Lets the first screen ask for the phone's battery saving to leave the app alone, which
+         stops alarms coming minutes late after a night asleep. Asked, never assumed. -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- Asked for by Android 13 and later; Android 12, the Kompakt's, has notifications on. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"
-        tools:node="remove" />
-
-    <uses-permission
-        android:name="android.permission.USE_FINGERPRINT"
-        tools:node="remove" />
+    <!-- The other apps that act on selected text, so a field's selection menu can list them
+         behind its ⋮ as every other app of this shop does. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+            <data android:mimeType="text/plain" />
+        </intent>
+    </queries>
 
     <application
-        android:name=".App"
-        android:allowBackup="true"
-        android:appCategory="productivity"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_launcher_name"
-        android:roundIcon="@mipmap/ic_launcher"
-        android:theme="@style/AppTheme">
+        android:allowBackup="false"
+        android:icon="@drawable/ic_launcher_mudita"
+        android:roundIcon="@drawable/ic_launcher_mudita"
+        android:label="@string/app_name"
+        android:supportsRtl="false"
+        android:theme="@style/Theme.App">
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/SplashTheme">
-
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
-                <action android:name="org.fossify.clock.TOGGLE_STOPWATCH" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- What other apps ask a clock to show: the alarms, the timers, the stopwatch, the
+             clock. Anyone may ask; nothing is changed by it. -->
+        <activity
+            android:name=".ApiActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
                 <action android:name="android.intent.action.SHOW_ALARMS" />
                 <action android:name="android.intent.action.SHOW_TIMERS" />
+                <action android:name="com.android.deskclock.action.SHOW_TIMERS" />
+                <action android:name="com.android.deskclock.action.SHOW_STOPWATCH" />
+                <action android:name="com.android.deskclock.action.SHOW_CLOCK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- What other apps ask a clock to do: set, snooze or stop an alarm or a timer, run the
+             stopwatch. Only apps holding SET_ALARM may ask, as with Android's own clock. -->
+        <activity-alias
+            android:name=".SetAlarmApi"
+            android:targetActivity=".ApiActivity"
+            android:exported="true"
+            android:permission="com.android.alarm.permission.SET_ALARM">
+            <intent-filter>
                 <action android:name="android.intent.action.SET_ALARM" />
-                <action android:name="android.intent.action.SET_TIMER" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.DISMISS_ALARM" />
-                <action android:name="android.intent.action.DISMISS_TIMER" />
-
-                <data android:scheme="id" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".activities.IntentHandlerActivity"
-            android:configChanges="orientation"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activities.MainActivity"
-            android:configChanges="orientation"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activities.AlarmActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:showOnLockScreen="true"
-            android:taskAffinity=".ReminderActivity">
-            <intent-filter>
                 <action android:name="android.intent.action.SNOOZE_ALARM" />
-
+                <action android:name="android.intent.action.SET_TIMER" />
+                <action android:name="android.intent.action.DISMISS_TIMER" />
+                <action android:name="com.android.deskclock.action.START_STOPWATCH" />
+                <action android:name="com.android.deskclock.action.PAUSE_STOPWATCH" />
+                <action android:name="com.android.deskclock.action.LAP_STOPWATCH" />
+                <action android:name="com.android.deskclock.action.RESET_STOPWATCH" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
+        <!-- The ringing screen over the lock screen. Its own task, out of Recents, so answering it
+             leaves the phone where it was. -->
         <activity
-            android:name=".activities.SettingsActivity"
-            android:configChanges="orientation"
-            android:exported="true"
-            android:label="@string/settings"
-            android:parentActivityName=".activities.MainActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="org.fossify.commons.activities.AboutActivity"
-            android:configChanges="orientation"
+            android:name=".alarm.RingActivity"
             android:exported="false"
-            android:label="@string/about"
-            android:parentActivityName=".activities.MainActivity" />
-
-        <activity
-            android:name="org.fossify.commons.activities.CustomizationActivity"
-            android:configChanges="orientation"
-            android:exported="false"
-            android:label="@string/customize_colors"
-            android:parentActivityName=".activities.SettingsActivity" />
-
-        <activity
-            android:name=".activities.SnoozeReminderActivity"
-            android:configChanges="orientation"
-            android:exported="false"
-            android:theme="@style/Theme.Transparent" />
-
-        <activity
-            android:name=".activities.WidgetDigitalConfigureActivity"
-            android:exported="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:taskAffinity="com.wanderwildwood.tokei.ringing"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             android:screenOrientation="portrait"
-            android:theme="@style/MyWidgetConfigTheme">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".activities.WidgetAnalogueConfigureActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyWidgetConfigTheme">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
+            android:configChanges="keyboardHidden|orientation|screenSize" />
 
         <service
-            android:name=".services.AlarmService"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Used to notify the user that alarms are running" />
-        </service>
-
-        <service android:name=".services.SnoozeService" />
-
-        <service
-            android:name=".services.TimerService"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Used to notify the user that timers are running" />
-        </service>
-
-        <service
-            android:name=".services.StopwatchService"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Used to notify the user that stopwatch is running" />
-        </service>
-
-        <receiver android:name=".receivers.AlarmReceiver" />
-
-        <receiver android:name=".receivers.HideTimerReceiver" />
-
-        <receiver android:name=".receivers.StopAlarmReceiver" />
-
-        <receiver android:name=".receivers.SkipUpcomingAlarmReceiver" />
-
-        <receiver android:name=".receivers.UpcomingAlarmReceiver" />
+            android:name=".alarm.RingService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
 
         <receiver
-            android:name=".receivers.RescheduleAlarmsReceiver"
+            android:name=".alarm.AlarmReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".alarm.ActionReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".alarm.SystemReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name=".helpers.MyDigitalTimeWidgetProvider"
-            android:exported="true"
-            android:label="@string/digital_clock">
-
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_digital_clock_info" />
-        </receiver>
-
-        <receiver
-            android:name=".helpers.MyAnalogueTimeWidgetProvider"
-            android:exported="true"
-            android:label="@string/analogue_clock">
-
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_analogue_clock_info" />
-        </receiver>
-
-        <receiver
-            android:name=".receivers.UpdateWidgetReceiver"
-            android:exported="true">
-
-            <intent-filter>
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
 
-        <activity-alias
-            android:name=".activities.SplashActivity.Red"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_red"
-            android:roundIcon="@mipmap/ic_launcher_red"
-            android:targetActivity=".activities.SplashActivity">
+        <!-- The next alarm for Glance's lock-screen panel; it answers Glance alone, and only
+             while the switch for it in Settings is on. -->
+        <provider
+            android:name=".glance.NextAlarmOnLockScreen"
+            android:authorities="com.wanderwildwood.tokei.glance"
+            android:exported="true" />
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Pink"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_pink"
-            android:roundIcon="@mipmap/ic_launcher_pink"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Purple"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_purple"
-            android:roundIcon="@mipmap/ic_launcher_purple"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Deep_purple"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_deep_purple"
-            android:roundIcon="@mipmap/ic_launcher_deep_purple"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Indigo"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_indigo"
-            android:roundIcon="@mipmap/ic_launcher_indigo"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Blue"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_blue"
-            android:roundIcon="@mipmap/ic_launcher_blue"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Light_blue"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_light_blue"
-            android:roundIcon="@mipmap/ic_launcher_light_blue"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Cyan"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_cyan"
-            android:roundIcon="@mipmap/ic_launcher_cyan"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Teal"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_teal"
-            android:roundIcon="@mipmap/ic_launcher_teal"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Green"
-            android:enabled="true"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher"
-            android:roundIcon="@mipmap/ic_launcher"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Light_green"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_light_green"
-            android:roundIcon="@mipmap/ic_launcher_light_green"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Lime"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_lime"
-            android:roundIcon="@mipmap/ic_launcher_lime"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Yellow"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_yellow"
-            android:roundIcon="@mipmap/ic_launcher_yellow"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Amber"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_amber"
-            android:roundIcon="@mipmap/ic_launcher_amber"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Orange"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_orange"
-            android:roundIcon="@mipmap/ic_launcher_orange"
-            android:targetActivity=".activities.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Deep_orange"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_deep_orange"
-            android:roundIcon="@mipmap/ic_launcher_deep_orange"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Brown"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_brown"
-            android:roundIcon="@mipmap/ic_launcher_brown"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Blue_grey"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_blue_grey"
-            android:roundIcon="@mipmap/ic_launcher_blue_grey"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashActivity.Grey_black"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher_grey_black"
-            android:roundIcon="@mipmap/ic_launcher_grey_black"
-            android:targetActivity=".activities.SplashActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
     </application>
+
 </manifest>

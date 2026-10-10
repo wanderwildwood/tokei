@@ -1,74 +1,35 @@
 [versions]
-#jetbrains
-kotlin = "2.4.20"
-kotlinxSerializationJson = "1.11.0"
-#KSP
-ksp = "2.3.12"
-#Detekt
-detekt = "1.23.8"
-detektCompose = "0.4.28"
-#AndroidX
-androidx-constraintlayout = "2.2.2"
+# Versions mirror Chess+ rather than the newest available, so this app builds
+# against the same Compose/MMD combination that is known to work on the Kompakt.
+agp = "8.13.1"
+kotlin = "2.2.21"
+mmd = "1.0.2"
+
+androidx-activity = "1.12.0"
+androidx-core = "1.17.0"
 androidx-lifecycle = "2.10.0"
-androidx-preference = "1.2.1"
-#AutoFitTextView
-autofittextview = "0.2.1"
-#Eventbus
-eventbus = "3.3.1"
-#KotlinX
-kotlinx-coroutines = "1.11.0"
-#NumberPicker
-numberpicker = "2.4.13"
-#Room
-room = "2.8.5"
-#Fossify
-commons = "7.1.2"
-#Gradle
-gradlePlugins-agp = "9.4.1"
-#build
-app-build-compileSDKVersion = "36"
-app-build-targetSDK = "36"
-app-build-minimumSDK = "26"
-app-build-javaVersion = "VERSION_17"
-app-build-kotlinJVMTarget = "17"
+androidx-compose = "1.9.5"
+androidx-material3 = "1.4.0"
+
+junit = "4.13.2"
+
 [libraries]
-#AndroidX
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
-androidx-preference = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
-#Android X lifecycle
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-viewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidx-lifecycle" }
-#AutoFitTextView
-autofittextview = { module = "me.grantland:autofittextview", version.ref = "autofittextview" }
-#EventBus
-eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
-#KotlinX
-#Kotlin
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-#NumberPicker
-numberpicker = { module = "io.github.ShawnLin013:number-picker", version.ref = "numberpicker" }
-#Room
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-#Compose
-compose-detekt = { module = "io.nlopez.compose.rules:detekt", version.ref = "detektCompose" }
-#Fossify
-fossify-commons = { module = "org.fossify:commons", version.ref = "commons" }
-[bundles]
-room = [
-    "androidx-room-ktx",
-    "androidx-room-runtime",
-]
-lifecycle = [
-    "androidx-lifecycle-runtime",
-    "androidx-lifecycle-viewModel",
-    "androidx-lifecycle-process",
-]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+
+compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose" }
+compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-material3" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-compose" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose" }
+
+mmd = { module = "com.mudita:MMD", version.ref = "mmd" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+
 [plugins]
-android = { id = "com.android.application", version.ref = "gradlePlugins-agp" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

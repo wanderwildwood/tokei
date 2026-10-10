@@ -1,68 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_launcher_name">Clock</string>
-    <string name="time_zone">Time zone</string>
-    <string name="vibrate">Vibrate</string>
-    <string name="no_days_selected">No days selected</string>
-    <string name="clock">Clock</string>
-    <string name="timer">Timer</string>
-    <string name="stopwatch">Stopwatch</string>
-    <string name="start_stopwatch">Start stopwatch</string>
-    <string name="lap">Lap</string>
-    <string name="stopwatch_stopped">Stopwatch has been stopped</string>
-    <string name="timer_stopped">Timer has been stopped</string>
-    <string name="max_reminder_duration">Max reminder duration</string>
-    <string name="time_expired">Time expired</string>
-    <string name="clock_and_date">Clock and date</string>
-    <string name="use_text_shadow">Use text shadow</string>
-    <string name="swipe_right_to_dismiss">Swipe right to Dismiss, or left to Snooze.</string>
-    <string name="sort_by_creation_order">Creation order</string>
-    <string name="sort_by_alarm_time">Alarm time</string>
-    <string name="sort_by_timer_duration">Timer duration</string>
-    <string name="sort_by_day_and_alarm_time">Day and Alarm time</string>
-    <string name="analogue_clock">Analogue clock</string>
-    <string name="digital_clock">Digital clock</string>
-    <string name="alarm_dismissed">Alarm dismissed</string>
-    <string name="select_timer_to_dismiss">Select timer to dismiss</string>
-    <string name="select_alarm_to_dismiss">Select alarm to dismiss</string>
-    <string name="alarm_created">Alarm created</string>
-    <string name="alarm_snoozed">Alarm snoozed by %s</string>
-    <string name="no_alarms_found">No alarms found</string>
-    <string name="add_alarm">Add alarm</string>
-    <string name="no_timers_found">No timers found</string>
-    <string name="add_timer">Add timer</string>
-    <string name="upcoming_alarm">Upcoming alarm</string>
-    <string name="not_scheduled">Not scheduled</string>
-    <string name="missed_alarm">Missed alarm</string>
-    <string name="replaced_by_another_alarm">Replaced by another alarm</string>
-    <string name="alarm_timed_out">Alarm timed out</string>
+    <string name="app_name">Clock</string>
 
-    <!-- Timer -->
-    <string name="timers_notification_msg">Timers are running</string>
-    <string name="timer_single_notification_label_msg">Timer for %s is running</string>
-    <string name="new_timer">New Timer</string>
+    <!-- Read aloud by a screen reader -->
+    <string name="cd_back">Back</string>
+    <string name="cd_close">Close without saving</string>
+    <string name="cd_about">About</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_hour">Hour</string>
+    <string name="cd_minute">Minute</string>
+    <string name="cd_hours">Hours</string>
+    <string name="cd_minutes">Minutes</string>
+    <string name="cd_seconds">Seconds</string>
 
-    <plurals name="timer_notification_msg">
-        <item quantity="one">%d timer is running</item>
-        <item quantity="other">%d timers are running</item>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="save">Save</string>
+    <string name="create">Create</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+    <!-- A row asking again before deleting; it disarms itself after four seconds -->
+    <string name="delete_armed">Delete — tap again</string>
+
+    <!-- Lengths. %1$d is a number -->
+    <string name="hours_short">%1$d h</string>
+    <string name="minutes_short">%1$d min</string>
+    <string name="seconds_short">%1$d s</string>
+    <!-- %1$d hours, %2$d minutes -->
+    <string name="hours_minutes_short">%1$d h %2$d min</string>
+    <plurals name="days_short">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <string name="one_hour">1 hour</string>
+    <string name="one_hour_short">1 h</string>
+    <string name="less_than_a_minute">less than a minute</string>
+    <string name="unit_hours">hours</string>
+    <string name="unit_minutes">minutes</string>
+    <string name="unit_seconds">seconds</string>
+
+    <!-- The four parts, as tabs under the top bar -->
+    <string name="tab_alarms">Alarm</string>
+    <string name="tab_timers">Timer</string>
+    <string name="tab_stopwatch">Stopwatch</string>
+    <string name="tab_world">World</string>
+
+    <!-- ============================================================ -->
+    <!-- Alarms -->
+
+    <string name="alarm">Alarm</string>
+    <string name="alarms_empty">No alarms yet. There is no limit to how many.</string>
+    <string name="alarm_create">Create alarm</string>
+    <string name="alarm_new">New alarm</string>
+    <string name="alarm_edit">Edit</string>
+    <!-- %1$s is how long, e.g. "7 h 12 min" -->
+    <string name="next_alarm_in">Next alarm in %1$s</string>
+    <string name="alarm_rings_in">Alarm in %1$s</string>
+    <!-- %1$s is a time -->
+    <string name="alarm_set_for">Alarm set for %1$s</string>
+    <!-- %1$s is when it repeats (or a timer\'s length), %2$s its name -->
+    <string name="days_and_name">%1$s · %2$s</string>
+    <!-- %1$s is a time -->
+    <string name="snoozed_until">Snoozed until %1$s</string>
+    <!-- %1$s is when, e.g. "Tomorrow 06:30" -->
+    <string name="skipping">Skipping %1$s</string>
+
+    <string name="repeat_title">Repeat</string>
+    <string name="repeat_once">Once</string>
+    <string name="repeat_every_day">Every day</string>
+    <string name="repeat_weekdays">Weekdays</string>
+    <string name="repeat_weekend">Weekends</string>
+    <string name="repeat_none_note">With no day ticked, the alarm rings once and then switches itself off.</string>
+    <string name="name_title">Name</string>
+    <string name="name_hint">Wake up, Medicine, Train</string>
+    <string name="name_none">None</string>
+    <string name="sound_title">Sound and vibration</string>
+    <string name="sound_vibration">Vibration</string>
+    <string name="sound_heading">Sound</string>
+    <string name="sound_silent">No sound, vibration only</string>
+    <string name="sound_default">The phone\'s alarm sound</string>
+    <string name="sound_file_chosen">A sound file</string>
+    <string name="sound_pick_file">Choose a sound file</string>
+    <!-- %1$s is the sound -->
+    <string name="sound_and_vibration">%1$s, and vibration</string>
+    <string name="skip_next">Skip the next one</string>
+    <!-- %1$s is when, e.g. "Mon 12 Oct 06:30" -->
+    <string name="skip_next_note">It does not ring %1$s, then carries on as before.</string>
+
+    <!-- ============================================================ -->
+    <!-- Ringing -->
+
+    <string name="ring_snooze">Snooze</string>
+    <!-- %1$s is a length, e.g. "10 minutes" -->
+    <string name="ring_snooze_for">Snooze %1$s</string>
+    <string name="ring_snooze_other">Or snooze for</string>
+    <string name="ring_stop">Stop</string>
+    <string name="ring_timer_done">Time is up</string>
+    <string name="ring_add_minute">1 minute more</string>
+    <string name="ring_add_minute_short">+1 min</string>
+    <plurals name="ring_more">
+        <item quantity="one">%1$d more is ringing</item>
+        <item quantity="other">%1$d more are ringing</item>
     </plurals>
 
+    <!-- ============================================================ -->
+    <!-- Missed -->
+
+    <plurals name="missed_title">
+        <item quantity="one">Missed</item>
+        <item quantity="other">Missed (%1$d)</item>
+    </plurals>
+    <!-- %1$s when it was due, %2$s the alarm\'s name or the timer, %3$s why -->
+    <string name="missed_line">%1$s, %2$s: %3$s</string>
+    <!-- %1$s is a timer\'s name or length -->
+    <string name="missed_timer">timer %1$s</string>
+    <string name="missed_more">and %1$d earlier</string>
+    <string name="why_stopped">the app was stopped, so it could not ring</string>
+    <string name="why_phone_off">the phone was off</string>
+    <string name="why_unanswered">it rang and was not answered</string>
+    <string name="why_unknown">it did not ring, and the reason is not known</string>
+
+    <!-- ============================================================ -->
+    <!-- Timers -->
+
+    <string name="timers_empty">No timers yet. Each one is kept here to start again, and several can run at once.</string>
+    <string name="timer_create">Create timer</string>
+    <string name="timer_new">New timer</string>
+    <string name="timer_edit">Edit</string>
+    <string name="timer_start">Start</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_resume">Resume</string>
+    <string name="timer_reset">Reset</string>
+    <string name="timer_paused">Paused</string>
+    <!-- %1$s is a time -->
+    <string name="timer_ends_at">Rings at %1$s</string>
+    <string name="timer_save_start">Save and start</string>
+    <string name="timer_zero">A timer needs a length of at least a second.</string>
+    <!-- %1$s is a length -->
+    <string name="timer_started">Timer started, %1$s</string>
+
+    <!-- ============================================================ -->
+    <!-- Stopwatch -->
+
+    <string name="stopwatch_start">Start</string>
+    <string name="stopwatch_stop">Stop</string>
+    <string name="stopwatch_lap">Lap</string>
+    <string name="stopwatch_reset">Reset</string>
+    <!-- %1$d is the lap\'s number -->
+    <string name="stopwatch_lap_n">Lap %1$d</string>
+    <!-- %1$d is the lap\'s number, %2$s its time so far -->
+    <string name="stopwatch_this_lap">Lap %1$d: %2$s</string>
+
+    <!-- ============================================================ -->
+    <!-- World clock -->
+
+    <string name="world_here">Here</string>
+    <string name="world_empty">Add the cities to keep the time of.</string>
+    <string name="world_add">Add a city</string>
+    <string name="world_search">Find a city</string>
+    <string name="world_none_found">No city by that name in the list.</string>
+    <string name="world_already">Already in the list</string>
+    <string name="world_remove">Remove from the list</string>
+    <string name="world_remove_armed">Remove — tap again</string>
+    <!-- %1$s is the day, e.g. "Tomorrow"; %2$s how far, e.g. "5 h" -->
+    <string name="world_ahead">%1$s, %2$s ahead</string>
+    <string name="world_behind">%1$s, %2$s behind</string>
+    <string name="world_same">%1$s, the same time</string>
+
+    <!-- ============================================================ -->
+    <!-- Setup: only shown while something stands between an alarm and the person -->
+
+    <string name="setup_duraspeed">One step so alarms ring: the phone\'s DuraSpeed setting can shut Clock down, and its alarms with it. Open DuraSpeed, tap Open, and switch Clock on.</string>
+    <string name="setup_duraspeed_open">Open DuraSpeed</string>
+    <string name="setup_duraspeed_done">It\'s switched on</string>
+    <string name="setup_notifications">Notifications are off for Clock, so the ringing screen cannot come up.</string>
+    <string name="setup_turn_on">Turn them on</string>
+    <string name="setup_exact">Clock is not allowed to set alarms, so an alarm can ring up to an hour late.</string>
+    <string name="setup_allow">Allow alarms</string>
+    <string name="setup_battery">The phone\'s battery saving can hold Clock back after a night asleep, and alarms then ring minutes late. Let it run without restriction.</string>
+    <string name="setup_battery_allow">Allow</string>
+    <!-- %1$s is when, e.g. "14:02" or "Yesterday 14:02" -->
+    <string name="setup_stopped">Clock was stopped (%1$s), and nothing could ring until it was opened again. Anything due in that time is listed as missed.</string>
+    <string name="setup_understood">Understood</string>
+    <string name="setup_cannot_open">This phone has no settings page for that.</string>
+
+    <!-- ============================================================ -->
     <!-- Settings -->
-    <string name="clock_tab">Clock tab</string>
-    <string name="alarm_tab">Alarm tab</string>
-    <string name="stopwatch_tab">Stopwatch tab</string>
-    <string name="timer_tab">Timer tab</string>
-    <string name="show_seconds">Show seconds</string>
-    <string name="increase_volume_gradually">Increase volume gradually</string>
-    <string name="settings_import_data">Import alarms and timers</string>
-    <string name="settings_export_data">Export alarms and timers</string>
 
-    <!-- FAQ -->
-    <string name="faq_1_title">How can I change lap sorting at the stopwatch tab?</string>
-    <string name="faq_1_text">Just click on any of the columns, that will make the laps be sorted by the given column. With additional clicks you can toggle between ascending and descending sorting.</string>
-    <!--
-        Haven't found some strings? There's more at
-        https://github.com/FossifyOrg/Commons/tree/master/commons/src/main/res
-    -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_snooze">Snooze length</string>
+    <string name="settings_ring_for">Rings for</string>
+    <!-- %1$s is a length -->
+    <string name="settings_ring_for_value">%1$s, then stops and is listed as missed</string>
+    <string name="settings_rise">Start quiet and get louder</string>
+    <string name="settings_rise_note">Over the first minute, up to the phone\'s alarm volume.</string>
+    <string name="settings_glance">Next alarm on the lock screen</string>
+    <string name="settings_glance_note">Shown by Glance, when it is installed.</string>
+    <string name="settings_call_note">Alarms ring on the alarm volume, so a phone set to silent still rings. During a call an alarm rings quietly and vibrates.</string>
 
+    <!-- ============================================================ -->
+    <!-- Notifications -->
+
+    <string name="channel_ringing">Ringing</string>
+    <string name="channel_ringing_about">An alarm or a timer ringing now. The sound is the app\'s own, on the alarm volume.</string>
+    <string name="channel_missed">Missed</string>
+
+    <!-- ============================================================ -->
+    <!-- Glance's lock-screen panel -->
+
+    <!-- %1$s is a day, e.g. "Tomorrow"; %2$s the alarm\'s name -->
+    <string name="glance_day_and_name">%1$s, %2$s</string>
+    <!-- %1$s is the alarm\'s name -->
+    <string name="glance_snoozed">%1$s, snoozed</string>
+    <!-- %1$s is the timer\'s name or length -->
+    <string name="glance_timer">Timer %1$s</string>
+
+    <!-- ============================================================ -->
+    <!-- About -->
+
+    <string name="about_title">Clock %1$s</string>
+    <string name="about_what">Alarms, timers, a stopwatch and a world clock. The app has no internet permission.</string>
+    <string name="about_licence">GNU General Public License v3</string>
+    <string name="about_base">Built on Fossify Clock, GPL-3.0</string>
+    <string name="about_icons">Icons from Material Symbols, Apache 2.0</string>
+    <string name="about_feed_the_llamas">feed the llamas</string>
+    <string name="about_no_browser">There is no browser on this phone to open that with.</string>
+    <string name="about_close">Close</string>
 </resources>

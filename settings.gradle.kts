@@ -1,17 +1,18 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        mavenCentral()
         google()
-        maven { setUrl("https://www.jitpack.io") }
-        mavenLocal()
+        mavenCentral()
     }
 }
+
+rootProject.name = "tokei"
 include(":app")

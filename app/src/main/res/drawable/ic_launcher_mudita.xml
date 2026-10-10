@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clock: launcher icon in the Mudita Kompakt stock style (81 grid, ring r=19.25 x 2.5,
+     glyph stroke 2.5, black on transparent). An alarm clock, its two arcs echoing the ringing
+     arcs of the stock Alarm's bell. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="81dp"
+    android:height="81dp"
+    android:viewportWidth="81"
+    android:viewportHeight="81">
+    <path
+        android:pathData="M19.25,2.5C9.999,2.5 2.5,9.999 2.5,19.25V61.75C2.5,71.001 9.999,78.5 19.25,78.5H61.75C71.001,78.5 78.5,71.001 78.5,61.75V19.25C78.5,9.999 71.001,2.5 61.75,2.5H19.25ZM0,19.25C0,8.619 8.619,0 19.25,0H61.75C72.382,0 81,8.619 81,19.25V61.75C81,72.382 72.382,81 61.75,81H19.25C8.619,81 0,72.382 0,61.75V19.25Z"
+        android:fillColor="#FF000000"
+        android:fillType="evenOdd"/>
+    <path
+        android:pathData="M26.5,42A14,14 0 1,1 54.5,42A14,14 0 1,1 26.5,42Z M40.5,42V33.5M40.5,42H46.5 M21.7,35.2A20,20 0 0,1 30.5,24.7M50.5,24.7A20,20 0 0,1 59.3,35.2 M32.5,53.5L29.6,57.6M48.5,53.5L51.4,57.6"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+</vector>

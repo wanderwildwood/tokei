@@ -1,157 +1,110 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.properties.Properties
-import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android)
-    alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.detekt)
-}
-
-val keystorePropertiesFile: File = rootProject.file("keystore.properties")
-val keystoreProperties = Properties()
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-}
-
-fun hasSigningVars(): Boolean {
-    return providers.environmentVariable("SIGNING_KEY_ALIAS").orNull != null
-            && providers.environmentVariable("SIGNING_KEY_PASSWORD").orNull != null
-            && providers.environmentVariable("SIGNING_STORE_FILE").orNull != null
-            && providers.environmentVariable("SIGNING_STORE_PASSWORD").orNull != null
-}
-
-base {
-    val versionCode = project.property("VERSION_CODE").toString().toInt()
-    archivesName = "clock-$versionCode"
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
-    compileSdk = project.libs.versions.app.build.compileSDKVersion.get().toInt()
+    namespace = "com.wanderwildwood.tokei"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = project.property("APP_ID").toString()
-        minSdk = project.libs.versions.app.build.minimumSDK.get().toInt()
-        targetSdk = project.libs.versions.app.build.targetSDK.get().toInt()
-        versionName = project.property("VERSION_NAME").toString()
-        versionCode = project.property("VERSION_CODE").toString().toInt()
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
+        applicationId = "com.wanderwildwood.tokei"
+        // The Kompakt runs Android 12 (API 31); nothing here needs anything newer.
+        minSdk = 31
+        targetSdk = 31
+        versionCode = 1
+        versionName = "0.1.0"
     }
 
-    signingConfigs {
-        if (keystorePropertiesFile.exists()) {
-            register("release") {
-                keyAlias = keystoreProperties.getProperty("keyAlias")
-                keyPassword = keystoreProperties.getProperty("keyPassword")
-                storeFile = file(keystoreProperties.getProperty("storeFile"))
-                storePassword = keystoreProperties.getProperty("storePassword")
-            }
-        } else if (hasSigningVars()) {
-            register("release") {
-                keyAlias = providers.environmentVariable("SIGNING_KEY_ALIAS").get()
-                keyPassword = providers.environmentVariable("SIGNING_KEY_PASSWORD").get()
-                storeFile = file(providers.environmentVariable("SIGNING_STORE_FILE").get())
-                storePassword = providers.environmentVariable("SIGNING_STORE_PASSWORD").get()
-            }
-        } else {
-            logger.warn("Warning: No signing config found. Build will be unsigned.")
+    // A real keystore in signing/ signs every build type when it is present, so the
+    // very first install is already release-signed and a later update can never hit
+    // INSTALL_FAILED_UPDATE_INCOMPATIBLE. It is gitignored, and there is no fallback:
+    // a fresh clone builds an unsigned release APK, which will not install anywhere.
+    val signingPropertiesFile = rootProject.file("signing/signing.properties")
+    val realSigningConfig = if (signingPropertiesFile.isFile) {
+        val signingProperties = Properties().apply {
+            signingPropertiesFile.inputStream().use(::load)
         }
-    }
-
-    buildFeatures {
-        viewBinding = true
-        buildConfig = true
+        signingConfigs.create("real") {
+            storeFile = rootProject.file("signing/signing.keystore")
+            storePassword = signingProperties.getProperty("STORE_PASSWORD")
+            keyAlias = signingProperties.getProperty("KEY_ALIAS")
+            keyPassword = signingProperties.getProperty("KEY_PASSWORD")
+        }
+    } else {
+        null
     }
 
     buildTypes {
-        debug {
-            applicationIdSuffix = ".debug"
+        getByName("debug") {
+            isMinifyEnabled = false
+            realSigningConfig?.let { signingConfig = it }
         }
-        release {
+        getByName("release") {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            if (keystorePropertiesFile.exists() || hasSigningVars()) {
-                signingConfig = signingConfigs.getByName("release")
+            realSigningConfig?.let { signingConfig = it }
+
+            // AGP stamps the git revision into META-INF. The build box works from an rsync
+            // with no .git and writes NO_SUPPORTED_VCS_FOUND there, while a CI runner writes
+            // the real commit -- so with this on, the same version built in the two places
+            // has different contents, and the published APK names a commit of his working
+            // copy. Off, so neither happens.
+            vcsInfo {
+                include = false
             }
         }
     }
 
-    flavorDimensions.add("variants")
-    productFlavors {
-        register("foss")
-        register("gplay")
-    }
-
-    sourceSets {
-        getByName("main").java.directories.add("src/main/kotlin")
+    lint {
+        // Sideloaded onto a Kompakt, not going to Google Play, whose API-33 floor this
+        // otherwise trips. Targeting the OS the device actually runs is deliberate.
+        disable += "ExpiredTargetSdkVersion"
     }
 
     compileOptions {
-        val currentJavaVersionFromLibs =
-            JavaVersion.valueOf(libs.versions.app.build.javaVersion.get())
-        sourceCompatibility = currentJavaVersionFromLibs
-        targetCompatibility = currentJavaVersionFromLibs
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
-    dependenciesInfo {
-        includeInApk = false
-    }
-
-    androidResources {
-        @Suppress("UnstableApiUsage")
-        generateLocaleConfig = true
-    }
-
-    tasks.withType<KotlinCompile> {
-        compilerOptions.jvmTarget.set(
-            JvmTarget.fromTarget(project.libs.versions.app.build.kotlinJVMTarget.get())
-        )
-    }
-
-    namespace = project.property("APP_ID").toString()
-
-    lint {
-        checkReleaseBuilds = false
-        abortOnError = true
-        warningsAsErrors = false
-        baseline = file("lint-baseline.xml")
-        lintConfig = rootProject.file("lint.xml")
-    }
-
-    bundle {
-        language {
-            enableSplit = false
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
     }
-}
 
-detekt {
-    baseline = file("detekt-baseline.xml")
-    config.setFrom("$rootDir/detekt.yml")
-    buildUponDefaultConfig = true
-    allRules = false
+    buildFeatures {
+        compose = true
+        // The About dialog shows the version it is actually running.
+        buildConfig = true
+    }
+
+    sourceSets {
+        named("main") { kotlin.srcDir("src/main/kotlin") }
+        named("test") { kotlin.srcDir("src/test/kotlin") }
+    }
 }
 
 dependencies {
-    implementation(libs.fossify.commons)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
-    implementation(libs.bundles.lifecycle)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.preference)
-    implementation(libs.kotlinx.coroutines)
-    implementation(libs.numberpicker)
-    implementation(libs.autofittextview)
-    implementation(libs.eventbus)
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.tooling)
 
-    implementation(libs.bundles.room)
-    ksp(libs.androidx.room.compiler)
-    detektPlugins(libs.compose.detekt)
+    implementation(libs.mmd)
+
+    testImplementation(libs.junit)
 }
