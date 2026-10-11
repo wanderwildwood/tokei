@@ -71,7 +71,7 @@ fun SubPage(title: String, onBack: () -> Unit, content: LazyListScope.() -> Unit
             )
         },
     ) { padding ->
-        LazyColumnMMD(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp), content = content)
+        LazyColumnMMD(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false, content = content)
     }
 }
 

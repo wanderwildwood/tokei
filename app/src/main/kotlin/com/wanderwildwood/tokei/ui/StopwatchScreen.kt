@@ -117,7 +117,7 @@ fun StopwatchScreen() {
         }
         Spacer(Modifier.height(16.dp))
         val laps = w.lapTimes()
-        LazyColumnMMD(modifier = Modifier.weight(1f).fillMaxWidth()) {
+        LazyColumnMMD(modifier = Modifier.weight(1f).fillMaxWidth(), isScrollbarVisible = false) {
             for (i in laps.indices.reversed()) {
                 item(key = i) {
                     Row(Modifier.fillMaxWidth().padding(vertical = 10.dp)) {

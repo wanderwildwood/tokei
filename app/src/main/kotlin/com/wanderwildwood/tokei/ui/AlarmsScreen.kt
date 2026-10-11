@@ -73,7 +73,7 @@ fun AlarmsScreen(onEdit: (Long) -> Unit) {
     val wake = remember(version, now) { Plan.nextWake(alarms, zone) }
 
     Box(Modifier.fillMaxSize()) {
-        LazyColumnMMD(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
+        LazyColumnMMD(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false) {
             problems.forEachIndexed { i, p -> item(key = "problem:$i") { ProblemCard(p) } }
             if (missed.isNotEmpty()) item(key = "missed") { MissedCard(missed.take(5).map { Notifier.line(context, it) }, missed.size) }
             if (wake != null) {

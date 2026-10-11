@@ -61,7 +61,7 @@ fun WorldScreen(onAdd: () -> Unit) {
     val here = ZoneId.systemDefault()
 
     Box(Modifier.fillMaxSize()) {
-        com.mudita.mmd.components.lazy.LazyColumnMMD(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
+        com.mudita.mmd.components.lazy.LazyColumnMMD(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false) {
             item(key = "here") {
                 CityRow(stringResource(R.string.world_here), here, here, now, null, sub = Times.day(context, Times.date(now)))
                 Dotted()

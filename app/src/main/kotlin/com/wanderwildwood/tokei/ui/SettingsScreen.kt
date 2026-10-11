@@ -61,7 +61,7 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
             )
         },
     ) { padding ->
-        LazyColumnMMD(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp)) {
+        LazyColumnMMD(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false) {
             item { Spacer(Modifier.height(8.dp)) }
             problems.forEachIndexed { i, p -> item(key = "problem:$i") { ProblemCard(p) } }
 

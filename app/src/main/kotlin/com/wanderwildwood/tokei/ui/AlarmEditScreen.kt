@@ -127,7 +127,7 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
             )
         },
     ) { padding ->
-        LazyColumnMMD(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp)) {
+        LazyColumnMMD(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false) {
             item(key = "time") {
                 Spacer(Modifier.height(16.dp))
                 TimeStepper(hour, minute) { h, m ->
