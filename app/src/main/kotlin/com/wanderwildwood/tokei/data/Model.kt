@@ -49,6 +49,9 @@ data class Timer(
     val sound: String = "",
     val soundTitle: String = "",
     val vibrate: Boolean = true,
+    /** In the list for good. A timer started on the fly is not, until Keep is pressed: it is
+     *  there while it runs and gone once it is stopped or reset. */
+    val kept: Boolean = true,
 ) {
     companion object {
         const val IDLE = 0

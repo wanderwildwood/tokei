@@ -109,13 +109,23 @@ private fun TimerRow(t: Timer, now: Long, onClick: () -> Unit) {
         Spacer(Modifier.width(8.dp))
         Column(verticalArrangement = Arrangement.spacedBy(8.dp), horizontalAlignment = Alignment.End) {
             when (t.state) {
+                // A timer started on the fly offers Keep in its second place; once kept, it is
+                // like any other.
                 Timer.RUNNING -> {
                     SmallBox(stringResource(R.string.timer_pause), filled = true) { Engine.timerAction(context, t.id) { x, n -> Plan.pause(x, n) } }
-                    SmallBox(stringResource(R.string.ring_add_minute_short)) { Engine.timerAction(context, t.id) { x, n -> Plan.addMinute(x, n) } }
+                    if (!t.kept) {
+                        SmallBox(stringResource(R.string.timer_keep)) { Engine.timerAction(context, t.id) { x, _ -> x.copy(kept = true) } }
+                    } else {
+                        SmallBox(stringResource(R.string.ring_add_minute_short)) { Engine.timerAction(context, t.id) { x, n -> Plan.addMinute(x, n) } }
+                    }
                 }
                 Timer.PAUSED -> {
                     SmallBox(stringResource(R.string.timer_resume), filled = true) { Engine.timerAction(context, t.id) { x, n -> Plan.start(x, n) } }
-                    SmallBox(stringResource(R.string.timer_reset)) { Engine.timerAction(context, t.id) { x, _ -> Plan.reset(x) } }
+                    if (!t.kept) {
+                        SmallBox(stringResource(R.string.timer_keep)) { Engine.timerAction(context, t.id) { x, _ -> x.copy(kept = true) } }
+                    } else {
+                        SmallBox(stringResource(R.string.timer_reset)) { Engine.timerAction(context, t.id) { x, _ -> Plan.reset(x) } }
+                    }
                 }
                 Timer.RINGING -> SmallBox(stringResource(R.string.ring_stop), filled = true) { Engine.stopTimer(context, t.id) }
                 else -> SmallBox(stringResource(R.string.timer_start), filled = true) { Engine.timerAction(context, t.id) { x, n -> Plan.start(x, n) } }
@@ -124,7 +134,11 @@ private fun TimerRow(t: Timer, now: Long, onClick: () -> Unit) {
     }
 }
 
-/** Making or changing a timer: its length in boxes, typed or stepped, and its name and sound, as an alarm has them. */
+/**
+ * Making or changing a timer: its length in boxes, typed or stepped, and its name and sound, as
+ * an alarm has them. A new one is started straight away with Start and is not kept, so a timer
+ * for the tea does not stay in the list for ever; Keep in the bar puts it there without starting.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimerEditScreen(id: Long, onDone: () -> Unit) {
@@ -157,7 +171,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
 
     fun save(start: Boolean) {
         if (seconds <= 0) return
-        val base = existing ?: Timer(seconds = seconds)
+        val base = existing ?: Timer(seconds = seconds, kept = !start)
         // A new length starts over; the same length keeps a running timer running.
         val kept = if (existing != null && existing.seconds != seconds) Plan.reset(base) else base
         val tid = Engine.saveTimer(context, kept.copy(seconds = seconds, label = label.trim(), sound = sound, soundTitle = soundTitle, vibrate = vibrate))
@@ -191,7 +205,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
                             }
                         }
                     }
-                    if (!arming) BarPill(stringResource(if (existing == null) R.string.create else R.string.save)) { save(false) }
+                    if (!arming) BarPill(stringResource(if (existing == null) R.string.timer_keep else R.string.save)) { save(false) }
                 },
             )
         },
@@ -221,7 +235,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
             item(key = "start") {
                 Spacer(Modifier.height(20.dp))
                 Box(Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
-                    DialogButton(stringResource(R.string.timer_save_start), filled = true) { save(true) }
+                    DialogButton(stringResource(if (existing == null) R.string.timer_start else R.string.timer_save_start), filled = true) { save(true) }
                 }
                 Spacer(Modifier.height(24.dp))
             }

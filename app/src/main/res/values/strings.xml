@@ -144,6 +144,7 @@
     <!-- %1$s is a time -->
     <string name="timer_ends_at">Rings at %1$s</string>
     <string name="timer_save_start">Save and start</string>
+    <string name="timer_keep">Keep</string>
     <string name="timer_zero">A timer needs a length of at least a second.</string>
     <!-- %1$s is a length -->
     <string name="timer_started">Timer started, %1$s</string>

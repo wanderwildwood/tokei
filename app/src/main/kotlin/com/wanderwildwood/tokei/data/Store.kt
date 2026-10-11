@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
  * Every write bumps [version], which is how the screens know to read again.
  */
 class Store private constructor(context: Context) :
-    SQLiteOpenHelper(context, "tokei.db", null, 1) {
+    SQLiteOpenHelper(context, "tokei.db", null, 2) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -46,7 +46,8 @@ class Store private constructor(context: Context) :
                 started_at INTEGER NOT NULL DEFAULT 0,
                 sound TEXT NOT NULL DEFAULT '',
                 sound_title TEXT NOT NULL DEFAULT '',
-                vibrate INTEGER NOT NULL DEFAULT 1
+                vibrate INTEGER NOT NULL DEFAULT 1,
+                kept INTEGER NOT NULL DEFAULT 1
             )""",
         )
         db.execSQL(
@@ -60,7 +61,10 @@ class Store private constructor(context: Context) :
         )
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        // 2: timers started on the fly. Every timer from before was made to be kept.
+        if (oldVersion < 2) db.execSQL("ALTER TABLE timer ADD COLUMN kept INTEGER NOT NULL DEFAULT 1")
+    }
 
     // ---------------------------------------------------------------- alarms
 
@@ -132,7 +136,16 @@ class Store private constructor(context: Context) :
             if (c.moveToFirst()) timerAt(c) else null
         }
 
+    /**
+     * A timer that was never kept and has gone back to its start — stopped, reset, rung out
+     * unanswered or missed — is done with, so it is deleted rather than saved. Every way a timer
+     * ends comes through here, which is why the rule lives here and not in each of them.
+     */
     fun save(t: Timer): Long {
+        if (!t.kept && t.id > 0 && t.state == Timer.IDLE) {
+            deleteTimer(t.id)
+            return t.id
+        }
         val v = ContentValues().apply {
             put("seconds", t.seconds)
             put("label", t.label)
@@ -143,6 +156,7 @@ class Store private constructor(context: Context) :
             put("sound", t.sound)
             put("sound_title", t.soundTitle)
             put("vibrate", if (t.vibrate) 1 else 0)
+            put("kept", if (t.kept) 1 else 0)
         }
         val id = if (t.id > 0) {
             writableDatabase.update("timer", v, "id = ?", arrayOf(t.id.toString()))
@@ -170,6 +184,7 @@ class Store private constructor(context: Context) :
         sound = c.str("sound"),
         soundTitle = c.str("sound_title"),
         vibrate = c.int("vibrate") != 0,
+        kept = c.int("kept") != 0,
     )
 
     // ---------------------------------------------------------------- missed

@@ -104,7 +104,9 @@ class ApiActivity : Activity() {
             return
         }
         val label = intent.getStringExtra(AlarmClock.EXTRA_MESSAGE).orEmpty()
-        val id = Engine.saveTimer(this, Timer(seconds = length, label = label))
+        // Started on the spot, as Start in the app does, so not kept: it leaves the list once it
+        // is stopped, unless Keep is pressed while it runs.
+        val id = Engine.saveTimer(this, Timer(seconds = length, label = label, kept = false))
         Engine.timerAction(this, id) { t, now -> Plan.start(t, now) }
         Toast.makeText(this, getString(R.string.timer_started, Times.length(this, length)), Toast.LENGTH_SHORT).show()
         if (!intent.getBooleanExtra(AlarmClock.EXTRA_SKIP_UI, false)) open(MainActivity.TAB_TIMERS)
