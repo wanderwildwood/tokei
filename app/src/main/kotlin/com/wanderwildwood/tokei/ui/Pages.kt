@@ -66,7 +66,7 @@ fun SubPage(title: String, onBack: () -> Unit, content: LazyListScope.() -> Unit
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             TopAppBarMMD(
-                title = { TextMMD(text = title, fontWeight = FontWeight.Bold) },
+                title = { TextMMD(text = title) },
                 navigationIcon = { BarButton(Icons.Back, stringResource(R.string.cd_back), onBack) },
             )
         },

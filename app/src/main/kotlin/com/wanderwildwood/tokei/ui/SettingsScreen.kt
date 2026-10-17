@@ -55,7 +55,7 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             TopAppBarMMD(
-                title = { TextMMD(text = stringResource(R.string.settings_title), fontWeight = FontWeight.Bold) },
+                title = { TextMMD(text = stringResource(R.string.settings_title)) },
                 navigationIcon = { BarButton(Icons.Back, stringResource(R.string.cd_back), onBack) },
                 actions = { BarButton(Icons.Info, stringResource(R.string.cd_about), onAbout) },
             )

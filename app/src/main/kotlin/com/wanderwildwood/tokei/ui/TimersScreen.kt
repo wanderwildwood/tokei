@@ -183,7 +183,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             TopAppBarMMD(
-                title = { TextMMD(text = stringResource(if (existing == null) R.string.timer_new else R.string.timer_edit), fontWeight = FontWeight.Bold) },
+                title = { TextMMD(text = stringResource(if (existing == null) R.string.timer_new else R.string.timer_edit)) },
                 navigationIcon = { BarButton(Icons.Close, stringResource(R.string.cd_close), onDone) },
                 actions = {
                     if (existing != null) {

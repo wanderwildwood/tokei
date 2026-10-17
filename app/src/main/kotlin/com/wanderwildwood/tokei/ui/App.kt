@@ -105,7 +105,7 @@ private fun Main(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             TopAppBarMMD(
-                title = { TextMMD(text = stringResource(R.string.app_name), fontWeight = FontWeight.Bold) },
+                title = { TextMMD(text = stringResource(R.string.app_name)) },
                 actions = {
                     BarButton(Icons.Settings, stringResource(R.string.cd_settings), onSettings)
                     BarButton(Icons.Info, stringResource(R.string.cd_about), onAbout)
@@ -114,7 +114,7 @@ private fun Main(
         },
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
-            Tabs(tab, listOf(R.string.tab_alarms, R.string.tab_timers, R.string.tab_stopwatch, R.string.tab_world).map { stringResource(it) }, onTab)
+            StoneTabs(listOf(R.string.tab_alarms, R.string.tab_timers, R.string.tab_stopwatch, R.string.tab_world).map { stringResource(it) }, tab, onTab)
             Box(Modifier.weight(1f)) {
                 when (tab) {
                     0 -> AlarmsScreen(onEdit = onAlarm)
@@ -127,34 +127,3 @@ private fun Main(
     }
 }
 
-/**
- * The four parts, in MMD's tab look: the chosen one bold over a black bar, a rule under the row.
- * Drawn here rather than with TabMMD, whose padding leaves a quarter of this screen too narrow
- * for "Stopwatch".
- */
-@Composable
-private fun Tabs(chosen: Int, labels: List<String>, onTab: (Int) -> Unit) {
-    val ink = MaterialTheme.colorScheme.onSurface
-    androidx.compose.foundation.layout.Row(Modifier.fillMaxWidth().height(52.dp)) {
-        labels.forEachIndexed { i, label ->
-            Column(
-                Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .selectable(selected = i == chosen, role = Role.Tab, onClick = { onTab(i) }),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    TextMMD(
-                        text = label,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = if (i == chosen) FontWeight.Bold else FontWeight.Normal,
-                        maxLines = 1,
-                    )
-                }
-                Box(Modifier.fillMaxWidth().padding(horizontal = 14.dp).height(3.dp).background(if (i == chosen) ink else MaterialTheme.colorScheme.surface))
-            }
-        }
-    }
-    HorizontalDividerMMD(thickness = 2.dp)
-}

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -117,7 +118,9 @@ fun StopwatchScreen() {
         }
         Spacer(Modifier.height(16.dp))
         val laps = w.lapTimes()
-        LazyColumnMMD(modifier = Modifier.weight(1f).fillMaxWidth(), isScrollbarVisible = false) {
+        // A long run of laps gets page dots down the edge once it passes three screens.
+        val lapState = rememberLazyListState()
+        ListJumpBox(lapState, ListJump.Pages, Modifier.weight(1f).fillMaxWidth()) { LazyColumnMMD(modifier = Modifier.fillMaxSize(), state = lapState, isScrollbarVisible = false) {
             for (i in laps.indices.reversed()) {
                 item(key = i) {
                     Row(Modifier.fillMaxWidth().padding(vertical = 10.dp)) {
@@ -128,7 +131,7 @@ fun StopwatchScreen() {
                     Dotted()
                 }
             }
-        }
+        } }
     }
 }
 
