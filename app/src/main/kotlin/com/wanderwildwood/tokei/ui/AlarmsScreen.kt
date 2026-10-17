@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.mudita.mmd.components.buttons.ButtonMMD
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.switcher.SwitchMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.wanderwildwood.tokei.R
@@ -73,7 +73,7 @@ fun AlarmsScreen(onEdit: (Long) -> Unit) {
     val wake = remember(version, now) { Plan.nextWake(alarms, zone) }
 
     Box(Modifier.fillMaxSize()) {
-        LazyColumnMMD(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false) {
+        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), contentPadding = PaddingValues(bottom = 102.dp)) {
             problems.forEachIndexed { i, p -> item(key = "problem:$i") { ProblemCard(p) } }
             if (missed.isNotEmpty()) item(key = "missed") { MissedCard(missed.take(5).map { Notifier.line(context, it) }, missed.size) }
             if (wake != null) {

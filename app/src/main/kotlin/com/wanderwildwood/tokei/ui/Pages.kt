@@ -40,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.radio_button.RadioButtonMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.text_field.TextFieldMMD
@@ -71,7 +70,7 @@ fun SubPage(title: String, onBack: () -> Unit, content: LazyListScope.() -> Unit
             )
         },
     ) { padding ->
-        LazyColumnMMD(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false, content = content)
+        PagedColumn(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp), content = content)
     }
 }
 
@@ -189,7 +188,6 @@ fun SoundPage(sound: String, soundTitle: String, vibrate: Boolean, onSound: (Str
         item(key = "pick") {
             NavRow(stringResource(R.string.sound_pick_file), null) { pickFile.launch(arrayOf("audio/*")) }
         }
-        item(key = "foot") { Spacer(Modifier.height(24.dp)) }
     }
 }
 

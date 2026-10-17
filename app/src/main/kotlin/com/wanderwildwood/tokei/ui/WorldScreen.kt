@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -61,7 +62,7 @@ fun WorldScreen(onAdd: () -> Unit) {
     val here = ZoneId.systemDefault()
 
     Box(Modifier.fillMaxSize()) {
-        com.mudita.mmd.components.lazy.LazyColumnMMD(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false) {
+        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), contentPadding = PaddingValues(bottom = 102.dp)) {
             item(key = "here") {
                 CityRow(stringResource(R.string.world_here), here, here, now, null, sub = Times.day(context, Times.date(now)))
                 Dotted()

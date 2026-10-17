@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
 import com.wanderwildwood.tokei.R
@@ -65,7 +65,7 @@ fun TimersScreen(onEdit: (Long) -> Unit) {
     }
 
     Box(Modifier.fillMaxSize()) {
-        LazyColumnMMD(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), isScrollbarVisible = false) {
+        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), contentPadding = PaddingValues(bottom = 102.dp)) {
             if (timers.isEmpty()) {
                 item(key = "empty") { Empty(stringResource(R.string.timers_empty), stringResource(R.string.timer_create)) { onEdit(NEW) } }
             }
@@ -210,7 +210,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
             )
         },
     ) { padding ->
-        LazyColumnMMD(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 8.dp), isScrollbarVisible = false) {
+        PagedColumn(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 8.dp)) {
             item(key = "length") {
                 Spacer(Modifier.height(16.dp))
                 LengthStepper(seconds) { seconds = it }

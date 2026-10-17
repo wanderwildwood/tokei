@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mudita.mmd.components.buttons.ButtonMMD
-import com.mudita.mmd.components.lazy.LazyColumnMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.wanderwildwood.tokei.R
 import com.wanderwildwood.tokei.Times
@@ -120,7 +119,7 @@ fun StopwatchScreen() {
         val laps = w.lapTimes()
         // A long run of laps gets page dots down the edge once it passes three screens.
         val lapState = rememberLazyListState()
-        ListJumpBox(lapState, ListJump.Pages, Modifier.weight(1f).fillMaxWidth()) { LazyColumnMMD(modifier = Modifier.fillMaxSize(), state = lapState, isScrollbarVisible = false) {
+        ListJumpBox(lapState, ListJump.Pages, Modifier.weight(1f).fillMaxWidth()) { PagedColumn(modifier = Modifier.fillMaxSize(), state = lapState) {
             for (i in laps.indices.reversed()) {
                 item(key = i) {
                     Row(Modifier.fillMaxWidth().padding(vertical = 10.dp)) {

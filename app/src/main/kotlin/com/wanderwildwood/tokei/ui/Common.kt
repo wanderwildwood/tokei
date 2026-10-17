@@ -110,7 +110,7 @@ fun CheckRow(title: String, checked: Boolean, onChange: (Boolean) -> Unit) {
             .padding(vertical = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        CheckboxMMD(checked = checked, onCheckedChange = null)
+        CheckboxMMD(checked = checked, onCheckedChange = onChange)
         Spacer(Modifier.width(8.dp))
         TextMMD(text = title, style = MaterialTheme.typography.bodyMedium)
     }
