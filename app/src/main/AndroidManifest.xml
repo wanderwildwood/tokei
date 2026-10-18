@@ -26,6 +26,8 @@
     <queries>
         <!-- Sky, for the line of weather on the ringing screen. -->
         <package android:name="com.wanderwildwood.soramoyo" />
+        <!-- DuraSpeed, the Kompakt's background manager: only to say whether it is there. -->
+        <package android:name="com.mediatek.duraspeed" />
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT" />
             <data android:mimeType="text/plain" />

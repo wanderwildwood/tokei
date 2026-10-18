@@ -4,8 +4,8 @@ import android.app.ActivityManager
 import android.app.ApplicationExitInfo
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings as AndroidSettings
 import com.wanderwildwood.tokei.BuildConfig
 import java.io.File
@@ -27,12 +27,20 @@ object DuraSpeed {
     private const val PACKAGE = "com.mediatek.duraspeed"
 
     /**
-     * A Kompakt, or, in a debug build only, an emulator told to act as one by a file named
-     * `pretend-kompakt` in the app's files, so the setup step can be seen without the phone.
+     * A phone with DuraSpeed on it, or, in a debug build only, an emulator told to act as one by
+     * a file named `pretend-kompakt` in the app's files, so the setup step can be seen without
+     * the phone. Asked of the package, not the maker: KompaktOS also says "Mudita" and has no
+     * DuraSpeed, and there the step would open nothing.
      */
     fun isKompakt(context: Context): Boolean =
-        Build.MANUFACTURER.equals("Mudita", ignoreCase = true) ||
-            (BuildConfig.DEBUG && File(context.filesDir, "pretend-kompakt").exists())
+        installed(context) || (BuildConfig.DEBUG && File(context.filesDir, "pretend-kompakt").exists())
+
+    private fun installed(context: Context): Boolean = try {
+        context.packageManager.getApplicationInfo(PACKAGE, 0)
+        true
+    } catch (_: PackageManager.NameNotFoundException) {
+        false
+    }
 
     /** DuraSpeed's own switch; null where the phone does not say. */
     private fun isOn(context: Context): Boolean? = runCatching {

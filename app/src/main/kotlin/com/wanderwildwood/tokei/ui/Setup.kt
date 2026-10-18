@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings as AndroidSettings
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -75,6 +76,17 @@ fun problems(context: Context, settings: Settings, onChange: () -> Unit): List<P
             button = context.getString(R.string.setup_allow),
             action = {
                 open(Intent(AndroidSettings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + context.packageName)))
+            },
+        )
+    }
+    // Android 14 and later let a sideloaded app take the screen only once it is allowed to:
+    // without that, an alarm or a timer rings with nothing but a notification.
+    if (Build.VERSION.SDK_INT >= 34 && !context.getSystemService(NotificationManager::class.java).canUseFullScreenIntent()) {
+        out += Problem(
+            text = context.getString(R.string.setup_full_screen),
+            button = context.getString(R.string.setup_full_screen_allow),
+            action = {
+                open(Intent(AndroidSettings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, Uri.parse("package:" + context.packageName)))
             },
         )
     }

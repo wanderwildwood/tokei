@@ -187,6 +187,8 @@
     <string name="setup_turn_on">Turn them on</string>
     <string name="setup_exact">Clock is not allowed to set alarms, so an alarm can ring up to an hour late.</string>
     <string name="setup_allow">Allow alarms</string>
+    <string name="setup_full_screen">Clock is not allowed to fill the screen, so an alarm or a timer rings with only a notification, and the screen stays dark.</string>
+    <string name="setup_full_screen_allow">Allow full screen</string>
     <string name="setup_battery">The phone\'s battery saving can hold Clock back after a night asleep, and alarms then ring minutes late. Let it run without restriction.</string>
     <string name="setup_battery_allow">Allow</string>
     <!-- %1$s is when, e.g. "14:02" or "Yesterday 14:02" -->

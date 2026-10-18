@@ -47,6 +47,11 @@ mended by two settings. Clock's first screen asks for each, only while it is nee
 - **Battery saving** can hold an app back, so an alarm rings minutes late. Press **Allow** and
   let Clock run without restriction.
 
+On Android 14 and later (KompaktOS, for one), an app installed from a file is not allowed to fill
+the screen until it is told it may, and an alarm then rings with only a notification. Clock asks
+for this too: press **Allow full screen** and turn the switch on. The DuraSpeed step shows only
+on a phone that has DuraSpeed.
+
 Alarms are set as the system's alarm clock, the kind that wakes the phone at the exact minute
 whatever it is saving power for; the phone's alarm icon and Mudita's home screen show the next
 one. They are set again after a restart, after the app is updated, and when the clock or the
