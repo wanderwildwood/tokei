@@ -83,6 +83,10 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
                     v++
                 }
             }
+            item(key = "jump") {
+                val jumpShown by rememberListJumpShown()
+                SwitchRow(stringResource(R.string.list_jump_setting), jumpShown) { ListJumpPrefs.setShown(context, it) }
+            }
             item(key = "call") {
                 TextMMD(text = stringResource(R.string.settings_call_note), style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 16.dp))
             }
