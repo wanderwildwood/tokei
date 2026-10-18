@@ -64,70 +64,77 @@ fun StopwatchScreen() {
         now = System.currentTimeMillis()
     }
 
-    Column(Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
-        Spacer(Modifier.height(20.dp))
-        TextMMD(
-            text = Times.clock(w.total(now), fine = !w.running),
-            fontSize = 64.sp,
-            lineHeight = 70.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        if (w.laps.isNotEmpty()) {
+    Column(Modifier.fillMaxSize()) {
+        // The laps run edge to edge with the margin inside each row, so with the letters and page
+        // dots switched on the rail sits in that margin and the totals column stays clear of it.
+        Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
+            Spacer(Modifier.height(20.dp))
             TextMMD(
-                text = stringResource(R.string.stopwatch_this_lap, w.laps.size + 1, Times.clock(w.current(now), fine = !w.running)),
-                style = MaterialTheme.typography.bodyMedium,
+                text = Times.clock(w.total(now), fine = !w.running),
+                fontSize = 64.sp,
+                lineHeight = 70.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
-        }
-        Spacer(Modifier.height(20.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-            val canLap = w.running
-            val canReset = !w.running && w.total(now) > 0
-            Box(
-                Modifier
-                    .size(104.dp)
-                    .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface), CircleShape)
-                    .clickable(enabled = canLap || canReset) {
+            if (w.laps.isNotEmpty()) {
+                TextMMD(
+                    text = stringResource(R.string.stopwatch_this_lap, w.laps.size + 1, Times.clock(w.current(now), fine = !w.running)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+            Spacer(Modifier.height(20.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+                val canLap = w.running
+                val canReset = !w.running && w.total(now) > 0
+                Box(
+                    Modifier
+                        .size(104.dp)
+                        .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface), CircleShape)
+                        .clickable(enabled = canLap || canReset) {
+                            val t = System.currentTimeMillis()
+                            if (canLap) set(w.lap(t)) else set(com.wanderwildwood.tokei.data.Stopwatch())
+                        },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    TextMMD(
+                        text = stringResource(if (w.running || w.total(now) == 0L) R.string.stopwatch_lap else R.string.stopwatch_reset),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+                ButtonMMD(
+                    onClick = {
                         val t = System.currentTimeMillis()
-                        if (canLap) set(w.lap(t)) else set(com.wanderwildwood.tokei.data.Stopwatch())
+                        set(if (w.running) w.stop(t) else w.start(t))
                     },
-                contentAlignment = Alignment.Center,
-            ) {
-                TextMMD(
-                    text = stringResource(if (w.running || w.total(now) == 0L) R.string.stopwatch_lap else R.string.stopwatch_reset),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                )
+                    modifier = Modifier.width(160.dp).height(64.dp),
+                ) {
+                    TextMMD(
+                        text = stringResource(if (w.running) R.string.stopwatch_stop else R.string.stopwatch_start),
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
             }
-            ButtonMMD(
-                onClick = {
-                    val t = System.currentTimeMillis()
-                    set(if (w.running) w.stop(t) else w.start(t))
-                },
-                modifier = Modifier.width(160.dp).height(64.dp),
-            ) {
-                TextMMD(
-                    text = stringResource(if (w.running) R.string.stopwatch_stop else R.string.stopwatch_start),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                )
-            }
+            Spacer(Modifier.height(16.dp))
         }
-        Spacer(Modifier.height(16.dp))
         val laps = w.lapTimes()
         // A long run of laps gets page dots down the edge once it passes three screens.
         val lapState = rememberLazyListState()
+        // The newest lap is first; a new one opens the list at the top again, or the list kept
+        // its place on the older laps and the new ones went in above, out of sight.
+        LaunchedEffect(laps.size) { lapState.scrollToItem(0) }
         ListJumpBox(lapState, ListJump.Pages, Modifier.weight(1f).fillMaxWidth()) { PagedColumn(modifier = Modifier.fillMaxSize(), state = lapState) {
             for (i in laps.indices.reversed()) {
                 item(key = i) {
-                    Row(Modifier.fillMaxWidth().padding(vertical = 10.dp)) {
+                    Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)) {
                         TextMMD(text = stringResource(R.string.stopwatch_lap_n, i + 1), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
                         TextMMD(text = Times.clock(laps[i], fine = true), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f), textAlign = TextAlign.End)
                         TextMMD(text = Times.clock(w.laps[i], fine = true), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), textAlign = TextAlign.End)
                     }
-                    Dotted()
+                    Dotted(Modifier.padding(horizontal = 20.dp))
                 }
             }
         } }

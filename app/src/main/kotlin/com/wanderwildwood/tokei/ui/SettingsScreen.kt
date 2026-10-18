@@ -49,6 +49,7 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
     val ring = remember(v) { s.ringMinutes }
     val rise = remember(v) { s.rise }
     val glance = remember(v) { s.onLockScreen }
+    val sky = remember(v) { s.skyOnRing }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -80,6 +81,12 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
                 SwitchRow(stringResource(R.string.settings_glance), glance, note = stringResource(R.string.settings_glance_note)) {
                     s.onLockScreen = it
                     GlanceProvider.changed(context)
+                    v++
+                }
+            }
+            item(key = "sky") {
+                SwitchRow(stringResource(R.string.settings_sky), sky, note = stringResource(R.string.settings_sky_note)) {
+                    s.skyOnRing = it
                     v++
                 }
             }

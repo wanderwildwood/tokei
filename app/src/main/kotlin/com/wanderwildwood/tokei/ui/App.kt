@@ -107,6 +107,13 @@ private fun Main(
             TopAppBarMMD(
                 title = { TextMMD(text = stringResource(R.string.app_name)) },
                 actions = {
+                    // The + for the list on screen sits up here rather than floating at its foot,
+                    // so no page of the list gives up a row's height to keep clear of it.
+                    when (tab) {
+                        0 -> BarButton(Icons.Add, stringResource(R.string.alarm_create)) { onAlarm(NEW) }
+                        1 -> BarButton(Icons.Add, stringResource(R.string.timer_create)) { onTimer(NEW) }
+                        3 -> BarButton(Icons.Add, stringResource(R.string.world_add), onAddCity)
+                    }
                     BarButton(Icons.Settings, stringResource(R.string.cd_settings), onSettings)
                     BarButton(Icons.Info, stringResource(R.string.cd_about), onAbout)
                 },

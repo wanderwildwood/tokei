@@ -92,10 +92,14 @@ permission, as with Android's clock.
 
 - **Glance** ([hitome](https://github.com/wanderwildwood/hitome)) can show the next alarm, and
   any timer running, on the lock screen, once **Settings → Next alarm on the lock screen** is on.
+- **Sky** ([soramoyo](https://github.com/wanderwildwood/soramoyo)) can put one line of weather
+  under a ringing alarm (the temperature, the sky, and the day's high and low), once **Settings →
+  Weather when an alarm rings** is on. Sky fetches it; Clock only reads the line.
 
 ## What it does not do
 
-- **Nothing leaves the phone.** The app has no internet permission.
+- **Nothing leaves the phone.** The app has no internet permission. (Sky, if asked for its line,
+  fetches the forecast itself, as it does when opened.)
 - **No widgets, no bedtime tracking, no alarms by the month.** Not in this version.
 
 ## Building

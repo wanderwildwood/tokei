@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -65,7 +64,7 @@ fun TimersScreen(onEdit: (Long) -> Unit) {
     }
 
     Box(Modifier.fillMaxSize()) {
-        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), contentPadding = PaddingValues(bottom = 102.dp)) {
+        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
             if (timers.isEmpty()) {
                 item(key = "empty") { Empty(stringResource(R.string.timers_empty), stringResource(R.string.timer_create)) { onEdit(NEW) } }
             }
@@ -75,10 +74,6 @@ fun TimersScreen(onEdit: (Long) -> Unit) {
                     if (i < timers.size - 1) Dotted()
                 }
             }
-            item(key = "foot") { Spacer(Modifier.height(110.dp)) }
-        }
-        if (timers.isNotEmpty()) {
-            AddButton(stringResource(R.string.timer_create), { onEdit(NEW) }, Modifier.align(Alignment.BottomEnd).padding(18.dp))
         }
     }
 }

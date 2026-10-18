@@ -26,6 +26,11 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("glance", false)
         set(v) = prefs.edit().putBoolean("glance", v).apply()
 
+    /** A line of weather from Sky on the ringing screen of an alarm. Off until asked for. */
+    var skyOnRing: Boolean
+        get() = prefs.getBoolean("sky_on_ring", false)
+        set(v) = prefs.edit().putBoolean("sky_on_ring", v).apply()
+
     /** The person said Clock is switched on in DuraSpeed's list. */
     var duraSpeedAllowed: Boolean
         get() = prefs.getBoolean("duraspeed_allowed", false)

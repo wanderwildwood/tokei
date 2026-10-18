@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -73,7 +72,7 @@ fun AlarmsScreen(onEdit: (Long) -> Unit) {
     val wake = remember(version, now) { Plan.nextWake(alarms, zone) }
 
     Box(Modifier.fillMaxSize()) {
-        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), contentPadding = PaddingValues(bottom = 102.dp)) {
+        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
             problems.forEachIndexed { i, p -> item(key = "problem:$i") { ProblemCard(p) } }
             if (missed.isNotEmpty()) item(key = "missed") { MissedCard(missed.take(5).map { Notifier.line(context, it) }, missed.size) }
             if (wake != null) {
@@ -94,10 +93,6 @@ fun AlarmsScreen(onEdit: (Long) -> Unit) {
                     if (i < alarms.size - 1) Dotted()
                 }
             }
-            item(key = "foot") { Spacer(Modifier.height(110.dp)) }
-        }
-        if (alarms.isNotEmpty()) {
-            AddButton(stringResource(R.string.alarm_create), { onEdit(NEW) }, Modifier.align(Alignment.BottomEnd).padding(18.dp))
         }
     }
 }
@@ -110,7 +105,8 @@ private fun AlarmRow(a: Alarm, zone: ZoneId, onClick: () -> Unit) {
         Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(vertical = 10.dp),
+            // Snug enough that four alarms and the "next alarm" line fill one page.
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {

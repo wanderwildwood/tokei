@@ -24,6 +24,8 @@
     <!-- The other apps that act on selected text, so a field's selection menu can list them
          behind its ⋮ as every other app of this shop does. -->
     <queries>
+        <!-- Sky, for the line of weather on the ringing screen. -->
+        <package android:name="com.wanderwildwood.soramoyo" />
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT" />
             <data android:mimeType="text/plain" />

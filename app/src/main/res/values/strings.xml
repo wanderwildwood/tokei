@@ -206,6 +206,8 @@
     <string name="settings_rise_note">Over the first minute, up to the phone\'s alarm volume.</string>
     <string name="settings_glance">Next alarm on the lock screen</string>
     <string name="settings_glance_note">Shown by Glance, when it is installed.</string>
+    <string name="settings_sky">Weather when an alarm rings</string>
+    <string name="settings_sky_note">From Sky, when it is installed: the temperature, the sky, and the day\'s high and low.</string>
     <string name="settings_call_note">Alarms ring on the alarm volume, so a phone set to silent still rings. During a call an alarm rings quietly and vibrates.</string>
 
     <!-- ============================================================ -->

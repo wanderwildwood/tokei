@@ -2,6 +2,7 @@ package com.wanderwildwood.tokei.alarm
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
@@ -30,7 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +42,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mudita.mmd.ThemeMMD
@@ -51,6 +55,8 @@ import com.wanderwildwood.tokei.data.Ring
 import com.wanderwildwood.tokei.data.Settings
 import com.wanderwildwood.tokei.data.Store
 import com.wanderwildwood.tokei.ui.monochrome
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * The ringing screen, over the lock screen, laid out as the stock Alarm app's: the time large,
@@ -173,7 +179,54 @@ private fun AlarmTop(r: Ring) {
         style = MaterialTheme.typography.headlineSmall,
         textAlign = TextAlign.Center,
     )
+    val weather = rememberSkyLine(r)
+    if (weather != null) {
+        Spacer(Modifier.height(12.dp))
+        TextMMD(
+            text = weather,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
 }
+
+/**
+ * Sky's line of weather for the ringing screen, when the setting is on and Sky is installed;
+ * null otherwise, and until it comes. Sky is asked to bring its forecast up to date first, which
+ * it does at most once a half hour and waits up to twenty seconds for.
+ */
+@Composable
+private fun rememberSkyLine(ring: Ring): String? {
+    val context = LocalContext.current
+    var line by remember(ring) { mutableStateOf<String?>(null) }
+    LaunchedEffect(ring) {
+        if (!Settings(context).skyOnRing) return@LaunchedEffect
+        line = withContext(Dispatchers.IO) { skyLine(context) }
+    }
+    return line
+}
+
+private fun skyLine(context: Context): String? = try {
+    val resolver = context.contentResolver
+    resolver.call(SKY, "refresh", null, null)
+    resolver.query(Uri.withAppendedPath(SKY, "line"), null, null, null, null)?.use { c ->
+        if (!c.moveToFirst()) {
+            Log.i("tokei", "Sky had no weather line to give")
+            return null
+        }
+        val lead = c.getString(c.getColumnIndexOrThrow("lead")).orEmpty()
+        val text = c.getString(c.getColumnIndexOrThrow("text")).orEmpty().trim()
+        listOf(lead, text).filter { it.isNotEmpty() }.joinToString(" · ").ifEmpty { null }
+    }
+} catch (e: Exception) {
+    // Sky not installed, or too old to answer: no line.
+    Log.i("tokei", "no weather line from Sky: ${e.javaClass.simpleName}")
+    null
+}
+
+private val SKY: Uri = Uri.parse("content://com.wanderwildwood.soramoyo.alarm")
 
 @Composable
 private fun TimerTop(r: Ring) {

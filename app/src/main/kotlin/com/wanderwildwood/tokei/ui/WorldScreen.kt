@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -62,7 +61,7 @@ fun WorldScreen(onAdd: () -> Unit) {
     val here = ZoneId.systemDefault()
 
     Box(Modifier.fillMaxSize()) {
-        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp), contentPadding = PaddingValues(bottom = 102.dp)) {
+        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
             item(key = "here") {
                 CityRow(stringResource(R.string.world_here), here, here, now, null, sub = Times.day(context, Times.date(now)))
                 Dotted()
@@ -77,10 +76,6 @@ fun WorldScreen(onAdd: () -> Unit) {
                     if (i < cities.size - 1) Dotted()
                 }
             }
-            item(key = "foot") { Spacer(Modifier.height(110.dp)) }
-        }
-        if (cities.isNotEmpty()) {
-            AddButton(stringResource(R.string.world_add), onAdd, Modifier.align(Alignment.BottomEnd).padding(18.dp))
         }
     }
 
