@@ -9,7 +9,7 @@ Android 12 device.
 
 | | |
 |---|---|
-| ![The alarms](screenshots/1-alarms.png) | ![An alarm ringing over the lock screen](screenshots/2-ringing.png) |
+| ![The alarms](screenshots/1-alarms.png) | ![An alarm ringing over the lock screen, with the weather from Sky under it](screenshots/2-ringing.png) |
 | ![Setting an alarm](screenshots/3-alarm.png) | ![Two timers running](screenshots/4-timers.png) |
 | ![The stopwatch with laps](screenshots/5-stopwatch.png) | ![The world clock](screenshots/6-world.png) |
 
