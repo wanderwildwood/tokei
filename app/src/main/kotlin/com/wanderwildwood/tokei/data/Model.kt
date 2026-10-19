@@ -9,6 +9,7 @@ import java.time.LocalTime
  * [from] is how far it has been caught up: every time of it up to that moment has rung or been
  * written down as missed, and only later ones are still to come. [snoozedUntil] is 0 when it is
  * not snoozed. [skip] is one coming time of a repeating alarm that is not to ring; 0 for none.
+ * [group] is the name of the group it is in, such as "Office"; "" for none (see [Groups]).
  */
 data class Alarm(
     val id: Long = 0,
@@ -24,6 +25,7 @@ data class Alarm(
     val from: Long = 0,
     val snoozedUntil: Long = 0,
     val skip: Long = 0,
+    val group: String = "",
 ) {
     val repeats: Boolean get() = days != 0
     val time: LocalTime get() = LocalTime.of(hour, minute)

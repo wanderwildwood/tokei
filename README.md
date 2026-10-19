@@ -12,6 +12,7 @@ Android 12 device.
 | ![The alarms](screenshots/1-alarms.png) | ![An alarm ringing over the lock screen, with the weather from Sky under it](screenshots/2-ringing.png) |
 | ![Setting an alarm](screenshots/3-alarm.png) | ![Two timers running](screenshots/4-timers.png) |
 | ![The stopwatch with laps](screenshots/5-stopwatch.png) | ![The world clock](screenshots/6-world.png) |
+| ![Alarms in two groups, Home and Office](screenshots/7-groups.png) | ![What a group's name offers: skip the next one, or rename the group](screenshots/8-group.png) |
 
 ## What it does
 
@@ -27,6 +28,12 @@ Android 12 device.
 - **The sound** is the phone's own alarm sound, any of its other alarm sounds, a sound file of
   your own, or none, to vibrate only. Vibration is on or off for each alarm.
 - **Skip the next one** of a repeating alarm, for a day off, without switching it off.
+- **Groups of alarms**, such as Office and Home. Any alarm can be put in a group from its
+  settings, by typing a name or picking one already in use. The Alarm tab lists a group's alarms
+  together under its name, with one switch that turns all of them on or off: on means every one
+  on again. Pressing the name offers **Skip the next one** for each of the group's repeating
+  alarms, and a new name for the group. Changing over from office days to days at home is two
+  presses.
 - **Timers that ring.** As many as you like, each kept with its length and name to start again,
   and several can run at once. When one reaches zero it rings like an alarm, with the screen off
   or the phone locked, until it is stopped or given a minute more.

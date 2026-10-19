@@ -169,11 +169,20 @@ object Engine {
         id
     }
 
-    fun setEnabled(context: Context, id: Long, on: Boolean) = synchronized(lock) {
+    fun setEnabled(context: Context, id: Long, on: Boolean) = setEnabled(context, listOf(id), on)
+
+    /**
+     * Switches alarms on or off: one from its own switch, or a whole group from its heading.
+     * Both come this way, so a group is set and scheduled exactly as its alarms would be one by
+     * one, and the alarms are set again once, after the last of them.
+     */
+    fun setEnabled(context: Context, ids: List<Long>, on: Boolean) = synchronized(lock) {
         val store = Store.get(context)
-        val a = store.alarm(id) ?: return@synchronized
-        store.save(a.copy(enabled = on, from = System.currentTimeMillis(), snoozedUntil = 0, skip = 0))
-        if (!on) Ringer.remove(context, Ring(false, id, 0))
+        for (id in ids) {
+            val a = store.alarm(id) ?: continue
+            store.save(a.copy(enabled = on, from = System.currentTimeMillis(), snoozedUntil = 0, skip = 0))
+            if (!on) Ringer.remove(context, Ring(false, id, 0))
+        }
         changed(context)
     }
 
@@ -184,12 +193,23 @@ object Engine {
     }
 
     /** Skips the next time of a repeating alarm, or, with [on] false, takes the skip back. */
-    fun skipNext(context: Context, id: Long, on: Boolean) = synchronized(lock) {
+    fun skipNext(context: Context, id: Long, on: Boolean) = skipNext(context, listOf(id), on)
+
+    /** The same for several alarms at once, such as a group's. */
+    fun skipNext(context: Context, ids: List<Long>, on: Boolean) = synchronized(lock) {
         val store = Store.get(context)
-        val a = store.alarm(id) ?: return@synchronized
-        val skip = if (on) Plan.skippable(a, ZoneId.systemDefault()) ?: 0L else 0L
-        store.save(a.copy(skip = skip))
+        for (id in ids) {
+            val a = store.alarm(id) ?: continue
+            val skip = if (on) Plan.skippable(a, ZoneId.systemDefault()) ?: 0L else 0L
+            store.save(a.copy(skip = skip))
+        }
         changed(context)
+    }
+
+    /** Gives group [from] a new name; a name already in use joins the two, and "" ungroups them. */
+    fun renameGroup(context: Context, from: String, to: String) = synchronized(lock) {
+        if (from.isBlank() || from == to) return@synchronized
+        Store.get(context).renameGroup(from, to)
     }
 
     /** Puts a ringing (or snoozed) alarm off for [minutes]. */

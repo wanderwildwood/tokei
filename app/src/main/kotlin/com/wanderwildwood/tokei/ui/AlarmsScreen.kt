@@ -1,6 +1,14 @@
 package com.wanderwildwood.tokei.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import com.mudita.mmd.components.text_field.TextFieldMMD
+import com.wanderwildwood.tokei.data.Groups
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -45,7 +53,7 @@ import java.time.ZoneId
 
 /**
  * The alarms, as the stock Alarm app lists them: the time large, its days and name under it, and
- * its switch. Above them, only when there is something to say: what would stop an alarm ringing,
+ * its switch, with the alarms of a group together under its name. Above them, only when there is something to say: what would stop an alarm ringing,
  * what was missed, and how long until the next one rings.
  */
 @Composable
@@ -70,6 +78,7 @@ fun AlarmsScreen(onEdit: (Long) -> Unit) {
     val problems = rememberProblems(check) { check++ }
     val zone = ZoneId.systemDefault()
     val wake = remember(version, now) { Plan.nextWake(alarms, zone) }
+    var menuFor by remember { mutableStateOf<String?>(null) }
 
     Box(Modifier.fillMaxSize()) {
         PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
@@ -87,12 +96,100 @@ fun AlarmsScreen(onEdit: (Long) -> Unit) {
             if (alarms.isEmpty()) {
                 item(key = "empty") { Empty(stringResource(R.string.alarms_empty), stringResource(R.string.alarm_create)) { onEdit(NEW) } }
             }
-            alarms.forEachIndexed { i, a ->
-                item(key = a.id) {
-                    AlarmRow(a, zone, onClick = { onEdit(a.id) })
-                    if (i < alarms.size - 1) Dotted()
+            val sections = Groups.sections(alarms)
+            sections.forEach { section ->
+                section.alarms.forEachIndexed { i, a ->
+                    item(key = a.id) {
+                        // The heading shares its first alarm's row, so a page never ends on a
+                        // heading with its alarms over the page.
+                        if (i == 0 && section.name.isNotEmpty()) {
+                            GroupHeading(section.name, section.alarms, zone, onMenu = { menuFor = section.name })
+                        }
+                        AlarmRow(a, zone, onClick = { onEdit(a.id) })
+                        if (i < section.alarms.size - 1) Dotted()
+                    }
                 }
             }
+        }
+    }
+    menuFor?.let { name ->
+        val group = alarms.filter { it.group == name }
+        if (group.isEmpty()) menuFor = null else GroupMenu(name, group, Groups.names(alarms), onDismiss = { menuFor = null })
+    }
+}
+
+/**
+ * Over a group's alarms: its name and one switch for all of them. Pressing the name, or holding
+ * it, opens what else can be done to the group at once.
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun GroupHeading(name: String, group: List<Alarm>, zone: ZoneId, onMenu: () -> Unit) {
+    val context = LocalContext.current
+    // One line, name and count, so a group's heading and first alarm still fit under another group.
+    Column(Modifier.fillMaxWidth().padding(top = 8.dp)) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .combinedClickable(onClick = onMenu, onLongClick = onMenu)
+                .padding(bottom = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            TextMMD(text = name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            TextMMD(
+                text = context.resources.getQuantityString(R.plurals.group_count, group.size, group.size),
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.weight(1f).padding(start = 10.dp),
+            )
+            Spacer(Modifier.width(12.dp))
+            SwitchMMD(checked = Groups.isOn(group), onCheckedChange = { on ->
+                Engine.setEnabled(context, Groups.toSwitch(group, on), on)
+                if (on) {
+                    val store = Store.get(context)
+                    group.mapNotNull { store.alarm(it.id)?.let { a -> Plan.nextRing(a, zone) } }.minOrNull()?.let { toastIn(context, it) }
+                }
+            })
+        }
+        Box(Modifier.fillMaxWidth().height(2.dp).background(MaterialTheme.colorScheme.onSurface))
+    }
+}
+
+/** What a group's heading opens: skip the next time of all its repeating alarms, or rename it. */
+@Composable
+private fun GroupMenu(name: String, group: List<Alarm>, names: List<String>, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    var renaming by remember(name) { mutableStateOf(false) }
+    var typed by remember(name) { mutableStateOf(name) }
+    EInkDialog(onDismiss = onDismiss) {
+        TextMMD(text = name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+        Spacer(Modifier.height(8.dp))
+        if (renaming) {
+            TextFieldMMD(
+                value = typed,
+                onValueChange = { typed = it.take(Groups.MAX_NAME) },
+                singleLine = true,
+                placeholder = { TextMMD(text = stringResource(R.string.group_hint), style = MaterialTheme.typography.bodyMedium) },
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                modifier = Modifier.fillMaxWidth().textActions(),
+            )
+            TextMMD(text = stringResource(R.string.group_rename_note), style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 6.dp, bottom = 12.dp))
+            DialogButtons(onCancel = { renaming = false }, onOk = {
+                Engine.renameGroup(context, name, Groups.clean(typed, names.filter { it != name }))
+                onDismiss()
+            }, okLabel = stringResource(R.string.save))
+        } else {
+            val skippable = Groups.skippable(group)
+            SwitchRow(
+                stringResource(R.string.group_skip_next),
+                Groups.isSkipping(group),
+                note = stringResource(if (skippable.isEmpty()) R.string.group_skip_none else R.string.group_skip_note),
+            ) { on ->
+                if (skippable.isNotEmpty()) Engine.skipNext(context, Groups.toSkip(group, on), on)
+            }
+            Dotted()
+            SettingRow(stringResource(R.string.group_rename), null) { renaming = true }
+            Spacer(Modifier.height(8.dp))
+            DialogButton(stringResource(R.string.close), onClick = onDismiss)
         }
     }
 }

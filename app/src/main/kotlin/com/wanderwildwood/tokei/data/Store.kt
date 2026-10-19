@@ -16,54 +16,14 @@ import kotlinx.coroutines.flow.StateFlow
  * Every write bumps [version], which is how the screens know to read again.
  */
 class Store private constructor(context: Context) :
-    SQLiteOpenHelper(context, "tokei.db", null, 2) {
+    SQLiteOpenHelper(context, "tokei.db", null, Schema.VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            """CREATE TABLE alarm (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                hour INTEGER NOT NULL,
-                minute INTEGER NOT NULL,
-                days INTEGER NOT NULL DEFAULT 0,
-                label TEXT NOT NULL DEFAULT '',
-                sound TEXT NOT NULL DEFAULT '',
-                sound_title TEXT NOT NULL DEFAULT '',
-                vibrate INTEGER NOT NULL DEFAULT 1,
-                enabled INTEGER NOT NULL DEFAULT 1,
-                caught_up INTEGER NOT NULL DEFAULT 0,
-                snoozed_until INTEGER NOT NULL DEFAULT 0,
-                skip INTEGER NOT NULL DEFAULT 0
-            )""",
-        )
-        db.execSQL(
-            """CREATE TABLE timer (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                seconds INTEGER NOT NULL,
-                label TEXT NOT NULL DEFAULT '',
-                state INTEGER NOT NULL DEFAULT 0,
-                ends_at INTEGER NOT NULL DEFAULT 0,
-                left_ms INTEGER NOT NULL DEFAULT 0,
-                started_at INTEGER NOT NULL DEFAULT 0,
-                sound TEXT NOT NULL DEFAULT '',
-                sound_title TEXT NOT NULL DEFAULT '',
-                vibrate INTEGER NOT NULL DEFAULT 1,
-                kept INTEGER NOT NULL DEFAULT 1
-            )""",
-        )
-        db.execSQL(
-            """CREATE TABLE missed (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timer INTEGER NOT NULL,
-                label TEXT NOT NULL DEFAULT '',
-                due INTEGER NOT NULL,
-                why TEXT NOT NULL
-            )""",
-        )
+        Schema.CREATE.forEach(db::execSQL)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // 2: timers started on the fly. Every timer from before was made to be kept.
-        if (oldVersion < 2) db.execSQL("ALTER TABLE timer ADD COLUMN kept INTEGER NOT NULL DEFAULT 1")
+        Schema.upgrade(oldVersion).forEach(db::execSQL)
     }
 
     // ---------------------------------------------------------------- alarms
@@ -92,6 +52,7 @@ class Store private constructor(context: Context) :
             put("caught_up", a.from)
             put("snoozed_until", a.snoozedUntil)
             put("skip", a.skip)
+            put("grp", a.group)
         }
         val id = if (a.id > 0) {
             writableDatabase.update("alarm", v, "id = ?", arrayOf(a.id.toString()))
@@ -101,6 +62,12 @@ class Store private constructor(context: Context) :
         }
         bump()
         return id
+    }
+
+    /** Moves every alarm of group [from] into group [to]; "" takes them out of any group. */
+    fun renameGroup(from: String, to: String) {
+        writableDatabase.update("alarm", ContentValues().apply { put("grp", to) }, "grp = ?", arrayOf(from))
+        bump()
     }
 
     fun deleteAlarm(id: Long) {
@@ -121,6 +88,7 @@ class Store private constructor(context: Context) :
         from = c.long("caught_up"),
         snoozedUntil = c.long("snoozed_until"),
         skip = c.long("skip"),
+        group = c.str("grp"),
     )
 
     // ---------------------------------------------------------------- timers

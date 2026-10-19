@@ -31,6 +31,7 @@ import com.wanderwildwood.tokei.R
 import com.wanderwildwood.tokei.Times
 import com.wanderwildwood.tokei.alarm.Engine
 import com.wanderwildwood.tokei.data.Alarm
+import com.wanderwildwood.tokei.data.Groups
 import com.wanderwildwood.tokei.data.Plan
 import com.wanderwildwood.tokei.data.Store
 import kotlinx.coroutines.delay
@@ -40,7 +41,7 @@ import java.time.ZoneId
 /**
  * Making or changing an alarm, as the stock Alarm app lays it out: a cross to leave without
  * saving, the bin and the Save (Create for a new one) in the top bar, the time in its boxes, and
- * a row for each of Repeat, Name and Sound. A repeating alarm has one more row, to skip its next time.
+ * a row for each of Repeat, Name, Group and Sound. A repeating alarm has one more row, to skip its next time.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,6 +57,8 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
     var minute by rememberSaveable { mutableStateOf(start.minute) }
     var days by rememberSaveable { mutableStateOf(start.days) }
     var label by rememberSaveable { mutableStateOf(start.label) }
+    var group by rememberSaveable { mutableStateOf(start.group) }
+    val groups = remember { Groups.names(Store.get(context).alarms()) }
     var sound by rememberSaveable { mutableStateOf(start.sound) }
     var soundTitle by rememberSaveable { mutableStateOf(start.soundTitle) }
     var vibrate by rememberSaveable { mutableStateOf(start.vibrate) }
@@ -78,6 +81,10 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
             NamePage(stringResource(R.string.name_title), label, { label = it }, onBack = { page = "" })
             return
         }
+        "group" -> {
+            GroupPage(group, groups, { group = it }, onBack = { page = "" })
+            return
+        }
         "sound" -> {
             SoundPage(sound, soundTitle, vibrate, { s, t -> sound = s; soundTitle = t }, { vibrate = it }, onBack = { page = "" })
             return
@@ -87,7 +94,7 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
     BackHandler { onDone() }
     fun save() {
         val a = (existing ?: Alarm(hour = hour, minute = minute)).copy(
-            hour = hour, minute = minute, days = days, label = label.trim(), sound = sound, soundTitle = soundTitle, vibrate = vibrate,
+            hour = hour, minute = minute, days = days, label = label.trim(), group = Groups.clean(group, groups), sound = sound, soundTitle = soundTitle, vibrate = vibrate,
         )
         val saved = Engine.save(context, a)
         if (skip && days != 0) Engine.skipNext(context, saved, true)
@@ -141,6 +148,10 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
             }
             item(key = "name") {
                 NavRow(stringResource(R.string.name_title), label.ifBlank { stringResource(R.string.alarm) }) { page = "name" }
+                Dotted()
+            }
+            item(key = "group") {
+                NavRow(stringResource(R.string.group_title), group.trim().ifBlank { stringResource(R.string.group_none) }) { page = "group" }
                 Dotted()
             }
             item(key = "sound") {

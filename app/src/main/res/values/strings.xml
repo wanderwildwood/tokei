@@ -96,6 +96,21 @@
     <!-- %1$s is when, e.g. "Mon 12 Oct 06:30" -->
     <string name="skip_next_note">It does not ring %1$s, then carries on as before.</string>
 
+    <!-- Groups of alarms, such as Office and Home, switched on and off together -->
+    <string name="group_title">Group</string>
+    <string name="group_none">None</string>
+    <string name="group_hint">Office, Home, Weekend</string>
+    <string name="group_note">Alarms in a group are listed together under its name, and can be switched on or off, or have their next time skipped, all at once.</string>
+    <plurals name="group_count">
+        <item quantity="one">%1$d alarm</item>
+        <item quantity="other">%1$d alarms</item>
+    </plurals>
+    <string name="group_skip_next">Skip the next one</string>
+    <string name="group_skip_note">For each repeating alarm in the group that is on.</string>
+    <string name="group_skip_none">No repeating alarm in the group is on.</string>
+    <string name="group_rename">Rename group</string>
+    <string name="group_rename_note">A name already in use puts the two groups together. With no name, the alarms are in no group.</string>
+
     <!-- ============================================================ -->
     <!-- Ringing -->
 

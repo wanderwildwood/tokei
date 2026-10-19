@@ -47,6 +47,7 @@ import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
 import com.wanderwildwood.tokei.R
 import com.wanderwildwood.tokei.alarm.Sounds
 import com.wanderwildwood.tokei.data.Alarm
+import com.wanderwildwood.tokei.data.Groups
 import com.wanderwildwood.tokei.data.Plan
 import kotlinx.coroutines.delay
 import java.time.DayOfWeek
@@ -112,6 +113,41 @@ fun NamePage(title: String, name: String, onName: (String) -> Unit, onBack: () -
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp).focusRequester(focus).textActions(),
             )
+        }
+    }
+}
+
+/**
+ * The group an alarm is in: typed, or one of those already in use pressed, or None. Typing a
+ * name already in use, whatever its capitals, puts the alarm in that group.
+ */
+@Composable
+fun GroupPage(group: String, names: List<String>, onGroup: (String) -> Unit, onBack: () -> Unit) {
+    // Ready to type when there is no group yet to choose from.
+    val focus = remember { FocusRequester() }
+    LaunchedEffect(Unit) { if (names.isEmpty()) runCatching { focus.requestFocus() } }
+    SubPage(stringResource(R.string.group_title), onBack) {
+        item(key = "field") {
+            TextFieldMMD(
+                value = group,
+                onValueChange = { onGroup(it.take(Groups.MAX_NAME)) },
+                singleLine = true,
+                placeholder = { TextMMD(text = stringResource(R.string.group_hint), style = MaterialTheme.typography.bodyMedium) },
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp).focusRequester(focus).textActions(),
+            )
+        }
+        item(key = "none") {
+            Spacer(Modifier.height(12.dp))
+            ChoiceRow(stringResource(R.string.group_none), group.isBlank()) { onGroup(""); onBack() }
+        }
+        for (name in names) {
+            item(key = "g:$name") {
+                ChoiceRow(name, group.trim().equals(name, ignoreCase = true)) { onGroup(name); onBack() }
+            }
+        }
+        item(key = "note") {
+            TextMMD(text = stringResource(R.string.group_note), style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 12.dp))
         }
     }
 }

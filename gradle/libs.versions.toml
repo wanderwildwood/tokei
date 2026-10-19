@@ -12,6 +12,7 @@ androidx-compose = "1.9.5"
 androidx-material3 = "1.4.0"
 
 junit = "4.13.2"
+sqlite-jdbc = "3.46.1.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -28,6 +29,8 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 mmd = { module = "com.mudita:MMD", version.ref = "mmd" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
+# SQLite on the computer, so the database upgrade can be tested without a phone.
+sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
