@@ -22,9 +22,24 @@ data class Stopwatch(val running: Boolean = false, val since: Long = 0, val bank
     /** The lap under way: the time since the last lap was pressed. */
     fun current(now: Long): Long = total(now) - (laps.lastOrNull() ?: 0L)
 
+    /**
+     * How long from [now] until the shown whole seconds next change: the total's, or the lap
+     * under way's when that turns first. Both count from the stopwatch's own start, not the wall
+     * clock's second, so a start at x.7 s shows 0:01 at x+1.7. Two turns closer together than
+     * [MERGE_MS] are drawn as one, at the later, so the screen is not redrawn twice in a breath.
+     */
+    fun untilNextSecond(now: Long): Long {
+        val total = 1_000L - total(now) % 1_000L
+        if (laps.isEmpty()) return total
+        val lap = 1_000L - current(now) % 1_000L
+        return if (kotlin.math.abs(total - lap) < MERGE_MS) maxOf(total, lap) else minOf(total, lap)
+    }
+
     fun encode(): String = "${if (running) 1 else 0};$since;$banked;" + laps.joinToString(",")
 
     companion object {
+        const val MERGE_MS = 100L
+
         fun decode(s: String): Stopwatch {
             val p = s.split(';')
             if (p.size != 4) return Stopwatch()

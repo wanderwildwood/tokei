@@ -164,6 +164,10 @@ private fun Ringing(onDone: () -> Unit) {
 /** Snooze lengths offered on the ringing screen, in minutes. */
 val SNOOZES = listOf(5, 10, 15, 30, 60)
 
+/** The range a snooze length of one's own, set under Other… in Settings, may take. */
+const val SNOOZE_MIN = 1
+const val SNOOZE_MAX = 120
+
 private fun shortMinutes(context: Context, m: Int): String =
     if (m == 60) context.getString(R.string.one_hour_short) else context.getString(R.string.minutes_short, m)
 

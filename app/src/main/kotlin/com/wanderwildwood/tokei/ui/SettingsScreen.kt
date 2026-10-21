@@ -1,8 +1,10 @@
 package com.wanderwildwood.tokei.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,10 +16,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.mudita.mmd.components.text.TextMMD
@@ -25,6 +29,8 @@ import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
 import com.wanderwildwood.tokei.R
 import com.wanderwildwood.tokei.Times
 import com.wanderwildwood.tokei.alarm.SNOOZES
+import com.wanderwildwood.tokei.alarm.SNOOZE_MAX
+import com.wanderwildwood.tokei.alarm.SNOOZE_MIN
 import com.wanderwildwood.tokei.data.Settings
 import com.wanderwildwood.tokei.glance.GlanceProvider
 
@@ -101,9 +107,7 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
     }
 
     if (pickSnooze) {
-        OptionsDialog(
-            title = stringResource(R.string.settings_snooze),
-            options = SNOOZES.map { it to Times.minutes(context, it) },
+        SnoozeDialog(
             chosen = snooze,
             onPick = {
                 s.snoozeMinutes = it
@@ -123,5 +127,51 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
             },
             onDismiss = { pickRing = false },
         )
+    }
+}
+
+/**
+ * The snooze lengths, and Other… at the foot for any length from 1 minute to 2 hours, typed or
+ * stepped in one box. A length set that way is listed in its place among the others, as chosen.
+ */
+@Composable
+private fun SnoozeDialog(chosen: Int, onPick: (Int) -> Unit, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    var other by remember { mutableStateOf(false) }
+    var typed by remember { mutableIntStateOf(chosen.coerceIn(SNOOZE_MIN, SNOOZE_MAX)) }
+    EInkDialog(onDismiss = onDismiss) {
+        TextMMD(text = stringResource(R.string.settings_snooze), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+        Spacer(Modifier.height(8.dp))
+        if (other) {
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                NumberBox(
+                    typed, SNOOZE_MIN, SNOOZE_MAX, context.getString(R.string.cd_minutes), { typed = it },
+                    width = 120, show = { it.toString() }, figures = 3,
+                )
+            }
+            TextMMD(
+                text = context.getString(R.string.unit_minutes),
+                style = MaterialTheme.typography.labelSmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            TextMMD(
+                text = stringResource(R.string.settings_snooze_other_note),
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(top = 8.dp, bottom = 12.dp),
+            )
+            DialogButtons(onCancel = { other = false }, onOk = {
+                onPick(typed.coerceIn(SNOOZE_MIN, SNOOZE_MAX))
+                onDismiss()
+            })
+        } else {
+            for (m in (SNOOZES + chosen).distinct().sorted()) {
+                ChoiceRow(Times.minutes(context, m), m == chosen) {
+                    onPick(m)
+                    onDismiss()
+                }
+            }
+            ChoiceRow(stringResource(R.string.settings_snooze_other), false) { other = true }
+        }
     }
 }

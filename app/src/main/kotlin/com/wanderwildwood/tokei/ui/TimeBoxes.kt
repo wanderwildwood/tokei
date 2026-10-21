@@ -53,7 +53,7 @@ import java.util.Locale
 
 private fun two(n: Int) = String.format(Locale.ROOT, "%02d", n)
 
-/** One number in its box, with its arrows. [show] writes it; typing takes the last two figures. */
+/** One number in its box, with its arrows. [show] writes it; typing takes the last [figures] figures. */
 @Composable
 fun NumberBox(
     value: Int,
@@ -64,6 +64,7 @@ fun NumberBox(
     width: Int = 96,
     size: Int = 46,
     show: (Int) -> String = ::two,
+    figures: Int = 2,
 ) {
     var focused by remember { mutableStateOf(false) }
     var field by remember { mutableStateOf(TextFieldValue(show(value))) }
@@ -90,7 +91,7 @@ fun NumberBox(
             BasicTextField(
                 value = field,
                 onValueChange = { v ->
-                    val digits = v.text.filter(Char::isDigit).takeLast(2)
+                    val digits = v.text.filter(Char::isDigit).takeLast(figures)
                     field = TextFieldValue(digits, TextRange(digits.length))
                     digits.toIntOrNull()?.let { if (it in min..max) onValue(it) }
                 },

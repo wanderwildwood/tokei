@@ -216,6 +216,8 @@
 
     <string name="settings_title">Settings</string>
     <string name="settings_snooze">Snooze length</string>
+    <string name="settings_snooze_other">Other…</string>
+    <string name="settings_snooze_other_note">From 1 minute to 2 hours.</string>
     <string name="settings_ring_for">Rings for</string>
     <!-- %1$s is a length -->
     <string name="settings_ring_for_value">%1$s, then stops and is listed as missed</string>

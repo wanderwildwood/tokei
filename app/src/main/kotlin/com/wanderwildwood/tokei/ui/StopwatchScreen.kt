@@ -42,7 +42,7 @@ import com.wanderwildwood.tokei.data.Store
 /**
  * The stopwatch, in the ringing screen's shapes: the time large, a round button for Lap (Reset
  * once stopped) and the black pill for Start and Stop. While it runs it shows whole seconds, a
- * redraw a second; stopped, and in the laps, it shows hundredths.
+ * redraw on each of its own seconds; stopped, and in the laps, it shows hundredths.
  */
 @Composable
 fun StopwatchScreen() {
@@ -51,10 +51,13 @@ fun StopwatchScreen() {
     val version by Store.version.collectAsState()
     var w by remember(version) { androidx.compose.runtime.mutableStateOf(settings.stopwatch) }
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
-    LaunchedEffect(w.running) {
+    // Keyed on the whole stopwatch, so a lap (which moves the lap line's seconds) or a fresh read
+    // of it starts the tick again from what is shown now.
+    LaunchedEffect(w) {
         now = System.currentTimeMillis()
         while (w.running) {
-            delay1s()
+            // Just past the stopwatch's own next second (and the lap line's), never a spin.
+            kotlinx.coroutines.delay(w.untilNextSecond(System.currentTimeMillis()) + 10L)
             now = System.currentTimeMillis()
         }
     }
@@ -140,5 +143,3 @@ fun StopwatchScreen() {
         } }
     }
 }
-
-private suspend fun delay1s() = kotlinx.coroutines.delay(1_000L - System.currentTimeMillis() % 1_000L)

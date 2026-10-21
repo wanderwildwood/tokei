@@ -20,8 +20,9 @@ Android 12 device.
   a sound and vibration, and a switch. The time is typed on the number keys, or stepped with the
   arrows, to the minute.
 - **Snooze for as long as you choose, on the ringing screen.** The round Snooze button puts it
-  off for the length set in Settings (10 minutes to start with); under it, 5, 15 and 30 minutes
-  and 1 hour each snooze for that long at a press.
+  off for the length set in Settings (10 minutes to start with, or any length from 1 minute to
+  2 hours under Other); under it, 5, 15 and 30 minutes and 1 hour each snooze for that long at
+  a press.
 - **Rings until it is answered**, on the alarm volume, so a phone set to silent still rings. If
   nobody answers it stops after 10 minutes (5, 15 or 30 can be chosen, or 1) and is listed as
   missed. It can start quiet and grow to full volume over a minute.
