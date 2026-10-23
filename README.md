@@ -125,6 +125,17 @@ A release build needs a keystore at `signing/signing.keystore` with a matching
 `signing/signing.properties`. There is no fallback key in this repository: without one, a
 release build comes out unsigned rather than wrongly signed.
 
+## Getting it, and keeping it
+
+Download <https://github.com/wanderwildwood/tokei/releases/latest/download/tokei.apk>
+and sideload it. That address always points at the newest release, and every release
+publishes a `.sha256` beside the APK if you would rather check than trust.
+
+For updates without doing this by hand, add this repository to
+[Obtainium](https://github.com/ImranR98/Obtainium):
+
+    https://github.com/wanderwildwood/tokei
+
 ## Licence
 
 GPL-3.0-only. See [LICENSE](LICENSE).
