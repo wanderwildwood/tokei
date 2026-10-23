@@ -136,6 +136,10 @@ For updates without doing this by hand, add this repository to
 
     https://github.com/wanderwildwood/tokei
 
+## Privacy
+
+Privacy: what the app stores and what it sends is set out in [PRIVACY.md](PRIVACY.md).
+
 ## Licence
 
 GPL-3.0-only. See [LICENSE](LICENSE).
