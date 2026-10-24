@@ -30,6 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import android.view.HapticFeedbackConstants
+import com.wanderwildwood.tokei.data.Settings
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
@@ -51,6 +54,25 @@ import java.util.Locale
  * number keys, and two figures typed set it outright, so 6:47 is typed, not stepped to.
  */
 
+/**
+ * Asks the phone for its keyboard tap, when Settings has it on: the same short tick a keypad
+ * gives, through the view rather than the vibrator, so the phone's own touch feedback setting
+ * still has the last word and a phone with it off stays quiet. Read at each press, so a change
+ * in Settings is felt at once.
+ */
+@Composable
+fun rememberKeyBuzz(): () -> Unit {
+    val view = LocalView.current
+    val settings = Settings(LocalContext.current)
+    return remember(view) {
+        { if (settings.buzz) view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP) }
+    }
+}
+
+/** Whether typing in a number box changed the figures in it: a figure added, or one taken away. */
+internal fun figuresChanged(before: String, typed: String, figures: Int): Boolean =
+    typed.filter(Char::isDigit).takeLast(figures) != before.filter(Char::isDigit)
+
 private fun two(n: Int) = String.format(Locale.ROOT, "%02d", n)
 
 /** One number in its box, with its arrows. [show] writes it; typing takes the last [figures] figures. */
@@ -66,12 +88,14 @@ fun NumberBox(
     show: (Int) -> String = ::two,
     figures: Int = 2,
 ) {
+    val buzz = rememberKeyBuzz()
     var focused by remember { mutableStateOf(false) }
     var field by remember { mutableStateOf(TextFieldValue(show(value))) }
     LaunchedEffect(value, focused) {
         if (!focused) field = TextFieldValue(show(value))
     }
     fun step(by: Int) {
+        buzz()
         val span = max - min + 1
         val next = ((value - min + by) % span + span) % span + min
         field = TextFieldValue(show(next), TextRange(show(next).length))
@@ -91,6 +115,7 @@ fun NumberBox(
             BasicTextField(
                 value = field,
                 onValueChange = { v ->
+                    if (figuresChanged(field.text, v.text, figures)) buzz()
                     val digits = v.text.filter(Char::isDigit).takeLast(figures)
                     field = TextFieldValue(digits, TextRange(digits.length))
                     digits.toIntOrNull()?.let { if (it in min..max) onValue(it) }
@@ -128,6 +153,7 @@ private fun Colon() {
 @Composable
 fun TimeStepper(hour: Int, minute: Int, onChange: (Int, Int) -> Unit) {
     val context = LocalContext.current
+    val buzz = rememberKeyBuzz()
     val is24 = remember { Times.is24(context) }
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
         if (is24) {
@@ -141,8 +167,8 @@ fun TimeStepper(hour: Int, minute: Int, onChange: (Int, Int) -> Unit) {
         if (!is24) {
             Spacer(Modifier.width(8.dp))
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                AmPm(context.getString(R.string.am), hour < 12) { if (hour >= 12) onChange(hour - 12, minute) }
-                AmPm(context.getString(R.string.pm), hour >= 12) { if (hour < 12) onChange(hour + 12, minute) }
+                AmPm(context.getString(R.string.am), hour < 12) { buzz(); if (hour >= 12) onChange(hour - 12, minute) }
+                AmPm(context.getString(R.string.pm), hour >= 12) { buzz(); if (hour < 12) onChange(hour + 12, minute) }
             }
         }
     }

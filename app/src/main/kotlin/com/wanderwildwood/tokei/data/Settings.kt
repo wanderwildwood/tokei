@@ -31,6 +31,11 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("sky_on_ring", false)
         set(v) = prefs.edit().putBoolean("sky_on_ring", v).apply()
 
+    /** A short tick at each key press while a time or a length is set. Off until asked for; it is the alarm's own vibration that has a switch of its own. */
+    var buzz: Boolean
+        get() = prefs.getBoolean(BUZZ, BUZZ_DEFAULT)
+        set(v) = prefs.edit().putBoolean(BUZZ, v).apply()
+
     /** The person said Clock is switched on in DuraSpeed's list. */
     var duraSpeedAllowed: Boolean
         get() = prefs.getBoolean("duraspeed_allowed", false)
@@ -69,5 +74,7 @@ class Settings(context: Context) {
 
     companion object {
         const val RISE_MS = 60_000L
+        const val BUZZ = "buzz"
+        const val BUZZ_DEFAULT = false
     }
 }

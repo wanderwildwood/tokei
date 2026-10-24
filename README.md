@@ -38,6 +38,9 @@ Android 12 device.
 - **Timers that ring.** As many as you like, each kept with its length and name to start again,
   and several can run at once. When one reaches zero it rings like an alarm, with the screen off
   or the phone locked, until it is stopped or given a minute more.
+- **A short tick at each key press** when a time or a length is set, with the arrows and AM/PM too.
+  Off to begin with; the switch is in Settings, and the phone's own touch feedback setting still
+  decides whether it is felt.
 - **A stopwatch** with laps. It keeps counting with the app closed.
 - **A world clock** for the cities you choose, each with its day and how far ahead or behind.
 - **Never misses an alarm without saying so.** If an alarm or a timer could not ring — the app

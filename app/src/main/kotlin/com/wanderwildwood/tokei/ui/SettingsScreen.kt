@@ -56,6 +56,7 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
     val rise = remember(v) { s.rise }
     val glance = remember(v) { s.onLockScreen }
     val sky = remember(v) { s.skyOnRing }
+    val buzz = remember(v) { s.buzz }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -93,6 +94,12 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
             item(key = "sky") {
                 SwitchRow(stringResource(R.string.settings_sky), sky, note = stringResource(R.string.settings_sky_note)) {
                     s.skyOnRing = it
+                    v++
+                }
+            }
+            item(key = "buzz") {
+                SwitchRow(stringResource(R.string.settings_buzz), buzz, note = stringResource(R.string.settings_buzz_note)) {
+                    s.buzz = it
                     v++
                 }
             }
