@@ -124,12 +124,11 @@ fun StopwatchScreen() {
             Spacer(Modifier.height(16.dp))
         }
         val laps = w.lapTimes()
-        // A long run of laps gets page dots down the edge once it passes three screens.
         val lapState = rememberLazyListState()
         // The newest lap is first; a new one opens the list at the top again, or the list kept
         // its place on the older laps and the new ones went in above, out of sight.
         LaunchedEffect(laps.size) { lapState.scrollToItem(0) }
-        ListJumpBox(lapState, ListJump.Pages, Modifier.weight(1f).fillMaxWidth()) { PagedColumn(modifier = Modifier.fillMaxSize(), state = lapState) {
+        PagedColumn(modifier = Modifier.weight(1f).fillMaxWidth(), state = lapState) {
             for (i in laps.indices.reversed()) {
                 item(key = i) {
                     Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)) {
@@ -140,6 +139,6 @@ fun StopwatchScreen() {
                     Dotted(Modifier.padding(horizontal = 20.dp))
                 }
             }
-        } }
+        }
     }
 }

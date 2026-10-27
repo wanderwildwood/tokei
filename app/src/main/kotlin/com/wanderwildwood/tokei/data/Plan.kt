@@ -86,6 +86,30 @@ object Plan {
         return listOfNotNull(snooze, scheduled(a, zone)).minOrNull()
     }
 
+    /** Whether the person changed when [new] rings, as against only what it is called or sounds like. */
+    fun scheduleChanged(old: Alarm?, new: Alarm): Boolean =
+        old == null || old.hour != new.hour || old.minute != new.minute || old.days != new.days
+
+    /**
+     * [edited] as it is kept after Save. When and on which days are unchanged, so is the state
+     * it was in: on or off, caught up to where it was, snoozed or not, with its skip. A once
+     * alarm that is waiting for this evening stays this evening; one that is snoozed stays
+     * snoozed. A change of time or days starts it afresh, on, from [now].
+     */
+    fun saved(old: Alarm?, edited: Alarm, now: Long): Alarm =
+        if (old != null && !scheduleChanged(old, edited)) {
+            edited.copy(enabled = old.enabled, from = old.from, snoozedUntil = old.snoozedUntil, skip = old.skip)
+        } else {
+            edited.copy(enabled = true, from = now, snoozedUntil = 0, skip = 0)
+        }
+
+    /** [a] after its switch is pressed to [on]: a snooze goes with it, whichever way. */
+    fun switched(a: Alarm, on: Boolean, now: Long): Alarm =
+        a.copy(enabled = on, from = now, snoozedUntil = 0, skip = 0)
+
+    /** [a] with its snooze cancelled and nothing else changed: a repeating alarm rings next at its time. */
+    fun unsnoozed(a: Alarm): Alarm = a.copy(snoozedUntil = 0)
+
     /** The next alarm to ring, and whether it is a snooze. */
     data class Wake(val at: Long, val alarm: Alarm, val snoozed: Boolean)
 

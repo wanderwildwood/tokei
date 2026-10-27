@@ -1,5 +1,7 @@
 package com.wanderwildwood.tokei.alarm
 
+import com.wanderwildwood.tokei.ui.helperStyle
+import com.wanderwildwood.tokei.ui.smallBodyStyle
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -124,20 +126,20 @@ private fun Ringing(onDone: () -> Unit) {
             val n = settings.snoozeMinutes
             BigRound(stringResource(R.string.ring_snooze), Times.minutes(context, n)) { Engine.snooze(context, top.id, n) }
             Spacer(Modifier.height(16.dp))
-            TextMMD(text = stringResource(R.string.ring_snooze_other), style = MaterialTheme.typography.labelSmall)
+            TextMMD(text = stringResource(R.string.ring_snooze_other), style = helperStyle())
             Spacer(Modifier.height(6.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 for (m in SNOOZES.filter { it != n }) {
                     Box(
                         Modifier
                             .weight(1f)
-                            .height(44.dp)
+                            .height(48.dp)
                             .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface), RoundedCornerShape(10.dp))
                             .clickable { Engine.snooze(context, top.id, m) }
                             .semantics { contentDescription = context.getString(R.string.ring_snooze_for, Times.minutes(context, m)) },
                         contentAlignment = Alignment.Center,
                     ) {
-                        TextMMD(text = shortMinutes(context, m), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+                        TextMMD(text = shortMinutes(context, m), style = smallBodyStyle(), fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -146,7 +148,7 @@ private fun Ringing(onDone: () -> Unit) {
         if (ringing.size > 1) {
             TextMMD(
                 text = context.resources.getQuantityString(R.plurals.ring_more, ringing.size - 1, ringing.size - 1),
-                style = MaterialTheme.typography.labelSmall,
+                style = helperStyle(),
             )
             Spacer(Modifier.height(8.dp))
         }

@@ -148,7 +148,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
     var arming by remember { mutableStateOf(false) }
     LaunchedEffect(arming) {
         if (arming) {
-            delay(4_000L)
+            delay(ARM_MS)
             arming = false
         }
     }
@@ -212,7 +212,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
                 if (seconds <= 0) {
                     TextMMD(
                         text = stringResource(R.string.timer_zero),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = helperStyle(),
                         modifier = Modifier.padding(horizontal = 12.dp),
                     )
                 }

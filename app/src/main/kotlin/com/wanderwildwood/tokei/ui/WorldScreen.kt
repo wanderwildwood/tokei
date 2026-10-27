@@ -150,6 +150,10 @@ fun CityPicker(onDone: () -> Unit) {
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).textActions(),
             )
         }
+        if (shown.size > 6) item(key = "cue") {
+            TextMMD(text = stringResource(R.string.world_cue), style = helperStyle(), modifier = Modifier.padding(bottom = 6.dp))
+            Dotted()
+        }
         for (c in shown) {
             item(key = c.zone) {
                 val added = c.zone in chosen

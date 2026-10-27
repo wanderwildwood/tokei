@@ -24,7 +24,7 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
-    <!-- A row asking again before deleting; it disarms itself after four seconds -->
+    <!-- A row asking again before deleting; it disarms itself after six seconds -->
     <string name="delete_armed">Delete — tap again</string>
 
     <!-- Lengths. %1$d is a number -->
@@ -89,7 +89,6 @@
     <string name="sound_silent">No sound, vibration only</string>
     <string name="sound_default">The phone\'s alarm sound</string>
     <string name="sound_file_chosen">A sound file</string>
-    <string name="sound_pick_file">Choose a sound file</string>
     <!-- %1$s is the sound -->
     <string name="sound_and_vibration">%1$s, and vibration</string>
     <string name="skip_next">Skip the next one</string>
@@ -220,14 +219,13 @@
     <string name="settings_snooze_other_note">From 1 minute to 2 hours.</string>
     <string name="settings_ring_for">Rings for</string>
     <!-- %1$s is a length -->
-    <string name="settings_ring_for_value">%1$s, then stops and is listed as missed</string>
+    <string name="settings_ring_for_value">%1$s, then listed as missed</string>
     <string name="settings_rise">Start quiet and get louder</string>
-    <string name="settings_rise_note">Over the first minute, up to the phone\'s alarm volume.</string>
+    <string name="settings_rise_note">Over the first minute.</string>
     <string name="settings_glance">Next alarm on the lock screen</string>
-    <string name="settings_glance_note">Shown by Glance, when it is installed.</string>
+    <string name="settings_glance_note">Shown by Glance, if it is installed.</string>
     <string name="settings_sky">Weather when an alarm rings</string>
-    <string name="settings_sky_note">From Sky, when it is installed: the temperature, the sky, and the day\'s high and low.</string>
-    <string name="settings_call_note">Alarms ring on the alarm volume, so a phone set to silent still rings. During a call an alarm rings quietly and vibrates.</string>
+    <string name="settings_sky_note">From Sky, if it is installed: the temperature, the sky, and the day\'s high and low.</string>
 
     <!-- ============================================================ -->
     <!-- Notifications -->
@@ -249,15 +247,25 @@
     <!-- ============================================================ -->
     <!-- About -->
 
+    <string name="sound_picker_title">Alarm sound</string>
+    <string name="sound_no_picker">This phone has no sound picker.</string>
+    <string name="snooze_cancel">Cancel snooze</string>
+    <string name="world_cue">Type a name above, or swipe up for the next cities.</string>
+    <string name="about_page_title">About</string>
+    <string name="about_ring_title">Ringing</string>
+    <string name="about_ring">Alarms ring on the alarm volume, so a phone set to silent still rings. During a call an alarm rings quietly and vibrates.</string>
+    <string name="about_privacy_title">Privacy</string>
+    <string name="about_privacy">Everything you put in this app stays on this phone. It has no internet access, so nothing is sent anywhere, and nothing is collected about you. It asks for notifications and to show over the lock screen, so a ringing alarm can be answered, and to vibrate and keep the phone awake while it rings. The sound is one you pick from those already on the phone.</string>
+    <string name="about_privacy_links">Only if you switch them on in Settings, it tells Glance your next alarm, and asks Sky for a line of weather, both on this phone. There are no ads, no analytics and no tracking. The links below open your browser only when you press them.</string>
+    <string name="about_terms_title">Terms</string>
+    <string name="about_terms">This app is free software under the GNU General Public License v3. It comes with no warranty: use it at your own risk.</string>
+    <string name="about_terms_alarms">A phone can fail to ring an alarm: a flat battery, a phone switched off, or the system stopping apps. Where missing one would matter, do not rely on one clock alone.</string>
     <string name="about_title">Clock %1$s</string>
-    <string name="about_what">Alarms, timers, a stopwatch and a world clock. The app has no internet permission.</string>
+    <string name="about_what">Alarms, timers, a stopwatch and a world clock.</string>
     <string name="about_licence">GNU General Public License v3</string>
     <string name="about_base">Built on Fossify Clock, GPL-3.0</string>
     <string name="about_icons">Icons from Material Symbols, Apache 2.0</string>
     <string name="about_feed_the_llamas">feed the llamas</string>
     <string name="about_no_browser">There is no browser on this phone to open that with.</string>
     <string name="about_close">Close</string>
-    <string name="list_jump_setting">Letters and page dots</string>
-    <string name="list_jump_shown">Shown</string>
-    <string name="list_jump_hidden">Hidden</string>
 </resources>

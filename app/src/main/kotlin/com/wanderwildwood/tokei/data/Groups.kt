@@ -47,14 +47,14 @@ object Groups {
     }
 
     /** The heading's switch reads on while any alarm in the group is on. */
-    fun isOn(group: List<Alarm>): Boolean = group.any { it.enabled }
+    fun isOn(group: List<Alarm>): Boolean = group.any { it.isOn }
 
     /**
      * The alarms the heading's switch has to change to put the whole group [on] or off: only
      * those not that way already, so an alarm left as it was keeps its skip and its snooze.
      */
     fun toSwitch(group: List<Alarm>, on: Boolean): List<Long> =
-        group.filter { it.enabled != on }.map { it.id }
+        group.filter { it.isOn != on }.map { it.id }
 
     /** The alarms "Skip next" applies to: the repeating ones that are on. */
     fun skippable(group: List<Alarm>): List<Alarm> = group.filter { it.enabled && it.repeats }

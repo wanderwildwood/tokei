@@ -79,7 +79,7 @@ fun NumberBox(
     }
     val ink = MaterialTheme.colorScheme.onSurface
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(Modifier.size(width.dp, 44.dp).clickable { step(1) }, contentAlignment = Alignment.Center) {
+        Box(Modifier.size(width.dp, 48.dp).clickable { step(1) }, contentAlignment = Alignment.Center) {
             Icon(Icons.Up, contentDescription = null, tint = ink, modifier = Modifier.size(48.dp))
         }
         Box(
@@ -113,7 +113,7 @@ fun NumberBox(
                     .semantics { contentDescription = description },
             )
         }
-        Box(Modifier.size(width.dp, 44.dp).clickable { step(-1) }, contentAlignment = Alignment.Center) {
+        Box(Modifier.size(width.dp, 48.dp).clickable { step(-1) }, contentAlignment = Alignment.Center) {
             Icon(Icons.Down, contentDescription = null, tint = ink, modifier = Modifier.size(48.dp))
         }
     }
@@ -153,7 +153,7 @@ private fun AmPm(text: String, chosen: Boolean, onClick: () -> Unit) {
     val ink = MaterialTheme.colorScheme.onSurface
     Box(
         Modifier
-            .size(50.dp, 36.dp)
+            .size(50.dp, 48.dp)
             .border(BorderStroke(2.dp, ink), RoundedCornerShape(12.dp))
             .background(if (chosen) ink else MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
@@ -186,7 +186,7 @@ fun LengthStepper(seconds: Int, onChange: (Int) -> Unit) {
         listOf(R.string.unit_hours, R.string.unit_minutes, R.string.unit_seconds).forEachIndexed { i, r ->
             if (i > 0) Spacer(Modifier.width(20.dp))
             Box(Modifier.width(84.dp), contentAlignment = Alignment.Center) {
-                TextMMD(text = context.getString(r), style = MaterialTheme.typography.labelSmall)
+                TextMMD(text = context.getString(r), style = helperStyle())
             }
         }
     }

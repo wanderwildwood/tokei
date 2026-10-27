@@ -1,6 +1,6 @@
 # Clock — Privacy Policy
 
-Version 0.2.3. Last reviewed 23 October 2026.
+Version 0.2.6. Last reviewed 27 October 2026.
 
 ## The short version
 
@@ -16,7 +16,7 @@ Because no personal data is transmitted to or held by the developer, there is no
 
 ## What the app stores, and where
 
-In its own private storage on the phone: your alarms (time, days, name, sound, vibration, on or off, snooze state), your timers, a list of alarms and timers that rang unanswered, the stopwatch, the cities on your world clock, and your settings (snooze length, how long an alarm rings, and the switches described below). If you choose a sound from your files, the app keeps the address of that one file and the permission Android gives it to read that file; it reads no other file.
+In its own private storage on the phone: your alarms (time, days, name, sound, vibration, on or off, snooze state), your timers, a list of alarms and timers that rang unanswered, the stopwatch, the cities on your world clock, and your settings (snooze length, how long an alarm rings, and the switches described below). The sound of an alarm is chosen in Android's own picker for alarm sounds, which lists the sounds already on the phone; the app keeps only the address and name of the one you pick, and bundles no sounds of its own. (An alarm set up in an earlier version with a sound file of your own keeps the address of that file and the permission Android gave it to read that file; the app reads no other file.)
 
 The app is left out of Android's backups (`allowBackup="false"`), and uninstalling it removes all of it. There is no cloud copy and no copy held by the developer.
 

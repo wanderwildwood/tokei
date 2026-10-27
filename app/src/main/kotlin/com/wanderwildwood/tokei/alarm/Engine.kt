@@ -160,11 +160,16 @@ object Engine {
 
     // ---------------------------------------------------------------- alarms
 
-    /** Saves an alarm, new or changed, switched on and starting from now. Returns its id. */
+    /**
+     * Saves an alarm, new or changed. New, or with its time or days changed, it is switched on and
+     * starts from now; with only its name, group or sound changed it keeps the state it was in
+     * (see [Plan.saved]). Returns its id.
+     */
     fun save(context: Context, a: Alarm): Long = synchronized(lock) {
         val store = Store.get(context)
-        val id = store.save(a.copy(enabled = true, from = System.currentTimeMillis(), snoozedUntil = 0, skip = 0))
-        Ringer.remove(context, Ring(false, id, 0))
+        val old = if (a.id != 0L) store.alarm(a.id) else null
+        val id = store.save(Plan.saved(old, a, System.currentTimeMillis()))
+        if (Plan.scheduleChanged(old, a)) Ringer.remove(context, Ring(false, id, 0))
         changed(context)
         id
     }
@@ -180,7 +185,7 @@ object Engine {
         val store = Store.get(context)
         for (id in ids) {
             val a = store.alarm(id) ?: continue
-            store.save(a.copy(enabled = on, from = System.currentTimeMillis(), snoozedUntil = 0, skip = 0))
+            store.save(Plan.switched(a, on, System.currentTimeMillis()))
             if (!on) Ringer.remove(context, Ring(false, id, 0))
         }
         changed(context)
@@ -226,11 +231,14 @@ object Engine {
     /** Stops a ringing alarm, and any snooze of it. A once alarm is already off: it rang. */
     fun dismiss(context: Context, id: Long) = synchronized(lock) {
         val store = Store.get(context)
-        store.alarm(id)?.let { if (it.snoozedUntil != 0L) store.save(it.copy(snoozedUntil = 0)) }
+        store.alarm(id)?.let { if (it.snoozedUntil != 0L) store.save(Plan.unsnoozed(it)) }
         Log.i(TAG, "alarm $id dismissed")
         Ringer.remove(context, Ring(false, id, 0))
         changed(context)
     }
+
+    /** Cancels a snooze from the alarm list; the alarm itself is as it was (a repeating one still rings at its time). */
+    fun cancelSnooze(context: Context, id: Long) = dismiss(context, id)
 
     // ---------------------------------------------------------------- timers
 

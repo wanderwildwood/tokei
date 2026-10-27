@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalCursorBlinkEnabled
 import androidx.compose.runtime.mutableStateOf
 import com.mudita.mmd.ThemeMMD
 import com.wanderwildwood.tokei.alarm.Engine
@@ -23,8 +25,12 @@ class MainActivity : ComponentActivity() {
         Notifier.channels(this)
         if (savedInstanceState == null) opening.value = openingIn(intent)
         setContent {
-            ThemeMMD(colorScheme = monochrome) {
-                ClockApp(opening = opening.value, onOpened = { opening.value = null })
+            // A steady cursor: a blinking one repaints the e-ink panel twice a second for as long
+            // as a field has focus.
+            CompositionLocalProvider(LocalCursorBlinkEnabled provides false) {
+                ThemeMMD(colorScheme = monochrome) {
+                    ClockApp(opening = opening.value, onOpened = { opening.value = null })
+                }
             }
         }
     }

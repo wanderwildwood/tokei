@@ -141,12 +141,12 @@ fun ProblemCard(p: Problem) {
         Spacer(Modifier.height(12.dp))
         // One under the other, full width: side by side, "Open DuraSpeed" broke over two lines.
         ButtonMMD(onClick = p.action, modifier = Modifier.fillMaxWidth().height(48.dp)) {
-            TextMMD(text = p.button, style = MaterialTheme.typography.bodySmall)
+            TextMMD(text = p.button, style = smallBodyStyle())
         }
         if (p.done != null && p.onDone != null) {
             Spacer(Modifier.height(8.dp))
             OutlinedButtonMMD(onClick = p.onDone, modifier = Modifier.fillMaxWidth().height(48.dp)) {
-                TextMMD(text = p.done, style = MaterialTheme.typography.bodySmall)
+                TextMMD(text = p.done, style = smallBodyStyle())
             }
         }
     }

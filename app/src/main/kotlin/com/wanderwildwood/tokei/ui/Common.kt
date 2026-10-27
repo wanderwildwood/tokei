@@ -21,16 +21,35 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mudita.mmd.components.checkbox.CheckboxMMD
 import com.mudita.mmd.components.radio_button.RadioButtonMMD
 import com.mudita.mmd.components.switcher.SwitchMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.text_field.TextFieldMMD
 import kotlinx.coroutines.delay
+
+/** The smallest text anywhere in the app, in sp: helper lines and notes are never smaller. */
+private const val MIN_TEXT_SP = 14f
+
+private fun TextStyle.atLeast14(): TextStyle =
+    if (fontSize.value < MIN_TEXT_SP) copy(fontSize = MIN_TEXT_SP.sp, lineHeight = (MIN_TEXT_SP * 1.3f).sp) else this
+
+/** Notes, values under a row, labels over a field: the theme's smallest text, never under 14 sp. */
+@Composable
+fun helperStyle(): TextStyle = MaterialTheme.typography.labelSmall.atLeast14()
+
+/** Text on the small buttons, never under 14 sp. */
+@Composable
+fun smallBodyStyle(): TextStyle = MaterialTheme.typography.bodySmall.atLeast14()
+
+/** How long a tap-again row stays armed before it puts itself back. */
+const val ARM_MS = 6_000L
 
 /** An icon in a top bar, with a target a thumb can find. */
 @Composable
@@ -62,7 +81,7 @@ fun SettingRow(title: String, value: String?, bold: Boolean = false, onClick: ((
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
         )
-        if (value != null) TextMMD(text = value, style = MaterialTheme.typography.labelSmall)
+        if (value != null) TextMMD(text = value, style = helperStyle())
     }
 }
 
@@ -77,7 +96,7 @@ fun SwitchRow(title: String, checked: Boolean, note: String? = null, onChange: (
     ) {
         Column(Modifier.weight(1f)) {
             TextMMD(text = title, style = MaterialTheme.typography.bodyMedium)
-            if (note != null) TextMMD(text = note, style = MaterialTheme.typography.labelSmall)
+            if (note != null) TextMMD(text = note, style = helperStyle())
         }
         Spacer(Modifier.width(12.dp))
         SwitchMMD(checked = checked, onCheckedChange = null)
@@ -118,7 +137,7 @@ fun CheckRow(title: String, checked: Boolean, onChange: (Boolean) -> Unit) {
 
 /**
  * A row that asks once, in its own face: the first press arms it and changes what it says,
- * the second does it. It disarms itself after four seconds, so a stray press does not leave
+ * the second does it. It disarms itself after six seconds, so a stray press does not leave
  * a live trigger for whoever picks the phone up next.
  */
 @Composable
@@ -126,7 +145,7 @@ fun ArmedRow(label: String, armedLabel: String, onConfirmed: () -> Unit) {
     var armed by remember { mutableStateOf(false) }
     LaunchedEffect(armed) {
         if (!armed) return@LaunchedEffect
-        delay(4000)
+        delay(ARM_MS)
         armed = false
     }
     Row(
@@ -155,7 +174,7 @@ fun ArmedRow(label: String, armedLabel: String, onConfirmed: () -> Unit) {
 fun Heading(text: String, modifier: Modifier = Modifier) {
     TextMMD(
         text = text,
-        style = MaterialTheme.typography.labelSmall,
+        style = helperStyle(),
         fontWeight = FontWeight.Bold,
         modifier = modifier.padding(top = 18.dp, bottom = 4.dp),
     )
@@ -175,12 +194,12 @@ fun Field(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxWidth().padding(vertical = 6.dp)) {
-        TextMMD(text = label, style = MaterialTheme.typography.labelSmall)
+        TextMMD(text = label, style = helperStyle())
         TextFieldMMD(
             value = value,
             onValueChange = onValue,
             singleLine = singleLine,
-            placeholder = hint?.let { { TextMMD(text = it, style = MaterialTheme.typography.labelSmall) } },
+            placeholder = hint?.let { { TextMMD(text = it, style = helperStyle()) } },
             keyboardOptions = KeyboardOptions(
                 capitalization = if (words && !number && !phone) KeyboardCapitalization.Sentences else KeyboardCapitalization.None,
                 keyboardType = when {

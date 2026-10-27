@@ -21,11 +21,11 @@ import com.wanderwildwood.tokei.R
 fun DialogButtons(onCancel: () -> Unit, onOk: () -> Unit, okLabel: String = stringResource(R.string.ok)) {
     Row(Modifier.fillMaxWidth()) {
         OutlinedButtonMMD(onClick = onCancel, modifier = Modifier.weight(1f).height(48.dp)) {
-            TextMMD(text = stringResource(R.string.cancel), style = MaterialTheme.typography.bodySmall)
+            TextMMD(text = stringResource(R.string.cancel), style = smallBodyStyle())
         }
         Spacer(Modifier.width(12.dp))
         ButtonMMD(onClick = onOk, modifier = Modifier.weight(1f).height(48.dp)) {
-            TextMMD(text = okLabel, style = MaterialTheme.typography.bodySmall)
+            TextMMD(text = okLabel, style = smallBodyStyle())
         }
     }
 }

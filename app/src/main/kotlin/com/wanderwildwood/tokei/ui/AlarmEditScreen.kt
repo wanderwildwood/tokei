@@ -67,7 +67,7 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
     var arming by remember { mutableStateOf(false) }
     LaunchedEffect(arming) {
         if (arming) {
-            delay(4_000L)
+            delay(ARM_MS)
             arming = false
         }
     }
@@ -97,7 +97,7 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
             hour = hour, minute = minute, days = days, label = label.trim(), group = Groups.clean(group, groups), sound = sound, soundTitle = soundTitle, vibrate = vibrate,
         )
         val saved = Engine.save(context, a)
-        if (skip && days != 0) Engine.skipNext(context, saved, true)
+        Engine.skipNext(context, saved, skip && days != 0)
         Store.get(context).alarm(saved)?.let { s -> Plan.nextRing(s, zone)?.let { toastIn(context, it) } }
         onDone()
     }

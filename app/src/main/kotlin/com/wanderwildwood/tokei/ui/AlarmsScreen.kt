@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -138,7 +140,7 @@ private fun GroupHeading(name: String, group: List<Alarm>, zone: ZoneId, onMenu:
             TextMMD(text = name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             TextMMD(
                 text = context.resources.getQuantityString(R.plurals.group_count, group.size, group.size),
-                style = MaterialTheme.typography.labelSmall,
+                style = helperStyle(),
                 modifier = Modifier.weight(1f).padding(start = 10.dp),
             )
             Spacer(Modifier.width(12.dp))
@@ -172,7 +174,7 @@ private fun GroupMenu(name: String, group: List<Alarm>, names: List<String>, onD
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                 modifier = Modifier.fillMaxWidth().textActions(),
             )
-            TextMMD(text = stringResource(R.string.group_rename_note), style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(top = 6.dp, bottom = 12.dp))
+            TextMMD(text = stringResource(R.string.group_rename_note), style = helperStyle(), modifier = Modifier.padding(top = 6.dp, bottom = 12.dp))
             DialogButtons(onCancel = { renaming = false }, onOk = {
                 Engine.renameGroup(context, name, Groups.clean(typed, names.filter { it != name }))
                 onDismiss()
@@ -222,6 +224,17 @@ private fun AlarmRow(a: Alarm, zone: ZoneId, onClick: () -> Unit) {
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                 )
+                // The alarm itself is as it was; only the snooze goes.
+                TextMMD(
+                    text = stringResource(R.string.snooze_cancel),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier
+                        .heightIn(min = 48.dp)
+                        .clickable { Engine.cancelSnooze(context, a.id) }
+                        .padding(vertical = 12.dp),
+                )
             } else if (a.skip > 0 && a.enabled) {
                 TextMMD(
                     text = stringResource(R.string.skipping, Times.whenShort(context, a.skip)),
@@ -231,7 +244,7 @@ private fun AlarmRow(a: Alarm, zone: ZoneId, onClick: () -> Unit) {
             }
         }
         Spacer(Modifier.width(12.dp))
-        SwitchMMD(checked = a.enabled, onCheckedChange = { on ->
+        SwitchMMD(checked = a.isOn, onCheckedChange = { on ->
             Engine.setEnabled(context, a.id, on)
             if (on) {
                 Store.get(context).alarm(a.id)?.let { saved ->
@@ -270,7 +283,7 @@ private fun MissedCard(lines: List<String>, total: Int) {
         Spacer(Modifier.height(4.dp))
         lines.forEach { TextMMD(text = it, style = MaterialTheme.typography.bodyMedium) }
         if (total > lines.size) {
-            TextMMD(text = stringResource(R.string.missed_more, total - lines.size), style = MaterialTheme.typography.labelSmall)
+            TextMMD(text = stringResource(R.string.missed_more, total - lines.size), style = helperStyle())
         }
         Spacer(Modifier.height(12.dp))
         ButtonMMD(
@@ -280,6 +293,6 @@ private fun MissedCard(lines: List<String>, total: Int) {
                 Notifier.cancelMissed(context)
             },
             modifier = Modifier.fillMaxWidth().height(48.dp),
-        ) { TextMMD(text = stringResource(R.string.setup_understood), style = MaterialTheme.typography.bodySmall) }
+        ) { TextMMD(text = stringResource(R.string.setup_understood), style = smallBodyStyle()) }
     }
 }

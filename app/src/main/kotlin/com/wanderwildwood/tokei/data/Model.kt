@@ -28,6 +28,13 @@ data class Alarm(
     val group: String = "",
 ) {
     val repeats: Boolean get() = days != 0
+
+    /**
+     * What its switch shows. A once alarm switches itself off when it rings, so while it is
+     * snoozed it is [enabled] false and still going to ring: the switch reads on, and turning it
+     * off cancels the snooze, instead of turning it on moving it to tomorrow.
+     */
+    val isOn: Boolean get() = enabled || snoozedUntil > 0
     val time: LocalTime get() = LocalTime.of(hour, minute)
 
     companion object {

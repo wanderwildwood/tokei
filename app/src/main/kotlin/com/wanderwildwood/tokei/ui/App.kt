@@ -67,6 +67,7 @@ fun ClockApp(opening: MainActivity.Opening?, onOpened: () -> Unit) {
     val a = alarm
     val t = timer
     when {
+        about -> AboutPage(onBack = { about = false })
         a != null -> AlarmEditScreen(id = a, preset = alarmPreset, onDone = {
             alarm = null
             alarmPreset = null
@@ -87,7 +88,6 @@ fun ClockApp(opening: MainActivity.Opening?, onOpened: () -> Unit) {
             )
         }
     }
-    if (about) AboutDialog(onDismiss = { about = false })
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
