@@ -427,7 +427,13 @@ private fun LazyListState.spread(): Spread? {
     // A row taller than the screen, read a screen at a time, has nothing whole above it.
     if (cut.offset <= 0) return null
     val whole = rows.filter { it.index < cut.index && it.offset >= 0 }
-    if (whole.isEmpty()) return null
+    // Nothing whole above it, but the foot of a row too tall for one screen is: the page
+    // opens on what is left of that row, and the row that follows cannot be drawn half, or
+    // the next page would open on it again and read the same lines twice.
+    if (whole.isEmpty()) {
+        val tail = rows.firstOrNull { it.index < cut.index } ?: return null
+        return Spread(tail.index, tail.index, 0, cut.index, bottom)
+    }
     val last = whole.last()
     val room = (bottom - (last.offset + last.size)).coerceAtLeast(0)
     // Room wider than any row on the page is not what a row that did not fit left behind, but
