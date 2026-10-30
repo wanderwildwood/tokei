@@ -150,22 +150,7 @@ fun TimeStepper(hour: Int, minute: Int, onChange: (Int, Int) -> Unit) {
 
 @Composable
 private fun AmPm(text: String, chosen: Boolean, onClick: () -> Unit) {
-    val ink = MaterialTheme.colorScheme.onSurface
-    Box(
-        Modifier
-            .size(50.dp, 48.dp)
-            .border(BorderStroke(2.dp, ink), RoundedCornerShape(12.dp))
-            .background(if (chosen) ink else MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center,
-    ) {
-        TextMMD(
-            text = text,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            color = if (chosen) MaterialTheme.colorScheme.surface else ink,
-        )
-    }
+    HouseButton(text, onClick, Modifier.size(50.dp, 48.dp), on = chosen, compact = true)
 }
 
 /** A timer's length: hours, minutes and seconds, each in its box. */

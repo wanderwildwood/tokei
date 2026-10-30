@@ -1,5 +1,6 @@
 package com.wanderwildwood.tokei.alarm
 
+import com.wanderwildwood.tokei.ui.HouseButton
 import com.wanderwildwood.tokei.ui.helperStyle
 import com.wanderwildwood.tokei.ui.smallBodyStyle
 import android.content.Context
@@ -130,17 +131,12 @@ private fun Ringing(onDone: () -> Unit) {
             Spacer(Modifier.height(6.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 for (m in SNOOZES.filter { it != n }) {
-                    Box(
-                        Modifier
-                            .weight(1f)
-                            .height(48.dp)
-                            .border(BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface), RoundedCornerShape(10.dp))
-                            .clickable { Engine.snooze(context, top.id, m) }
-                            .semantics { contentDescription = context.getString(R.string.ring_snooze_for, Times.minutes(context, m)) },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        TextMMD(text = shortMinutes(context, m), style = smallBodyStyle(), fontWeight = FontWeight.Bold)
-                    }
+                    HouseButton(
+                        shortMinutes(context, m),
+                        { Engine.snooze(context, top.id, m) },
+                        Modifier.weight(1f).semantics { contentDescription = context.getString(R.string.ring_snooze_for, Times.minutes(context, m)) },
+                        compact = true,
+                    )
                 }
             }
         }
