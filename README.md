@@ -1,4 +1,4 @@
-# 時計 tokei — Clock
+# 時計 tokei — Time
 
 Alarms, timers, a stopwatch and a world clock for the
 [Mudita Kompakt](https://mudita.com/products/kompakt/), laid out like the phone's own Alarm app
@@ -47,16 +47,16 @@ Android 12 device.
 ## Ringing on time on a Kompakt
 
 On the Kompakt forum, alarms that rang minutes late or not at all after a night asleep were
-mended by two settings. Clock's first screen asks for each, only while it is needed:
+mended by two settings. Time's first screen asks for each, only while it is needed:
 
 - **DuraSpeed** shuts apps down a few minutes after the screen goes dark, and an app shut down
-  that way has its alarms cancelled. Press **Open DuraSpeed**, tap **Open** there, switch Clock
+  that way has its alarms cancelled. Press **Open DuraSpeed**, tap **Open** there, switch Time
   on, then press **It's switched on**. If DuraSpeed stops the app again, the step comes back.
 - **Battery saving** can hold an app back, so an alarm rings minutes late. Press **Allow** and
-  let Clock run without restriction.
+  let Time run without restriction.
 
 On Android 14 and later (KompaktOS, for one), an app installed from a file is not allowed to fill
-the screen until it is told it may, and an alarm then rings with only a notification. Clock asks
+the screen until it is told it may, and an alarm then rings with only a notification. Time asks
 for this too: press **Allow full screen** and turn the switch on. The DuraSpeed step shows only
 on a phone that has DuraSpeed.
 
@@ -71,18 +71,18 @@ During a call an alarm rings quietly and vibrates, and the ringing screen still 
 
 ## Using it in place of the stock clock
 
-Clock answers what Android's own clock answers, so most ways of reaching "the clock" can be
+Time answers what Android's own clock answers, so most ways of reaching "the clock" can be
 pointed at it. What it can and cannot take over, as found on a Kompakt (MuditaOS with Mudita
 Launcher 1.5.0, inkOS 0.6):
 
-| Where | What it opens now | Can Clock take it? | How |
+| Where | What it opens now | Can Time take it? | How |
 |---|---|---|---|
-| Mudita's home screen, tapping the time | The stock Alarm app (`com.mudita.alarm`), by name | No | The launcher opens that one app and no other. Hiding the stock app makes the tap do nothing; it does not open Clock. |
-| Mudita's home screen, the next-alarm line | Whatever alarm is set next, from the system | Already does | Clock's alarms show there; a snoozed one shows as snoozed. |
-| inkOS, tapping the clock | An app picked in inkOS, or else whatever Android uses to show alarms | Yes | In inkOS settings, set the clock tap to open Clock. Left unset, Android asks which app to use, unless one was chosen with **Always** before: pick Clock, then **Always**. |
-| The status bar's alarm icon and the next alarm on the lock screen | The app that set the alarm | Already does | Clock's alarms open Clock. |
-| Other apps setting an alarm or a timer ("set an alarm for 6:30") | Android's clock (`com.android.deskclock`) until another app answers | Yes | The first time, Android asks which app: pick Clock, then **Always**. |
-| Glance | The app that wrote the line | Yes | Turn on **Next alarm on the lock screen** in Clock's settings, and Clock in Glance. |
+| Mudita's home screen, tapping the time | The stock Alarm app (`com.mudita.alarm`), by name | No | The launcher opens that one app and no other. Hiding the stock app makes the tap do nothing; it does not open Time. |
+| Mudita's home screen, the next-alarm line | Whatever alarm is set next, from the system | Already does | Time's alarms show there; a snoozed one shows as snoozed. |
+| inkOS, tapping the clock | An app picked in inkOS, or else whatever Android uses to show alarms | Yes | In inkOS settings, set the clock tap to open Time. Left unset, Android asks which app to use, unless one was chosen with **Always** before: pick Time, then **Always**. |
+| The status bar's alarm icon and the next alarm on the lock screen | The app that set the alarm | Already does | Time's alarms open Time. |
+| Other apps setting an alarm or a timer ("set an alarm for 6:30") | Android's clock (`com.android.deskclock`) until another app answers | Yes | The first time, Android asks which app: pick Time, then **Always**. |
+| Glance | The app that wrote the line | Yes | Turn on **Next alarm on the lock screen** in Time's settings, and Time in Glance. |
 | Katapult | Nothing: its clock is for reading | — | — |
 
 Both stock clocks can stay installed. Hiding them (from a computer, with
@@ -93,7 +93,7 @@ anything.
 
 ## For other apps
 
-Clock answers the standard `android.provider.AlarmClock` actions: `SET_ALARM` (hour, minutes,
+Time answers the standard `android.provider.AlarmClock` actions: `SET_ALARM` (hour, minutes,
 message, days, ringtone, vibrate, skip UI), `SHOW_ALARMS`, `SNOOZE_ALARM`, `DISMISS_ALARM`,
 `SET_TIMER` (length, message, skip UI), `SHOW_TIMERS` and `DISMISS_TIMER`; and the stopwatch
 and clock actions Android's own clock takes by name (`com.android.deskclock.action.SHOW_STOPWATCH`,
@@ -107,7 +107,7 @@ permission, as with Android's clock.
   any timer running, on the lock screen, once **Settings → Next alarm on the lock screen** is on.
 - **Sky** ([soramoyo](https://github.com/wanderwildwood/soramoyo)) can put one line of weather
   under a ringing alarm (the temperature, the sky, and the day's high and low), once **Settings →
-  Weather when an alarm rings** is on. Sky fetches it; Clock only reads the line.
+  Weather when an alarm rings** is on. Sky fetches it; Time only reads the line.
 
 ## What it does not do
 
@@ -160,7 +160,7 @@ Icons are from Material Symbols, Apache 2.0.
 
 ## Where it comes from
 
-Clock began as a fork of [Fossify Clock](https://github.com/FossifyOrg/Clock) (GPL-3.0), and its
+Time began as a fork of [Fossify Clock](https://github.com/FossifyOrg/Clock) (GPL-3.0), and its
 history is kept in this repository. From it come the alarm and timer models, the arithmetic of
 repeat days, the stopwatch's laps, the list of world-clock cities, and the way the ringing sound
 loops on the alarm volume. Its screens and its shared library were replaced: the screens are

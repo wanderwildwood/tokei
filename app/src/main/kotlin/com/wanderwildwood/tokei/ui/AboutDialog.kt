@@ -1,8 +1,5 @@
 package com.wanderwildwood.tokei.ui
 
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -17,6 +14,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +36,11 @@ import com.wanderwildwood.tokei.R
  */
 @Composable
 fun AboutPage(onBack: () -> Unit) {
+    var licences by rememberSaveable { mutableStateOf(false) }
+    if (licences) {
+        LicencesPage(onBack = { licences = false })
+        return
+    }
     SubPage(stringResource(R.string.about_page_title), onBack) {
         item(key = "title") {
             TextMMD(
@@ -53,8 +59,17 @@ fun AboutPage(onBack: () -> Unit) {
         item(key = "credits") {
             Spacer(Modifier.height(10.dp))
             TextMMD(text = stringResource(R.string.about_base), style = helperStyle())
-            TextMMD(text = stringResource(R.string.about_icons), style = helperStyle())
-            TextMMD(text = "github.com/wanderwildwood/tokei", style = helperStyle())
+        }
+        item(key = "licences") {
+            TextMMD(
+                text = stringResource(R.string.about_licences),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth().clickable { licences = true }.heightIn(min = 48.dp).wrapContentHeight(Alignment.CenterVertically),
+            )
+        }
+        item(key = "source") {
+            TextMMD(text = "github.com/wanderwildwood/tokei", style = helperStyle(), modifier = Modifier.openLink("https://github.com/wanderwildwood/tokei"))
         }
         item(key = "llama") {
             Spacer(Modifier.height(6.dp))
@@ -96,33 +111,13 @@ private fun Llama() {
             style = helperStyle(),
             // The site's address opens the site, the way the llama beside it opens its page.
             modifier = Modifier
-                .clickable {
-                    runCatching {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse("https://wanderthe.dev")),
-                        )
-                    }.onFailure {
-                        Toast.makeText(context, context.getString(R.string.about_no_browser), Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .heightIn(min = 48.dp)
-                .wrapContentHeight(Alignment.CenterVertically),
+                .openLink("https://wanderthe.dev"),
         )
         Spacer(Modifier.width(6.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .clickable {
-                    runCatching {
-                        context.startActivity(
-                            Intent(Intent.ACTION_VIEW, Uri.parse("https://square.link/u/AGu8oT10")),
-                        )
-                    }.onFailure {
-                        Toast.makeText(context, context.getString(R.string.about_no_browser), Toast.LENGTH_SHORT).show()
-                    }
-                }
-                .heightIn(min = 48.dp)
-                .wrapContentHeight(Alignment.CenterVertically),
+                .openLink("https://square.link/u/AGu8oT10"),
         ) {
             Image(
                 painter = painterResource(R.drawable.llama),
@@ -133,4 +128,15 @@ private fun Llama() {
             TextMMD(text = stringResource(R.string.about_feed_the_llamas), style = helperStyle())
         }
     }
+}
+
+/** A target of at least 48 dp that opens [url] in a real browser, or says there is none. */
+@Composable
+private fun Modifier.openLink(url: String): Modifier {
+    val context = LocalContext.current
+    val shown = url.removePrefix("https://")
+    return this
+        .clickable { openLink(context, url, context.getString(R.string.about_no_browser_address, shown)) }
+        .heightIn(min = 48.dp)
+        .wrapContentHeight(Alignment.CenterVertically)
 }

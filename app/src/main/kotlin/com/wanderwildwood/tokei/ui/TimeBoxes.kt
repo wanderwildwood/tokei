@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.mudita.mmd.components.text.TextMMD
 import com.wanderwildwood.tokei.R
@@ -80,7 +81,7 @@ fun NumberBox(
     val ink = MaterialTheme.colorScheme.onSurface
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(Modifier.size(width.dp, 48.dp).clickable { step(1) }, contentAlignment = Alignment.Center) {
-            Icon(Icons.Up, contentDescription = null, tint = ink, modifier = Modifier.size(48.dp))
+            Icon(Icons.Up, contentDescription = stringResource(R.string.cd_number_up, description), tint = ink, modifier = Modifier.size(48.dp))
         }
         Box(
             Modifier
@@ -114,7 +115,7 @@ fun NumberBox(
             )
         }
         Box(Modifier.size(width.dp, 48.dp).clickable { step(-1) }, contentAlignment = Alignment.Center) {
-            Icon(Icons.Down, contentDescription = null, tint = ink, modifier = Modifier.size(48.dp))
+            Icon(Icons.Down, contentDescription = stringResource(R.string.cd_number_down, description), tint = ink, modifier = Modifier.size(48.dp))
         }
     }
 }

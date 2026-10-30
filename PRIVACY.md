@@ -1,10 +1,10 @@
-# Clock — Privacy Policy
+# Time — Privacy Policy
 
-Version 0.2.6. Last reviewed 27 October 2026.
+Version 0.2.9. Last reviewed 27 October 2026.
 
 ## The short version
 
-Clock collects nothing and sends nothing anywhere. It has no internet permission, so no data can leave your phone through it. There is no account, no sign-up, no analytics, no advertising and no crash reporting. The developer never receives anything about you or your use of the app, and has no way to.
+Time collects nothing and sends nothing anywhere. It has no internet permission, so no data can leave your phone through it. There is no account, no sign-up, no analytics, no advertising and no crash reporting. The developer never receives anything about you or your use of the app, and has no way to.
 
 Two other apps of the same author can exchange a line with it on your phone, but only when you switch them on, and only those two (see "Who else receives anything").
 
@@ -43,8 +43,8 @@ No server. The app contacts no host.
 
 Other apps on the same phone:
 
-- **Glance** (`com.wanderwildwood.hitome`), only if you switch on Settings, "Next alarm on the lock screen". Clock then answers Glance, and no other app, with the time and name of your next alarm and any running timer, for Glance to draw on the lock screen. While the switch is off it answers with nothing.
-- **Sky** (`com.wanderwildwood.soramoyo`), only if you switch on Settings, "Weather when an alarm rings". When an alarm rings, Clock asks Sky for its current line of weather and shows it under the alarm. Clock sends Sky nothing about you or the alarm. Sky fetches the forecast itself, and its own privacy policy covers that.
+- **Glance** (`com.wanderwildwood.hitome`), only if you switch on Settings, "Next alarm on the lock screen". Time then answers Glance, and no other app, with the time and name of your next alarm and any running timer, for Glance to draw on the lock screen. While the switch is off it answers with nothing.
+- **Sky** (`com.wanderwildwood.soramoyo`), only if you switch on Settings, "Weather when an alarm rings". When an alarm rings, Time asks Sky for its current line of weather and shows it under the alarm. Time sends Sky nothing about you or the alarm. Sky fetches the forecast itself, and its own privacy policy covers that.
 - Alarms, timers and the stopwatch can be set, snoozed or stopped by other apps that hold Android's `SET_ALARM` permission, as with Android's own clock. They can ask the app to show alarms, timers and the clock; nothing is changed by showing.
 
 In About, "feed the llamas" opens a donation page (square.link) and wanderthe.dev opens the author's website, in your browser and only when you press them. The app does not fetch either page and learns nothing about whether you went.
