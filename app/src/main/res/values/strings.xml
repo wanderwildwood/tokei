@@ -88,6 +88,7 @@
     <string name="sound_heading">Sound</string>
     <string name="sound_silent">No sound, vibration only</string>
     <string name="sound_default">The phone\'s alarm sound</string>
+    <string name="sound_pick_file">Choose a sound file</string>
     <string name="sound_file_chosen">A sound file</string>
     <!-- %1$s is the sound -->
     <string name="sound_and_vibration">%1$s, and vibration</string>
@@ -247,15 +248,13 @@
     <!-- ============================================================ -->
     <!-- About -->
 
-    <string name="sound_picker_title">Alarm sound</string>
-    <string name="sound_no_picker">This phone has no sound picker.</string>
     <string name="snooze_cancel">Cancel snooze</string>
     <string name="world_cue">Type a name above, or swipe up for the next cities.</string>
     <string name="about_page_title">About</string>
     <string name="about_ring_title">Ringing</string>
     <string name="about_ring">Alarms ring on the alarm volume, so a phone set to silent still rings. During a call an alarm rings quietly and vibrates.</string>
     <string name="about_privacy_title">Privacy</string>
-    <string name="about_privacy">Everything you put in this app stays on this phone. It has no internet access, so nothing is sent anywhere, and nothing is collected about you. Its permissions are all for ringing on time: exact alarms; setting alarms again after a restart; showing over the lock screen; a foreground service that plays the sound; vibrating; keeping the phone awake while it rings; and notifications for Snooze and Stop. On its first screen it can ask Android to leave the app out of battery saving, and only when you press that button. The sound is one you pick from those already on the phone. The app is left out of Android\'s backups.</string>
+    <string name="about_privacy">Everything you put in this app stays on this phone. It has no internet access, so nothing is sent anywhere, and nothing is collected about you. Its permissions are all for ringing on time: exact alarms; setting alarms again after a restart; showing over the lock screen; a foreground service that plays the sound; vibrating; keeping the phone awake while it rings; and notifications for Snooze and Stop. On its first screen it can ask Android to leave the app out of battery saving, and only when you press that button. The sound is one you pick from those already on the phone, or a file of yours; the app keeps only its address. The app is left out of Android\'s backups.</string>
     <string name="about_privacy_links">Only if you switch them on in Settings, it tells Glance your next alarm, and asks Sky for a line of weather, both on this phone. There are no ads, no analytics and no tracking. The links below open your browser only when you press them.</string>
     <string name="about_terms_title">Terms</string>
     <string name="about_terms">This app is free software under the GNU General Public License v3. It comes with no warranty: use it at your own risk.</string>
