@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Zeit</string>
+
+    <!-- Read aloud by a screen reader -->
+    <string name="cd_back">Zurück</string>
+    <string name="cd_close">Schließen, ohne zu speichern</string>
+    <string name="cd_about">Über</string>
+    <string name="cd_settings">Einstellungen</string>
+    <string name="cd_delete">Löschen</string>
+    <string name="cd_hour">Stunde</string>
+    <string name="cd_minute">Minute</string>
+    <string name="cd_hours">Stunden</string>
+    <string name="cd_minutes">Minuten</string>
+    <string name="cd_seconds">Sekunden</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="close">Schließen</string>
+    <string name="save">Speichern</string>
+    <string name="create">Anlegen</string>
+    <string name="today">Heute</string>
+    <string name="yesterday">Gestern</string>
+    <string name="tomorrow">Morgen</string>
+    <string name="am">vorm.</string>
+    <string name="pm">nachm.</string>
+    <!-- A row asking again before deleting; it disarms itself after six seconds -->
+    <string name="delete_armed">Löschen — noch einmal tippen</string>
+
+    <!-- Lengths. %1$d is a number -->
+    <string name="hours_short">%1$d h</string>
+    <string name="minutes_short">%1$d min</string>
+    <string name="seconds_short">%1$d s</string>
+    <!-- %1$d hours, %2$d minutes -->
+    <string name="hours_minutes_short">%1$d h %2$d min</string>
+    <plurals name="days_short">
+        <item quantity="one">%1$d Tag</item>
+        <item quantity="other">%1$d Tage</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%1$d Minute</item>
+        <item quantity="other">%1$d Minuten</item>
+    </plurals>
+    <string name="one_hour">1 Stunde</string>
+    <string name="one_hour_short">1 h</string>
+    <string name="less_than_a_minute">weniger als eine Minute</string>
+    <string name="unit_hours">Stunden</string>
+    <string name="unit_minutes">Minuten</string>
+    <string name="unit_seconds">Sekunden</string>
+
+    <!-- The four parts, as tabs under the top bar -->
+    <string name="tab_alarms">Wecker</string>
+    <string name="tab_timers">Timer</string>
+    <string name="tab_stopwatch">Stoppuhr</string>
+    <string name="tab_world">Weltzeit</string>
+
+    <!-- ============================================================ -->
+    <!-- Alarms -->
+
+    <string name="alarm">Wecker</string>
+    <string name="alarms_empty">Noch keine Wecker. Du kannst so viele anlegen, wie du willst.</string>
+    <string name="alarm_create">Wecker anlegen</string>
+    <string name="alarm_new">Neuer Wecker</string>
+    <string name="alarm_edit">Bearbeiten</string>
+    <!-- %1$s is how long, e.g. "7 h 12 min" -->
+    <string name="next_alarm_in">Nächster Wecker in %1$s</string>
+    <string name="alarm_rings_in">Wecker in %1$s</string>
+    <!-- %1$s is a time -->
+    <string name="alarm_set_for">Wecker gestellt für %1$s</string>
+    <!-- %1$s is when it repeats (or a timer\'s length), %2$s its name -->
+    <string name="days_and_name">%1$s · %2$s</string>
+    <!-- %1$s is a time -->
+    <string name="snoozed_until">Schlummern bis %1$s</string>
+    <!-- %1$s is when, e.g. "Tomorrow 06:30" -->
+    <string name="skipping">%1$s wird übersprungen</string>
+
+    <string name="repeat_title">Wiederholen</string>
+    <string name="repeat_once">Einmal</string>
+    <string name="repeat_every_day">Jeden Tag</string>
+    <string name="repeat_weekdays">Werktags</string>
+    <string name="repeat_weekend">Am Wochenende</string>
+    <string name="repeat_none_note">Ohne angekreuzten Tag klingelt der Wecker einmal und schaltet sich dann selbst aus.</string>
+    <string name="name_title">Name</string>
+    <string name="name_hint">Aufstehen, Medikamente, Zug</string>
+    <string name="name_none">Keiner</string>
+    <string name="sound_title">Ton und Vibration</string>
+    <string name="sound_vibration">Vibration</string>
+    <string name="sound_heading">Ton</string>
+    <string name="sound_silent">Kein Ton, nur Vibration</string>
+    <string name="sound_default">Der Weckton des Telefons</string>
+    <string name="sound_file_chosen">Eine Tondatei</string>
+    <!-- %1$s is the sound -->
+    <string name="sound_and_vibration">%1$s und Vibration</string>
+    <string name="skip_next">Den nächsten überspringen</string>
+    <!-- %1$s is when, e.g. "Mon 12 Oct 06:30" -->
+    <string name="skip_next_note">Er klingelt nicht am %1$s und läuft danach wie zuvor weiter.</string>
+
+    <!-- Groups of alarms, such as Office and Home, switched on and off together -->
+    <string name="group_title">Gruppe</string>
+    <string name="group_none">Keine</string>
+    <string name="group_hint">Büro, Zuhause, Wochenende</string>
+    <string name="group_note">Wecker in einer Gruppe stehen unter ihrem Namen zusammen und lassen sich gemeinsam ein- oder ausschalten oder mit ihrem nächsten Termin überspringen.</string>
+    <plurals name="group_count">
+        <item quantity="one">%1$d Wecker</item>
+        <item quantity="other">%1$d Wecker</item>
+    </plurals>
+    <string name="group_skip_next">Den nächsten überspringen</string>
+    <string name="group_skip_note">Für jeden eingeschalteten wiederkehrenden Wecker der Gruppe.</string>
+    <string name="group_skip_none">In der Gruppe ist kein wiederkehrender Wecker eingeschaltet.</string>
+    <string name="group_rename">Gruppe umbenennen</string>
+    <string name="group_rename_note">Ein bereits verwendeter Name führt die beiden Gruppen zusammen. Ohne Namen gehören die Wecker zu keiner Gruppe.</string>
+
+    <!-- ============================================================ -->
+    <!-- Ringing -->
+
+    <string name="ring_snooze">Schlummern</string>
+    <!-- %1$s is a length, e.g. "10 minutes" -->
+    <string name="ring_snooze_for">Für %1$s schlummern</string>
+    <string name="ring_snooze_other">Oder schlummern für</string>
+    <string name="ring_stop">Stopp</string>
+    <string name="ring_timer_done">Die Zeit ist um</string>
+    <string name="ring_add_minute">1 Minute mehr</string>
+    <string name="ring_add_minute_short">+1 min</string>
+    <plurals name="ring_more">
+        <item quantity="one">Noch %1$d klingelt</item>
+        <item quantity="other">Noch %1$d klingeln</item>
+    </plurals>
+
+    <!-- ============================================================ -->
+    <!-- Missed -->
+
+    <plurals name="missed_title">
+        <item quantity="one">Verpasst</item>
+        <item quantity="other">Verpasst (%1$d)</item>
+    </plurals>
+    <!-- %1$s when it was due, %2$s the alarm\'s name or the timer, %3$s why -->
+    <string name="missed_line">%1$s, %2$s: %3$s</string>
+    <!-- %1$s is a timer\'s name or length -->
+    <string name="missed_timer">Timer %1$s</string>
+    <string name="missed_more">und %1$d davor</string>
+    <string name="why_stopped">die App wurde beendet und konnte deshalb nicht klingeln</string>
+    <string name="why_phone_off">das Telefon war aus</string>
+    <string name="why_unanswered">es klingelte, und niemand hat reagiert</string>
+    <string name="why_unknown">es klingelte nicht, und der Grund ist nicht bekannt</string>
+
+    <!-- ============================================================ -->
+    <!-- Timers -->
+
+    <string name="timers_empty">Noch keine Timer. Jeder bleibt hier, um wieder gestartet zu werden, und mehrere können gleichzeitig laufen.</string>
+    <string name="timer_create">Timer anlegen</string>
+    <string name="timer_new">Neuer Timer</string>
+    <string name="timer_edit">Bearbeiten</string>
+    <string name="timer_start">Start</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_resume">Fortsetzen</string>
+    <string name="timer_reset">Zurücksetzen</string>
+    <string name="timer_paused">Pausiert</string>
+    <!-- %1$s is a time -->
+    <string name="timer_ends_at">Klingelt um %1$s</string>
+    <string name="timer_save_start">Speichern und starten</string>
+    <string name="timer_keep">Behalten</string>
+    <string name="timer_zero">Ein Timer braucht eine Länge von mindestens einer Sekunde.</string>
+    <!-- %1$s is a length -->
+    <string name="timer_started">Timer gestartet, %1$s</string>
+
+    <!-- ============================================================ -->
+    <!-- Stopwatch -->
+
+    <string name="stopwatch_start">Start</string>
+    <string name="stopwatch_stop">Stopp</string>
+    <string name="stopwatch_lap">Runde</string>
+    <string name="stopwatch_reset">Zurücksetzen</string>
+    <!-- %1$d is the lap\'s number -->
+    <string name="stopwatch_lap_n">Runde %1$d</string>
+    <!-- %1$d is the lap\'s number, %2$s its time so far -->
+    <string name="stopwatch_this_lap">Runde %1$d: %2$s</string>
+
+    <!-- ============================================================ -->
+    <!-- World clock -->
+
+    <string name="world_here">Hier</string>
+    <string name="world_empty">Füge die Städte hinzu, deren Uhrzeit du verfolgen willst.</string>
+    <string name="world_add">Eine Stadt hinzufügen</string>
+    <string name="world_search">Eine Stadt suchen</string>
+    <string name="world_none_found">Keine Stadt mit diesem Namen in der Liste.</string>
+    <string name="world_already">Schon in der Liste</string>
+    <string name="world_remove">Aus der Liste entfernen</string>
+    <string name="world_remove_armed">Entfernen — noch einmal tippen</string>
+    <!-- %1$s is the day, e.g. "Tomorrow"; %2$s how far, e.g. "5 h" -->
+    <string name="world_ahead">%1$s, %2$s voraus</string>
+    <string name="world_behind">%1$s, %2$s zurück</string>
+    <string name="world_same">%1$s, die gleiche Zeit</string>
+
+    <!-- ============================================================ -->
+    <!-- Setup: only shown while something stands between an alarm and the person -->
+
+    <string name="setup_duraspeed">Ein Schritt, damit Wecker klingeln: Die DuraSpeed-Einstellung des Telefons kann Zeit beenden, und seine Wecker mit ihr. Öffne DuraSpeed, tippe auf Öffnen und schalte Zeit ein.</string>
+    <string name="setup_duraspeed_open">DuraSpeed öffnen</string>
+    <string name="setup_duraspeed_done">Es ist eingeschaltet</string>
+    <string name="setup_notifications">Benachrichtigungen sind für Zeit aus, deshalb kann der Klingelbildschirm nicht erscheinen.</string>
+    <string name="setup_turn_on">Einschalten</string>
+    <string name="setup_exact">Zeit darf keine Wecker stellen, deshalb kann ein Wecker bis zu eine Stunde zu spät klingeln.</string>
+    <string name="setup_allow">Wecker erlauben</string>
+    <string name="setup_full_screen">Zeit darf den Bildschirm nicht füllen, deshalb klingelt ein Wecker oder Timer nur mit einer Benachrichtigung, und der Bildschirm bleibt dunkel.</string>
+    <string name="setup_full_screen_allow">Vollbild erlauben</string>
+    <string name="setup_battery">Die Akkuschonung des Telefons kann Zeit nach einer Nacht im Schlaf zurückhalten, und Wecker klingeln dann Minuten zu spät. Lass sie ohne Einschränkung laufen.</string>
+    <string name="setup_battery_allow">Erlauben</string>
+    <!-- %1$s is when, e.g. "14:02" or "Yesterday 14:02" -->
+    <string name="setup_stopped">Zeit wurde beendet (%1$s), und nichts konnte klingeln, bis die App wieder geöffnet wurde. Alles, was in dieser Zeit fällig war, steht als verpasst in der Liste.</string>
+    <string name="setup_understood">Verstanden</string>
+    <string name="setup_cannot_open">Dieses Telefon hat dafür keine Einstellungsseite.</string>
+
+    <!-- ============================================================ -->
+    <!-- Settings -->
+
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_snooze">Schlummerdauer</string>
+    <string name="settings_snooze_other">Andere…</string>
+    <string name="settings_snooze_other_note">Von 1 Minute bis 2 Stunden.</string>
+    <string name="settings_ring_for">Klingelt für</string>
+    <!-- %1$s is a length -->
+    <string name="settings_ring_for_value">%1$s, danach als verpasst vermerkt</string>
+    <string name="settings_rise">Leise beginnen und lauter werden</string>
+    <string name="settings_rise_note">Über die erste Minute.</string>
+    <string name="settings_glance">Nächster Wecker auf dem Sperrbildschirm</string>
+    <string name="settings_glance_note">Wird von Glance angezeigt, wenn es installiert ist.</string>
+    <string name="settings_sky">Wetter, wenn ein Wecker klingelt</string>
+    <string name="settings_sky_note">Von Himmel, wenn es installiert ist: die Temperatur, der Himmel und das Tageshoch und -tief.</string>
+
+    <!-- ============================================================ -->
+    <!-- Notifications -->
+
+    <string name="channel_ringing">Klingeln</string>
+    <string name="channel_ringing_about">Ein Wecker oder Timer klingelt gerade. Der Ton ist der eigene der App, in der Lautstärke für Wecker.</string>
+    <string name="channel_missed">Verpasst</string>
+
+    <!-- ============================================================ -->
+    <!-- Glance's lock-screen panel -->
+
+    <!-- %1$s is a day, e.g. "Tomorrow"; %2$s the alarm\'s name -->
+    <string name="glance_day_and_name">%1$s, %2$s</string>
+    <!-- %1$s is the alarm\'s name -->
+    <string name="glance_snoozed">%1$s, schlummert</string>
+    <!-- %1$s is the timer\'s name or length -->
+    <string name="glance_timer">Timer %1$s</string>
+
+    <!-- ============================================================ -->
+    <!-- About -->
+
+    <string name="sound_picker_title">Weckton</string>
+    <string name="sound_no_picker">Dieses Telefon hat keine Tonauswahl.</string>
+    <string name="snooze_cancel">Schlummern abbrechen</string>
+    <string name="world_cue">Tippe oben einen Namen ein oder wische nach oben zu den nächsten Städten.</string>
+    <string name="about_page_title">Über</string>
+    <string name="about_ring_title">Klingeln</string>
+    <string name="about_ring">Wecker klingeln in der Wecklautstärke, deshalb klingelt auch ein Telefon, das auf lautlos steht. Während eines Anrufs klingelt ein Wecker leise und vibriert.</string>
+    <string name="about_privacy_title">Datenschutz</string>
+    <string name="about_privacy">Alles, was du in diese App eingibst, bleibt auf diesem Telefon. Sie hat keinen Internetzugang, deshalb wird nichts gesendet und nichts über dich gesammelt. Ihre Berechtigungen dienen alle dem pünktlichen Klingeln: exakte Wecker; Wecker nach einem Neustart erneut stellen; über dem Sperrbildschirm anzeigen; ein Vordergrunddienst, der den Ton abspielt; Vibrieren; das Telefon wach halten, während es klingelt; und Benachrichtigungen für Schlummern und Stopp. Auf ihrem ersten Bildschirm kann sie Android bitten, die App von der Akkuschonung auszunehmen, und nur, wenn du diese Schaltfläche drückst. Der Ton ist einer, den du aus denen auf dem Telefon auswählst. Die App ist von Androids Sicherungen ausgenommen.</string>
+    <string name="about_privacy_links">Nur wenn du sie in den Einstellungen einschaltest, teilt sie Glance deinen nächsten Wecker mit und fragt Himmel nach einer Zeile Wetter, beides auf diesem Telefon. Es gibt keine Werbung, keine Analysen und kein Tracking. Die Links unten öffnen deinen Browser nur, wenn du sie drückst.</string>
+    <string name="about_terms_title">Bedingungen</string>
+    <string name="about_terms">Diese App ist freie Software unter der GNU General Public License v3. Sie kommt ohne Gewährleistung: Nutze sie auf eigenes Risiko.</string>
+    <string name="about_terms_alarms">Ein Telefon kann einen Wecker verpassen: ein leerer Akku, ein ausgeschaltetes Telefon oder das System, das Apps beendet. Wo ein verpasster Wecker wichtig wäre, verlass dich nicht auf eine einzige Uhr.</string>
+    <string name="about_title">Zeit %1$s</string>
+    <string name="about_what">Wecker, Timer, eine Stoppuhr und eine Weltzeit.</string>
+    <string name="about_base">Aufgebaut auf Fossify Clock, GPL-3.0</string>
+    <string name="about_feed_the_llamas">füttere die Lamas</string>
+    <string name="about_close">Schließen</string>
+    <!-- The folio at the foot of a paged list, "2 / 6"; a tap on it asks for a page -->
+    <string name="folio_of">%1$d / %2$d</string>
+    <string name="folio_go_title">Zu Seite springen</string>
+    <string name="folio_page">Seite %1$d von %2$d</string>
+    <string name="folio_go">Los</string>
+    <string name="folio_cancel">Abbrechen</string>
+    <string name="about_licences">Lizenzen</string>
+    <string name="licences_title">Lizenzen</string>
+    <string name="licences_source_head">Quellcode</string>
+    <string name="licences_licence_head">Lizenz</string>
+    <string name="licences_licence">Zeit ist freie Software unter der GNU General Public License, ausschließlich Version 3 (GPL-3.0-only), Copyright wander wildwood, für das, was hier geschrieben steht. Sie begann als Fork von Fossify Clock (GPL-3.0). Die Arbeit, auf der sie aufbaut, behält ihre eigene Lizenz, und ihre Autoren behalten ihr Urheberrecht, wie unter „Gebaut mit“ aufgeführt. Der vollständige Text jeder Lizenz steht am Ende dieser Seite.</string>
+    <string name="licences_built_head">Gebaut mit</string>
+    <string name="licences_back">Zurück</string>
+    <string name="about_no_browser_address">Es ist kein Browser installiert. Die Adresse ist %1$s.</string>
+    <string name="licences_gpl">GNU General Public License, Version 3</string>
+    <string name="licences_apache">Apache License, Version 2.0</string>
+    <string name="licences_mit">MIT License</string>
+    <string name="licences_ofl">SIL Open Font License, Version 1.1</string>
+    <string name="cd_number_up">%1$s, eins nach oben</string>
+    <string name="cd_number_down">%1$s, eins nach unten</string>
+</resources>
