@@ -66,7 +66,7 @@ fun Dotted(modifier: Modifier = Modifier) {
 /** The black pill at the right of a top bar: Create, Save. */
 @Composable
 fun BarPill(text: String, onClick: () -> Unit) {
-    ButtonMMD(onClick = onClick, modifier = Modifier.padding(end = 8.dp).height(44.dp)) {
+    ButtonMMD(onClick = onClick, modifier = Modifier.padding(end = 8.dp).height(48.dp)) {
         TextMMD(text = text, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
     }
 }
