@@ -67,7 +67,7 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
             )
         },
     ) { padding ->
-        PagedColumn(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 20.dp)) {
+        PagedColumn(modifier = Modifier.padding(padding).fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp)) {
             item { Spacer(Modifier.height(8.dp)) }
             problems.forEachIndexed { i, p -> item(key = "problem:$i") { ProblemCard(p) } }
 

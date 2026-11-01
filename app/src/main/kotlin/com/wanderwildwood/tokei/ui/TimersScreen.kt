@@ -64,7 +64,7 @@ fun TimersScreen(onEdit: (Long) -> Unit) {
     }
 
     Box(Modifier.fillMaxSize()) {
-        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
+        PagedColumn(modifier = Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp)) {
             if (timers.isEmpty()) {
                 item(key = "empty") { Empty(stringResource(R.string.timers_empty), stringResource(R.string.timer_create)) { onEdit(NEW) } }
             }
@@ -205,7 +205,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
             )
         },
     ) { padding ->
-        PagedColumn(modifier = Modifier.padding(padding).fillMaxSize().padding(horizontal = 8.dp)) {
+        PagedColumn(modifier = Modifier.padding(padding).fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 8.dp, end = 8.dp)) {
             item(key = "length") {
                 Spacer(Modifier.height(16.dp))
                 LengthStepper(seconds) { seconds = it }

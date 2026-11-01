@@ -61,7 +61,7 @@ fun WorldScreen(onAdd: () -> Unit) {
     val here = ZoneId.systemDefault()
 
     Box(Modifier.fillMaxSize()) {
-        PagedColumn(modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp)) {
+        PagedColumn(modifier = Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp)) {
             item(key = "here") {
                 CityRow(stringResource(R.string.world_here), here, here, now, null, sub = Times.day(context, Times.date(now)))
                 Dotted()

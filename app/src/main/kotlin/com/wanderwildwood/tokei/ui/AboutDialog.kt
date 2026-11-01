@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,7 +40,17 @@ import com.wanderwildwood.tokei.R
 fun AboutPage(onBack: () -> Unit) {
     var licences by rememberSaveable { mutableStateOf(false) }
     if (licences) {
-        LicencesPage(onBack = { licences = false })
+        androidx.compose.material3.Surface(
+            modifier = androidx.compose.ui.Modifier.fillMaxSize(),
+            color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+        ) {
+            LicencesScreen(
+                rememberLicencesData(),
+                rememberLicencesLabels(),
+                onBack = { licences = false },
+                modifier = androidx.compose.ui.Modifier.fillMaxSize().safeDrawingPadding(),
+            )
+        }
         return
     }
     SubPage(stringResource(R.string.about_page_title), onBack) {
