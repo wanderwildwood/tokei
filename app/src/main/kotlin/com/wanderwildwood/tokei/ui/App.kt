@@ -84,7 +84,6 @@ fun ClockApp(opening: MainActivity.Opening?, onOpened: () -> Unit) {
                 onTimer = { timer = it },
                 onAddCity = { addCity = true },
                 onSettings = { settings = true },
-                onAbout = { about = true },
             )
         }
     }
@@ -99,7 +98,6 @@ private fun Main(
     onTimer: (Long) -> Unit,
     onAddCity: () -> Unit,
     onSettings: () -> Unit,
-    onAbout: () -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -115,7 +113,6 @@ private fun Main(
                         3 -> BarButton(Icons.Add, stringResource(R.string.world_add), onAddCity)
                     }
                     BarButton(Icons.Settings, stringResource(R.string.cd_settings), onSettings)
-                    BarButton(Icons.Info, stringResource(R.string.cd_about), onAbout)
                 },
             )
         },
