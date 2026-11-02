@@ -267,9 +267,7 @@
     <string name="about_licences">Lizenzen</string>
     <string name="licences_title">Lizenzen</string>
     <string name="licences_source_head">Quellcode</string>
-    <string name="licences_licence_head">Lizenz</string>
-    <string name="licences_licence">Zeit ist freie Software unter der GNU General Public License, ausschließlich Version 3 (GPL-3.0-only), Copyright wander wildwood, für das, was hier geschrieben steht. Sie begann als Fork von Fossify Clock (GPL-3.0). Die Arbeit, auf der sie aufbaut, behält ihre eigene Lizenz, und ihre Autoren behalten ihr Urheberrecht, wie unter „Gebaut mit“ aufgeführt. Der vollständige Text jeder Lizenz steht am Ende dieser Seite.</string>
-    <string name="licences_built_head">Gebaut mit</string>
+    <string name="licences_licence">Zeit ist freie Software unter der GNU General Public License, ausschließlich Version 3 (GPL-3.0-only), Copyright wander wildwood, für das, was hier geschrieben steht. Sie begann als Fork von Fossify Clock (GPL-3.0). Die Arbeit, auf der sie aufbaut, behält ihre eigene Lizenz, und ihre Autoren behalten ihr Urheberrecht, jede auf ihrer eigenen Seite.</string>
     <string name="licences_back">Zurück</string>
     <string name="about_no_browser_address">Es ist kein Browser installiert. Die Adresse ist %1$s.</string>
     <string name="cd_number_up">%1$s, eins nach oben</string>
