@@ -249,7 +249,6 @@
 
     <string name="snooze_cancel">Schlummern abbrechen</string>
     <string name="world_cue">Tippe oben einen Namen ein oder wische nach oben zu den nächsten Städten.</string>
-    <string name="about_page_title">Über</string>
     <string name="about_ring_title">Klingeln</string>
     <string name="about_ring">Wecker klingeln in der Wecklautstärke, deshalb klingelt auch ein Telefon, das auf lautlos steht. Während eines Anrufs klingelt ein Wecker leise und vibriert.</string>
     <string name="about_privacy_title">Datenschutz</string>
@@ -261,7 +260,7 @@
     <string name="about_title">Zeit %1$s</string>
     <string name="about_what">Wecker, Timer, eine Stoppuhr und eine Weltzeit.</string>
     <string name="about_base">Aufgebaut auf Fossify Clock, GPL-3.0</string>
-    <string name="about_feed_the_llamas">füttere die Lamas</string>
+    <string name="about_feed_the_llamas">Füttere die Lamas</string>
     <string name="about_close">Schließen</string>
     <!-- The folio at the foot of a paged list, "2 / 6"; a tap on it asks for a page -->
     <string name="about_licences">Lizenzen</string>

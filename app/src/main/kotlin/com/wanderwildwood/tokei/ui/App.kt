@@ -67,14 +67,16 @@ fun ClockApp(opening: MainActivity.Opening?, onOpened: () -> Unit) {
     val a = alarm
     val t = timer
     when {
-        about -> AboutPage(onBack = { about = false })
         a != null -> AlarmEditScreen(id = a, preset = alarmPreset, onDone = {
             alarm = null
             alarmPreset = null
         })
         t != null -> TimerEditScreen(id = t, onDone = { timer = null })
         addCity -> CityPicker(onDone = { addCity = false })
-        settings -> SettingsScreen(onBack = { settings = false }, onAbout = { about = true })
+        settings -> {
+            SettingsScreen(onBack = { settings = false }, onAbout = { about = true })
+            if (about) AboutDialog(onDismiss = { about = false })
+        }
         else -> {
             BackHandler(enabled = tab != 0) { tab = 0 }
             Main(
