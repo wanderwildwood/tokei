@@ -1,6 +1,5 @@
 package com.wanderwildwood.tokei.alarm
 
-import com.wanderwildwood.tokei.ui.HouseButton
 import com.wanderwildwood.tokei.ui.helperStyle
 import com.wanderwildwood.tokei.ui.smallBodyStyle
 import android.content.Context
@@ -15,7 +14,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,8 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -63,8 +59,8 @@ import kotlinx.coroutines.withContext
 
 /**
  * The ringing screen, over the lock screen, laid out as the stock Alarm app's: the time large,
- * the name under it, a round Snooze in the middle and Stop at the foot. Under the round Snooze,
- * the other lengths, each of which snoozes for that long at a press. A timer has a minute more
+ * the name under it, a round Snooze in the middle and Stop at the foot. Snooze is for the length
+ * set in Settings, with no other lengths to choose from here. A timer has a minute more
  * where Snooze is. When more than one thing rings, the newest is shown, and the next after it.
  */
 class RingActivity : ComponentActivity() {
@@ -126,19 +122,6 @@ private fun Ringing(onDone: () -> Unit) {
         } else {
             val n = settings.snoozeMinutes
             BigRound(stringResource(R.string.ring_snooze), Times.minutes(context, n)) { Engine.snooze(context, top.id, n) }
-            Spacer(Modifier.height(16.dp))
-            TextMMD(text = stringResource(R.string.ring_snooze_other), style = helperStyle())
-            Spacer(Modifier.height(6.dp))
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                for (m in SNOOZES.filter { it != n }) {
-                    HouseButton(
-                        shortMinutes(context, m),
-                        { Engine.snooze(context, top.id, m) },
-                        Modifier.weight(1f).semantics { contentDescription = context.getString(R.string.ring_snooze_for, Times.minutes(context, m)) },
-                        compact = true,
-                    )
-                }
-            }
         }
         Spacer(Modifier.weight(1f))
         if (ringing.size > 1) {
@@ -159,15 +142,12 @@ private fun Ringing(onDone: () -> Unit) {
     }
 }
 
-/** Snooze lengths offered on the ringing screen, in minutes. */
+/** Snooze lengths offered in Settings, in minutes. */
 val SNOOZES = listOf(5, 10, 15, 30, 60)
 
 /** The range a snooze length of one's own, set under Other… in Settings, may take. */
 const val SNOOZE_MIN = 1
 const val SNOOZE_MAX = 120
-
-private fun shortMinutes(context: Context, m: Int): String =
-    if (m == 60) context.getString(R.string.one_hour_short) else context.getString(R.string.minutes_short, m)
 
 @Composable
 private fun AlarmTop(r: Ring) {

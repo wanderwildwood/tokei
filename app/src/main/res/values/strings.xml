@@ -42,7 +42,6 @@
         <item quantity="other">%1$d minutes</item>
     </plurals>
     <string name="one_hour">1 hour</string>
-    <string name="one_hour_short">1 h</string>
     <string name="less_than_a_minute">less than a minute</string>
     <string name="unit_hours">hours</string>
     <string name="unit_minutes">minutes</string>
@@ -117,7 +116,6 @@
     <string name="ring_snooze">Snooze</string>
     <!-- %1$s is a length, e.g. "10 minutes" -->
     <string name="ring_snooze_for">Snooze %1$s</string>
-    <string name="ring_snooze_other">Or snooze for</string>
     <string name="ring_stop">Stop</string>
     <string name="ring_timer_done">Time is up</string>
     <string name="ring_add_minute">1 minute more</string>
