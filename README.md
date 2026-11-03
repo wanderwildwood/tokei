@@ -50,7 +50,7 @@ On the Kompakt forum, alarms that rang minutes late or not at all after a night 
 mended by two settings. Time's first screen asks for each, only while it is needed:
 
 - **DuraSpeed** shuts apps down a few minutes after the screen goes dark, and an app shut down
-  that way has its alarms cancelled. Press **Open DuraSpeed**, tap **Open** there, switch Time
+  that way has its alarms canceled. Press **Open DuraSpeed**, tap **Open** there, switch Time
   on, then press **It's switched on**. If DuraSpeed stops the app again, the step comes back.
 - **Battery saving** can hold an app back, so an alarm rings minutes late. Press **Allow** and
   let Time run without restriction.
@@ -140,7 +140,7 @@ For updates without doing this by hand, add this repository to
 
 Privacy: what the app stores and what it sends is set out in [PRIVACY.md](PRIVACY.md).
 
-## Licence
+## License
 
 GPL-3.0-only. See [LICENSE](LICENSE).
 
