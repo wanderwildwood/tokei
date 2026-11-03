@@ -89,6 +89,7 @@
     <string name="sound_silent">Kein Ton, nur Vibration</string>
     <string name="sound_default">Der Weckton des Telefons</string>
     <string name="sound_file_chosen">Eine Tondatei</string>
+    <string name="sound_pick_file">Eine Tondatei wählen</string>
     <!-- %1$s is the sound -->
     <string name="sound_and_vibration">%1$s und Vibration</string>
     <string name="skip_next">Den nächsten überspringen</string>
@@ -268,6 +269,11 @@
     <string name="licences_source_head">Quellcode</string>
     <string name="licences_licence">Zeit ist freie Software unter der GNU General Public License, ausschließlich Version 3 (GPL-3.0-only), Copyright wander wildwood, für das, was hier geschrieben steht. Sie begann als Fork von Fossify Clock (GPL-3.0). Die Arbeit, auf der sie aufbaut, behält ihre eigene Lizenz, und ihre Autoren behalten ihr Urheberrecht, jede auf ihrer eigenen Seite.</string>
     <string name="licences_back">Zurück</string>
+    <string name="licences_no_text">%s braucht hier keinen Lizenztext.</string>
+    <string name="licences_full_head">Vollständige Texte</string>
+    <string name="licences_full_gpl">GNU General Public License v3 (vollständiger Text)</string>
+    <string name="licences_full_apache">Apache License 2.0 (vollständiger Text)</string>
+    <string name="licences_full_ofl">SIL Open Font License 1.1 (vollständiger Text)</string>
     <string name="about_no_browser_address">Es ist kein Browser installiert. Die Adresse ist %1$s.</string>
     <string name="cd_number_up">%1$s, eins nach oben</string>
     <string name="cd_number_down">%1$s, eins nach unten</string>
