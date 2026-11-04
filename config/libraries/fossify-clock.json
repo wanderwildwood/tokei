@@ -1,0 +1,8 @@
+{
+  "uniqueId": "fossify-clock",
+  "name": "Fossify Clock",
+  "description": "The app this one was made from: its alarms, timers and stopwatch started from Fossify Clock.",
+  "developers": [{ "name": "Fossify" }],
+  "website": "https://github.com/FossifyOrg/Clock",
+  "licenses": ["GPL-3.0-only"]
+}
