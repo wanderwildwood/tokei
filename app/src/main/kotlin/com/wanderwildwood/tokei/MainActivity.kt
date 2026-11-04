@@ -11,6 +11,7 @@ import com.mudita.mmd.ThemeMMD
 import com.wanderwildwood.tokei.alarm.Engine
 import com.wanderwildwood.tokei.alarm.Notifier
 import com.wanderwildwood.tokei.ui.ClockApp
+import com.wanderwildwood.tokei.ui.houseTypography
 import com.wanderwildwood.tokei.ui.monochrome
 import com.wanderwildwood.tokei.ui.ArmedScope
 
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
             // A steady cursor: a blinking one repaints the e-ink panel twice a second for as long
             // as a field has focus.
             CompositionLocalProvider(LocalCursorBlinkEnabled provides false) {
-                ThemeMMD(colorScheme = monochrome) {
+                ThemeMMD(colorScheme = monochrome, typography = houseTypography) {
                     ArmedScope { ClockApp(opening = opening.value, onOpened = { opening.value = null }) }
                 }
             }

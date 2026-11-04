@@ -23,26 +23,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.mudita.mmd.components.checkbox.CheckboxMMD
 import com.mudita.mmd.components.radio_button.RadioButtonMMD
 import com.mudita.mmd.components.switcher.SwitchMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.text_field.TextFieldMMD
 
-/** The smallest text anywhere in the app, in sp: helper lines and notes are never smaller. */
-private const val MIN_TEXT_SP = 14f
+/**
+ * The smallest text anywhere in the app: the house floor, 16 sp (HouseType.kt). Helper lines and
+ * notes are never smaller. houseTypography already raises the small styles; this guards a theme
+ * without it.
+ */
+private fun TextStyle.atLeastFloor(): TextStyle =
+    if (fontSize.value < HOUSE_TYPE_FLOOR_SP) copy(fontSize = HouseTypeFloor) else this
 
-private fun TextStyle.atLeast14(): TextStyle =
-    if (fontSize.value < MIN_TEXT_SP) copy(fontSize = MIN_TEXT_SP.sp, lineHeight = (MIN_TEXT_SP * 1.3f).sp) else this
-
-/** Notes, values under a row, labels over a field: the theme's smallest text, never under 14 sp. */
+/** Notes, values under a row, labels over a field: the theme's smallest text, never under 16 sp. */
 @Composable
-fun helperStyle(): TextStyle = MaterialTheme.typography.labelSmall.atLeast14()
+fun helperStyle(): TextStyle = MaterialTheme.typography.labelSmall.atLeastFloor()
 
-/** Text on the small buttons, never under 14 sp. */
+/** Text on the small buttons, never under 16 sp. */
 @Composable
-fun smallBodyStyle(): TextStyle = MaterialTheme.typography.bodySmall.atLeast14()
+fun smallBodyStyle(): TextStyle = MaterialTheme.typography.bodySmall.atLeastFloor()
 
 /** An icon in a top bar, with a target a thumb can find. */
 @Composable
