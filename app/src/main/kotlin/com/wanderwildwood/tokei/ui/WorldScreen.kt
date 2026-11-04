@@ -82,14 +82,19 @@ fun WorldScreen(onAdd: () -> Unit) {
     removing?.let { z ->
         val name = Cities.named(z)?.name ?: z
         EInkDialog(onDismiss = { removing = null }) {
-            TextMMD(text = name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
-            Spacer(Modifier.height(12.dp))
-            ArmedRow(stringResource(R.string.world_remove), stringResource(R.string.world_remove_armed)) {
-                settings.cities = settings.cities - z
-                cities = settings.cities
-                removing = null
+            // The dialog is its own window, so its armed row needs a scope of its own.
+            ArmedScope {
+                Column {
+                    TextMMD(text = name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                    Spacer(Modifier.height(12.dp))
+                    ArmedRow(stringResource(R.string.world_remove), stringResource(R.string.world_remove_armed)) {
+                        settings.cities = settings.cities - z
+                        cities = settings.cities
+                        removing = null
+                    }
+                    DialogButton(stringResource(R.string.close)) { removing = null }
+                }
             }
-            DialogButton(stringResource(R.string.close)) { removing = null }
         }
     }
 }

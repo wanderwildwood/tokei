@@ -12,6 +12,7 @@ import com.wanderwildwood.tokei.alarm.Engine
 import com.wanderwildwood.tokei.alarm.Notifier
 import com.wanderwildwood.tokei.ui.ClockApp
 import com.wanderwildwood.tokei.ui.monochrome
+import com.wanderwildwood.tokei.ui.ArmedScope
 
 class MainActivity : ComponentActivity() {
 
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
             // as a field has focus.
             CompositionLocalProvider(LocalCursorBlinkEnabled provides false) {
                 ThemeMMD(colorScheme = monochrome) {
-                    ClockApp(opening = opening.value, onOpened = { opening.value = null })
+                    ArmedScope { ClockApp(opening = opening.value, onOpened = { opening.value = null }) }
                 }
             }
         }

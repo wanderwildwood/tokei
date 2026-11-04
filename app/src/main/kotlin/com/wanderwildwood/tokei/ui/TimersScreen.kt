@@ -145,13 +145,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
     var soundTitle by rememberSaveable { mutableStateOf(existing?.soundTitle.orEmpty()) }
     var vibrate by rememberSaveable { mutableStateOf(existing?.vibrate ?: true) }
     var page by rememberSaveable { mutableStateOf("") }
-    var arming by remember { mutableStateOf(false) }
-    LaunchedEffect(arming) {
-        if (arming) {
-            delay(ARM_MS)
-            arming = false
-        }
-    }
+    var arming by rememberArmedFlag()
     when (page) {
         "name" -> {
             NamePage(stringResource(R.string.name_title), label, { label = it }, onBack = { page = "" })
@@ -162,7 +156,9 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
             return
         }
     }
-    BackHandler { onDone() }
+    // Registered after the armed flag's own handler, so it answers Back first: an armed Delete
+    // only disarms, and a second Back leaves.
+    BackHandler { if (arming) arming = false else onDone() }
 
     fun save(start: Boolean) {
         if (seconds <= 0) return

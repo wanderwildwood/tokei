@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +33,6 @@ import com.wanderwildwood.tokei.data.Alarm
 import com.wanderwildwood.tokei.data.Groups
 import com.wanderwildwood.tokei.data.Plan
 import com.wanderwildwood.tokei.data.Store
-import kotlinx.coroutines.delay
 import java.time.LocalTime
 import java.time.ZoneId
 
@@ -64,13 +62,7 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
     var vibrate by rememberSaveable { mutableStateOf(start.vibrate) }
     var skip by rememberSaveable { mutableStateOf(existing?.skip?.let { it > 0 } ?: false) }
     var page by rememberSaveable { mutableStateOf("") }
-    var arming by remember { mutableStateOf(false) }
-    LaunchedEffect(arming) {
-        if (arming) {
-            delay(ARM_MS)
-            arming = false
-        }
-    }
+    var arming by rememberArmedFlag()
 
     when (page) {
         "repeat" -> {
@@ -91,7 +83,9 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
         }
     }
 
-    BackHandler { onDone() }
+    // Registered after the armed flag's own handler, so it answers Back first: an armed Delete
+    // only disarms, and a second Back leaves.
+    BackHandler { if (arming) arming = false else onDone() }
     fun save() {
         val a = (existing ?: Alarm(hour = hour, minute = minute)).copy(
             hour = hour, minute = minute, days = days, label = label.trim(), group = Groups.clean(group, groups), sound = sound, soundTitle = soundTitle, vibrate = vibrate,

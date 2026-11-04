@@ -24,7 +24,7 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
-    <!-- A row asking again before deleting; it disarms itself after six seconds -->
+    <!-- A row asking again before deleting; it stays armed until the next other touch, Back or leaving -->
     <string name="delete_armed">Delete — tap again</string>
 
     <!-- Lengths. %1$d is a number -->

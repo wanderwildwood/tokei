@@ -13,10 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +29,6 @@ import com.mudita.mmd.components.radio_button.RadioButtonMMD
 import com.mudita.mmd.components.switcher.SwitchMMD
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.text_field.TextFieldMMD
-import kotlinx.coroutines.delay
 
 /** The smallest text anywhere in the app, in sp: helper lines and notes are never smaller. */
 private const val MIN_TEXT_SP = 14f
@@ -47,9 +43,6 @@ fun helperStyle(): TextStyle = MaterialTheme.typography.labelSmall.atLeast14()
 /** Text on the small buttons, never under 14 sp. */
 @Composable
 fun smallBodyStyle(): TextStyle = MaterialTheme.typography.bodySmall.atLeast14()
-
-/** How long a tap-again row stays armed before it puts itself back. */
-const val ARM_MS = 6_000L
 
 /** An icon in a top bar, with a target a thumb can find. */
 @Composable
@@ -137,17 +130,12 @@ fun CheckRow(title: String, checked: Boolean, onChange: (Boolean) -> Unit) {
 
 /**
  * A row that asks once, in its own face: the first press arms it and changes what it says,
- * the second does it. It disarms itself after six seconds, so a stray press does not leave
- * a live trigger for whoever picks the phone up next.
+ * the second does it. It stays armed until the next other touch, Back or leaving the screen,
+ * with no timer (shared Armed.kt).
  */
 @Composable
 fun ArmedRow(label: String, armedLabel: String, onConfirmed: () -> Unit) {
-    var armed by remember { mutableStateOf(false) }
-    LaunchedEffect(armed) {
-        if (!armed) return@LaunchedEffect
-        delay(ARM_MS)
-        armed = false
-    }
+    var armed by rememberArmedFlag()
     Row(
         modifier = Modifier
             .fillMaxWidth()

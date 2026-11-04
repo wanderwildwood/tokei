@@ -24,7 +24,7 @@
     <string name="tomorrow">Morgen</string>
     <string name="am">vorm.</string>
     <string name="pm">nachm.</string>
-    <!-- A row asking again before deleting; it disarms itself after six seconds -->
+    <!-- A row asking again before deleting; it stays armed until the next other touch, Back or leaving -->
     <string name="delete_armed">Löschen — noch einmal tippen</string>
 
     <!-- Lengths. %1$d is a number -->

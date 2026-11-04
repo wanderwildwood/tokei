@@ -56,6 +56,7 @@ import com.wanderwildwood.tokei.data.Store
 import com.wanderwildwood.tokei.ui.monochrome
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.wanderwildwood.tokei.ui.ArmedScope
 
 /**
  * The ringing screen, over the lock screen, laid out as the stock Alarm app's: the time large,
@@ -71,8 +72,10 @@ class RingActivity : ComponentActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContent {
             ThemeMMD(colorScheme = monochrome) {
-                Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
-                    Ringing(onDone = ::finish)
+                ArmedScope {
+                    Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
+                        Ringing(onDone = ::finish)
+                    }
                 }
             }
         }
