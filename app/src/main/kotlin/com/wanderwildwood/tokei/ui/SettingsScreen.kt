@@ -56,6 +56,10 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
     val rise = remember(v) { s.rise }
     val glance = remember(v) { s.onLockScreen }
     val sky = remember(v) { s.skyOnRing }
+    // A row for another app shows only while that app is here, or while it is still switched on,
+    // so it can be switched off. Looked at again on every return to this screen.
+    val glanceHere = remember(check) { installed(context, GlanceProvider.READER) }
+    val skyHere = remember(check) { installed(context, SKY_PACKAGE) }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -83,14 +87,14 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
                     v++
                 }
             }
-            item(key = "glance") {
+            if (glanceHere || glance) item(key = "glance") {
                 SwitchRow(stringResource(R.string.settings_glance), glance, note = stringResource(R.string.settings_glance_note)) {
                     s.onLockScreen = it
                     GlanceProvider.changed(context)
                     v++
                 }
             }
-            item(key = "sky") {
+            if (skyHere || sky) item(key = "sky") {
                 SwitchRow(stringResource(R.string.settings_sky), sky, note = stringResource(R.string.settings_sky_note)) {
                     s.skyOnRing = it
                     v++
@@ -122,6 +126,12 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
         )
     }
 }
+
+private const val SKY_PACKAGE = "com.wanderwildwood.soramoyo"
+
+/** Whether [pkg] is installed with a launcher entry; the package is listed in the manifest's <queries>. */
+private fun installed(context: android.content.Context, pkg: String): Boolean =
+    context.packageManager.getLaunchIntentForPackage(pkg) != null
 
 /**
  * The snooze lengths, and Other… at the foot for any length from 1 minute to 2 hours, typed or

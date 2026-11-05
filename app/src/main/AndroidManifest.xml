@@ -26,6 +26,8 @@
     <queries>
         <!-- Sky, for the line of weather on the ringing screen. -->
         <package android:name="com.wanderwildwood.soramoyo" />
+        <!-- Glance, so Settings shows its lock-screen switch only when it is installed. -->
+        <package android:name="com.wanderwildwood.hitome" />
         <!-- DuraSpeed, the Kompakt's background manager: only to say whether it is there. -->
         <package android:name="com.mediatek.duraspeed" />
         <intent>
