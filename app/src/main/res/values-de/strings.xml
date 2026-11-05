@@ -261,11 +261,15 @@
     <string name="about_base">Aufgebaut auf Fossify Clock, GPL-3.0</string>
     <string name="about_feed_the_llamas">Füttere die Lamas</string>
     <string name="about_close">Schließen</string>
+    <string name="about_open_drawer">%1$s öffnen</string>
+    <string name="about_close_drawer">%1$s schließen</string>
+    <string name="about_contact_head">Kontakt</string>
+    <string name="about_links_head">Links</string>
     <!-- The folio at the foot of a paged list, "2 / 6"; a tap on it asks for a page -->
     <string name="about_licences">Lizenzen</string>
     <string name="licences_title">Lizenzen</string>
     <string name="licences_source_head">Quellcode</string>
-    <string name="licences_licence">Zeit ist freie Software unter der GNU General Public License, ausschließlich Version 3 (GPL-3.0-only), Copyright wander wildwood, für das, was hier geschrieben steht. Sie begann als Fork von Fossify Clock (GPL-3.0). Die Arbeit, auf der sie aufbaut, behält ihre eigene Lizenz, und ihre Autoren behalten ihr Urheberrecht, jede auf ihrer eigenen Seite.</string>
+    <string name="licences_licence">Zeit ist freie Software unter der GNU General Public License, ausschließlich Version 3 (GPL-3.0-only), Copyright wander wildwood, für das, was hier geschrieben steht. Sie begann als Fork von Fossify Clock (GPL-3.0). Die Arbeit, auf der sie aufbaut, behält ihre eigene Lizenz, und ihre Autoren behalten ihr Urheberrecht; sie sind unten aufgeführt.</string>
     <string name="licences_back">Zurück</string>
     <string name="licences_no_text">%s braucht hier keinen Lizenztext.</string>
     <string name="licences_full_head">Vollständige Texte</string>
