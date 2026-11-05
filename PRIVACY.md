@@ -1,6 +1,6 @@
 # Time — Privacy Policy
 
-Version 0.2.12. Last reviewed 4 November 2026.
+Version 0.2.17. Last reviewed 4 November 2026.
 
 ## The short version
 
