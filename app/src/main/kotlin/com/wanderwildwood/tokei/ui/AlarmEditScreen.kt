@@ -127,7 +127,7 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
             )
         },
     ) { padding ->
-        PagedColumn(modifier = Modifier.padding(padding).fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp)) {
+        PagedColumn(modifier = Modifier.padding(padding).fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp), showCutRow = true) {
             item(key = "time") {
                 Spacer(Modifier.height(16.dp))
                 TimeStepper(hour, minute) { h, m ->

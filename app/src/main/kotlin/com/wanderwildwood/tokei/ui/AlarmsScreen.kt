@@ -83,7 +83,7 @@ fun AlarmsScreen(onEdit: (Long) -> Unit) {
     var menuFor by remember { mutableStateOf<String?>(null) }
 
     Box(Modifier.fillMaxSize()) {
-        PagedColumn(modifier = Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp)) {
+        PagedColumn(modifier = Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp), showCutRow = true) {
             problems.forEachIndexed { i, p -> item(key = "problem:$i") { ProblemCard(p) } }
             if (missed.isNotEmpty()) item(key = "missed") { MissedCard(missed.take(5).map { Notifier.line(context, it) }, missed.size) }
             if (wake != null) {
