@@ -16,7 +16,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -179,7 +178,7 @@ fun SoundPage(sound: String, soundTitle: String, vibrate: Boolean, onSound: (Str
     }
     DisposableEffect(Unit) { onDispose { playing?.stop() } }
 
-    val pickFile = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+    val pickFile = rememberLauncherForActivityResult(FilesOpenDocument(writable = true)) { uri ->
         if (uri != null) {
             runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
             val name = runCatching {
