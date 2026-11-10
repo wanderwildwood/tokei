@@ -24,7 +24,12 @@ import com.wanderwildwood.tokei.data.Why
 object Notifier {
 
     const val RINGING = "ringing"
-    const val MISSED = "missed"
+    const val MISSED = "missed_light"
+
+    // A channel's settings are frozen once it exists, the light among them, so the one made
+    // before the light was asked for moves to a new id (LightChannel). Not the ringing one:
+    // an alarm that is ringing has the screen on.
+    private const val MISSED_NO_LIGHT = "missed"
     const val RINGING_ID = 1
     private const val MISSED_ID = 2
 
@@ -40,7 +45,9 @@ object Notifier {
                 setBypassDnd(true)
             },
         )
-        nm.createNotificationChannel(
+        LightChannel.ensure(
+            nm,
+            MISSED_NO_LIGHT,
             NotificationChannel(MISSED, context.getString(R.string.channel_missed), NotificationManager.IMPORTANCE_DEFAULT),
         )
     }
