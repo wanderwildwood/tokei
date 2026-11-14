@@ -289,4 +289,6 @@
     <string name="privacy_rights_title">Deine Rechte</string>
     <string name="privacy_rights">Nach der DSGVO kannst du Auskunft über die Daten verlangen, die über dich gespeichert sind, sie berichtigen oder löschen lassen, ihre Verarbeitung einschränken lassen oder ihr widersprechen, eine Kopie mitnehmen, eine Einwilligung widerrufen und dich bei einer Datenschutzbehörde beschweren. Da die App alles, was sie speichert, nur auf deinem Telefon ablegt, kannst du das meiste davon selbst tun: einen Wecker, einen Timer oder eine Stadt in der App löschen, die App-Daten in den Android-Einstellungen löschen oder die App deinstallieren.</string>
     <!-- /shared-about -->
+    <string name="settings_dark">Dunkelmodus</string>
+    <string name="settings_dark_note">Weiß auf Schwarz, in dieser App. Home hat einen Schalter für alle Apps.</string>
 </resources>

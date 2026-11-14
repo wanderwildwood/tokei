@@ -28,6 +28,8 @@
         <package android:name="com.wanderwildwood.tana" />
         <!-- Sky, for the line of weather on the ringing screen. -->
         <package android:name="com.wanderwildwood.soramoyo" />
+        <!-- Home, whose dark mode switch this app follows when Home is installed. -->
+        <package android:name="com.wanderwildwood.iori" />
         <!-- Glance, so Settings shows its lock-screen switch only when it is installed. -->
         <package android:name="com.wanderwildwood.hitome" />
         <!-- DuraSpeed, the Kompakt's background manager: only to say whether it is there. -->
@@ -53,6 +55,12 @@
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/Theme.App">
+        <!-- Starts dark mode before the first screen is drawn. Holds no data. -->
+        <provider
+            android:name=".ui.DarkModeInit"
+            android:authorities="${applicationId}.darkmodeinit"
+            android:exported="false" />
+
 
         <activity
             android:name=".MainActivity"

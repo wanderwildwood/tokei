@@ -87,6 +87,11 @@ fun SettingsScreen(onBack: () -> Unit, onAbout: () -> Unit) {
                     v++
                 }
             }
+            item(key = "dark") {
+                SwitchRow(stringResource(R.string.settings_dark), DarkMode.on, note = stringResource(R.string.settings_dark_note)) {
+                    DarkMode.set(context, it)
+                }
+            }
             if (glanceHere || glance) item(key = "glance") {
                 SwitchRow(stringResource(R.string.settings_glance), glance, note = stringResource(R.string.settings_glance_note)) {
                     s.onLockScreen = it
