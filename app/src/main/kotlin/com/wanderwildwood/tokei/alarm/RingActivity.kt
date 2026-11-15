@@ -128,6 +128,15 @@ private fun Ringing(onDone: () -> Unit) {
             BigRound(stringResource(R.string.ring_snooze), Times.minutes(context, n)) { Engine.snooze(context, top.id, n) }
         }
         Spacer(Modifier.weight(1f))
+        val soundFailed by Ringer.soundFailed.collectAsState()
+        if (soundFailed) {
+            TextMMD(
+                text = stringResource(R.string.ring_sound_failed),
+                style = helperStyle(),
+                textAlign = TextAlign.Center,
+            )
+            Spacer(Modifier.height(8.dp))
+        }
         if (ringing.size > 1) {
             TextMMD(
                 text = context.resources.getQuantityString(R.plurals.ring_more, ringing.size - 1, ringing.size - 1),

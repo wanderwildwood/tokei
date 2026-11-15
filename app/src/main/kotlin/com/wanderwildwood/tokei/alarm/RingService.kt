@@ -21,12 +21,23 @@ import com.wanderwildwood.tokei.data.Alarm
 import com.wanderwildwood.tokei.data.Ring
 import com.wanderwildwood.tokei.data.Settings
 import com.wanderwildwood.tokei.data.Store
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * What is ringing, kept in the settings so the ringing screen, the notification and the service
  * all read the same list. Adding to it or taking from it starts, updates or stops the service.
  */
 object Ringer {
+
+    private val _soundFailed = MutableStateFlow(false)
+
+    /** True while something rings whose sound could not be played, so the ringing screen says so. */
+    val soundFailed: StateFlow<Boolean> = _soundFailed
+
+    internal fun soundFailed(failed: Boolean) {
+        _soundFailed.value = failed
+    }
 
     fun add(context: Context, settings: Settings, rings: List<Ring>, now: Long) {
         val list = settings.ringing.filter { old -> rings.none { it.same(old) } } + rings
@@ -142,7 +153,10 @@ class RingService : Service() {
                 .build()
                 .also { audio.requestAudioFocus(it) }
             player = Sounds.candidates(this, sound).firstNotNullOfOrNull { uri -> open(uri, attrs) }
-            if (player == null) Log.e("tokei", "no sound could be played for ${r.encode()}")
+            if (player == null) {
+                Log.e("tokei", "no sound could be played for ${r.encode()}")
+                Ringer.soundFailed(true)
+            }
             val p = player
             if (p != null) {
                 when {
@@ -157,14 +171,29 @@ class RingService : Service() {
                 Log.i("tokei", "playing for ${r.encode()}${if (inCall) " quietly, in a call" else ""}")
             }
         }
-        if (vibrate || inCall) {
-            vibrator = getSystemService(Vibrator::class.java).also {
-                it.vibrate(
-                    VibrationEffect.createWaveform(longArrayOf(0, 600, 600), 0),
-                    AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
-                )
-            }
+        // With no sound to be had, it buzzes even when buzzing is off: a silent alarm by mistake
+        // is the one thing it must not be.
+        if (vibrate || inCall || Ringer.soundFailed.value) buzz()
+    }
+
+    private fun buzz() {
+        if (vibrator != null) return
+        vibrator = getSystemService(Vibrator::class.java).also {
+            it.vibrate(
+                VibrationEffect.createWaveform(longArrayOf(0, 600, 600), 0),
+                AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(),
+            )
         }
+    }
+
+    /** The sound stopped partway with an error: say so on the ringing screen, and buzz instead. */
+    private fun failedWhilePlaying(p: MediaPlayer) {
+        Log.e("tokei", "the sound stopped with an error")
+        handler.removeCallbacks(rise)
+        if (player === p) player = null
+        runCatching { p.release() }
+        Ringer.soundFailed(true)
+        buzz()
     }
 
     /** The volume, raised a step a second from quiet to full over [Settings.RISE_MS]. */
@@ -183,6 +212,10 @@ class RingService : Service() {
             setDataSource(this@RingService, uri)
             isLooping = true
             setWakeMode(this@RingService, PowerManager.PARTIAL_WAKE_LOCK)
+            setOnErrorListener { mp, _, _ ->
+                failedWhilePlaying(mp)
+                true
+            }
             prepare()
         }
     } catch (e: Exception) {
@@ -198,6 +231,7 @@ class RingService : Service() {
         vibrator = null
         focus?.let { getSystemService(AudioManager::class.java).abandonAudioFocusRequest(it) }
         focus = null
+        Ringer.soundFailed(false)
     }
 
     override fun onDestroy() {

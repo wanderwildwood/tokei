@@ -117,6 +117,7 @@
     <!-- %1$s is a length, e.g. "10 minutes" -->
     <string name="ring_snooze_for">Snooze %1$s</string>
     <string name="ring_stop">Stop</string>
+    <string name="ring_sound_failed">The sound could not be played, so it buzzes instead.</string>
     <string name="ring_timer_done">Time is up</string>
     <string name="ring_add_minute">1 minute more</string>
     <string name="ring_add_minute_short">+1 min</string>
