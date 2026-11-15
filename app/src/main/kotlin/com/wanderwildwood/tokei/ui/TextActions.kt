@@ -1,5 +1,6 @@
 package com.wanderwildwood.tokei.ui
 
+import com.wanderwildwood.tokei.R
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
@@ -70,6 +71,8 @@ fun Modifier.textActions(field: TextFieldState? = null): Modifier {
     val hiddenLabels = remember {
         apps.filter { it.activityInfo.packageName in notShown }.map { it.loadLabel(context.packageManager).toString() }.toSet()
     }
+    // The overflow item's label is also what a screen reader says, so a word, not a glyph.
+    val moreLabel = remember { context.getString(R.string.selection_more) }
     val folded = remember { mutableListOf<TextContextMenuItem>() }
     val kept = remember { IntArray(1) }
     // The last press, in window coordinates: the selection starts where the finger went down,
@@ -135,7 +138,7 @@ fun Modifier.textActions(field: TextFieldState? = null): Modifier {
                     }
                 }
             }
-            item(key = More, label = "⋮") { showRest(view, folded.toList(), this, press[1]) }
+            item(key = More, label = moreLabel) { showRest(view, folded.toList(), this, press[1]) }
         }
 }
 
