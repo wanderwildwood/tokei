@@ -51,6 +51,10 @@ import com.wanderwildwood.tokei.data.Groups
 import com.wanderwildwood.tokei.data.Plan
 import kotlinx.coroutines.delay
 import java.time.DayOfWeek
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 
 /*
  * The pages an alarm's (or a timer's) settings open onto, as the stock Alarm app has them: a back
@@ -232,6 +236,7 @@ private fun SoundRow(title: String, chosen: Boolean, onClick: () -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
+            .semantics { role = Role.RadioButton; selected = chosen }
             .clickable(onClick = onClick)
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
