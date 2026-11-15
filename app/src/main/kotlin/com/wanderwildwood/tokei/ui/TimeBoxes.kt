@@ -45,6 +45,9 @@ import com.mudita.mmd.components.text.TextMMD
 import com.wanderwildwood.tokei.R
 import com.wanderwildwood.tokei.Times
 import java.util.Locale
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.selected
 
 /*
  * The stock Alarm app's way of setting a time: each number in a rounded box with an arrow above
@@ -151,7 +154,7 @@ fun TimeStepper(hour: Int, minute: Int, onChange: (Int, Int) -> Unit) {
 
 @Composable
 private fun AmPm(text: String, chosen: Boolean, onClick: () -> Unit) {
-    HouseButton(text, onClick, Modifier.size(50.dp, 48.dp), on = chosen, compact = true)
+    HouseButton(text, onClick, Modifier.size(50.dp, 48.dp).semantics { role = Role.RadioButton; selected = chosen }, on = chosen, compact = true)
 }
 
 /** A timer's length: hours, minutes and seconds, each in its box. */
