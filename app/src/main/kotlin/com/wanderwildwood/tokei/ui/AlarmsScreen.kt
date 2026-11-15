@@ -52,6 +52,14 @@ import com.wanderwildwood.tokei.data.Plan
 import com.wanderwildwood.tokei.data.Store
 import kotlinx.coroutines.delay
 import java.time.ZoneId
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.runtime.withFrameNanos
 
 /**
  * The alarms, as the stock Alarm app lists them: the time large, its days and name under it, and
@@ -161,24 +169,35 @@ private fun GroupHeading(name: String, group: List<Alarm>, zone: ZoneId, onMenu:
 private fun GroupMenu(name: String, group: List<Alarm>, names: List<String>, onDismiss: () -> Unit) {
     val context = LocalContext.current
     var renaming by remember(name) { mutableStateOf(false) }
-    var typed by remember(name) { mutableStateOf(name) }
+    var typed by remember(name) { mutableStateOf(TextFieldValue(name, TextRange(name.length))) }
+    val field = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
+    val save = {
+        Engine.renameGroup(context, name, Groups.clean(typed.text, names.filter { it != name }))
+        onDismiss()
+    }
     EInkDialog(onDismiss = onDismiss) {
         TextMMD(text = name, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
         Spacer(Modifier.height(8.dp))
         if (renaming) {
+            // Rename shows the field with the cursor in it and the keyboard up, asked from inside
+            // the dialog a frame after the field is drawn; Done on the keyboard is Save.
+            LaunchedEffect(Unit) {
+                withFrameNanos { }
+                runCatching { field.requestFocus() }
+                keyboard?.show()
+            }
             TextFieldMMD(
                 value = typed,
-                onValueChange = { typed = it.take(Groups.MAX_NAME) },
+                onValueChange = { typed = if (it.text.length <= Groups.MAX_NAME) it else it.copy(text = it.text.take(Groups.MAX_NAME)) },
                 singleLine = true,
                 placeholder = { TextMMD(text = stringResource(R.string.group_hint), style = MaterialTheme.typography.bodyMedium) },
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                modifier = Modifier.fillMaxWidth().textActions(),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { save() }),
+                modifier = Modifier.fillMaxWidth().focusRequester(field).textActions(),
             )
             TextMMD(text = stringResource(R.string.group_rename_note), style = helperStyle(), modifier = Modifier.padding(top = 6.dp, bottom = 12.dp))
-            DialogButtons(onCancel = { renaming = false }, onOk = {
-                Engine.renameGroup(context, name, Groups.clean(typed, names.filter { it != name }))
-                onDismiss()
-            }, okLabel = stringResource(R.string.save))
+            DialogButtons(onCancel = { renaming = false }, onOk = { save() }, okLabel = stringResource(R.string.save))
         } else {
             val skippable = Groups.skippable(group)
             SwitchRow(
