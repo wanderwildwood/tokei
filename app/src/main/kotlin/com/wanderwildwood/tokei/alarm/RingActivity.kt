@@ -162,7 +162,7 @@ private fun AlarmTop(r: Ring) {
     BigTime(time, ampm)
     TextMMD(
         text = alarm?.label?.ifBlank { null } ?: stringResource(R.string.alarm),
-        style = MaterialTheme.typography.headlineSmall,
+        style = MaterialTheme.typography.titleLarge,
         textAlign = TextAlign.Center,
     )
     val weather = rememberSkyLine(r)
@@ -219,11 +219,11 @@ private fun TimerTop(r: Ring) {
     val context = LocalContext.current
     val timer = remember(r) { Store.get(context).timer(r.id) }
     Spacer(Modifier.height(24.dp))
-    TextMMD(text = stringResource(R.string.ring_timer_done), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+    TextMMD(text = stringResource(R.string.ring_timer_done), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
     Spacer(Modifier.height(8.dp))
     TextMMD(
         text = timer?.let { Engine.timerLabel(context, it) }.orEmpty(),
-        style = MaterialTheme.typography.headlineSmall,
+        style = MaterialTheme.typography.titleLarge,
         textAlign = TextAlign.Center,
     )
 }
@@ -250,7 +250,7 @@ private fun BigRound(title: String, sub: String?, onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            TextMMD(text = title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+            TextMMD(text = title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             if (sub != null) TextMMD(text = sub, style = MaterialTheme.typography.bodyMedium)
         }
     }
