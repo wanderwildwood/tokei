@@ -27,6 +27,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -89,11 +96,37 @@ fun AlarmsScreen(onEdit: (Long) -> Unit) {
     val zone = ZoneId.systemDefault()
     val wake = remember(version, now) { Plan.nextWake(alarms, zone) }
     var menuFor by remember { mutableStateOf<String?>(null) }
+    val setAt by justSet.collectAsState()
+    androidx.compose.runtime.DisposableEffect(Unit) { onDispose { justSet.value = null } }
 
-    Box(Modifier.fillMaxSize()) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                    justSet.value = null
+                }
+            },
+    ) {
         PagedColumn(modifier = Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp), showCutRow = true) {
             problems.forEachIndexed { i, p -> item(key = "problem:$i") { ProblemCard(p) } }
             if (missed.isNotEmpty()) item(key = "missed") { MissedCard(missed.take(5).map { Notifier.line(context, it) }, missed.size) }
+            // When the alarm just set is the next to ring, the line under this already says so.
+            setAt?.takeIf { it != wake?.at }?.let { at ->
+                item(key = "just-set") {
+                    // Counted from the clock, not from the minute's tick, which may be a minute old.
+                    val left = remember(at, now) { at - System.currentTimeMillis() }
+                    TextMMD(
+                        text = stringResource(R.string.alarm_rings_in, Times.until(context, left)),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .semantics { liveRegion = LiveRegionMode.Polite },
+                    )
+                }
+            }
             if (wake != null) {
                 item(key = "next") {
                     TextMMD(
@@ -274,13 +307,16 @@ private fun AlarmRow(a: Alarm, zone: ZoneId, onClick: () -> Unit) {
     }
 }
 
-/** "Alarm in 7 h 12 min", said once when an alarm is set, as the stock app does. */
+/**
+ * When the alarm just set rings next, said as "Alarm in 7 h 12 min" at the top of the alarms, as
+ * the stock app says it. It stays until the next press there or leaving the tab: the stock app's
+ * Toast is gone in a few seconds, which on this panel can be before it has been read.
+ */
+private val justSet = kotlinx.coroutines.flow.MutableStateFlow<Long?>(null)
+
+@Suppress("UNUSED_PARAMETER")
 fun toastIn(context: android.content.Context, at: Long) {
-    android.widget.Toast.makeText(
-        context,
-        context.getString(R.string.alarm_rings_in, Times.until(context, at - System.currentTimeMillis())),
-        android.widget.Toast.LENGTH_SHORT,
-    ).show()
+    justSet.value = at
 }
 
 /** What was missed, each with its reason, and the press that says it has been read. */
