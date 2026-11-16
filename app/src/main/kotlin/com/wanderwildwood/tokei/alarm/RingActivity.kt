@@ -1,5 +1,6 @@
 package com.wanderwildwood.tokei.alarm
 
+import com.wanderwildwood.tokei.ui.DarkSelection
 import com.wanderwildwood.tokei.ui.helperStyle
 import com.wanderwildwood.tokei.ui.houseTypography
 import com.wanderwildwood.tokei.ui.smallBodyStyle
@@ -72,13 +73,13 @@ class RingActivity : ComponentActivity() {
         setTurnScreenOn(true)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContent {
-            ThemeMMD(colorScheme = monochrome, typography = houseTypography) {
+            ThemeMMD(colorScheme = monochrome, typography = houseTypography) { DarkSelection {
                 ArmedScope {
                     Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
                         Ringing(onDone = ::finish)
                     }
                 }
-            }
+            } }
         }
     }
 

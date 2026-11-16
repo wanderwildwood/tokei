@@ -1,5 +1,6 @@
 package com.wanderwildwood.tokei
 
+import com.wanderwildwood.tokei.ui.DarkSelection
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -30,9 +31,9 @@ class MainActivity : ComponentActivity() {
             // A steady cursor: a blinking one repaints the e-ink panel twice a second for as long
             // as a field has focus.
             CompositionLocalProvider(LocalCursorBlinkEnabled provides false) {
-                ThemeMMD(colorScheme = monochrome, typography = houseTypography) {
+                ThemeMMD(colorScheme = monochrome, typography = houseTypography) { DarkSelection {
                     ArmedScope { ClockApp(opening = opening.value, onOpened = { opening.value = null }) }
-                }
+                } }
             }
         }
     }
