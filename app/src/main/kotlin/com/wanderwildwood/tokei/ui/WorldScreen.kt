@@ -38,7 +38,8 @@ import kotlin.math.abs
 
 /**
  * The world clock: the time here first, then each chosen city with its time, its day beside this
- * one's, and how far ahead or behind it is today. It redraws on the minute.
+ * one's, and how far ahead or behind it is today. The cities redraw on the minute; the time here
+ * shows its seconds and is the one row that redraws each second.
  */
 @Composable
 fun WorldScreen(onAdd: () -> Unit) {
@@ -63,7 +64,7 @@ fun WorldScreen(onAdd: () -> Unit) {
     Box(Modifier.fillMaxSize()) {
         PagedColumn(modifier = Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(start = 20.dp, end = 12.dp), showCutRow = true) {
             item(key = "here") {
-                CityRow(stringResource(R.string.world_here), here, here, now, null, sub = Times.day(context, Times.date(now)))
+                HereRow(here)
                 Dotted()
             }
             if (cities.isEmpty()) {
@@ -99,10 +100,28 @@ fun WorldScreen(onAdd: () -> Unit) {
     }
 }
 
+/** The time here, with seconds. It keeps its own tick so that nothing else is redrawn with it. */
 @Composable
-private fun CityRow(name: String, zone: ZoneId, here: ZoneId, now: Long, onClick: (() -> Unit)?, sub: String? = null) {
+private fun HereRow(here: ZoneId) {
     val context = LocalContext.current
-    val (time, ampm) = Times.split(context, now, zone)
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(1_000L - System.currentTimeMillis() % 1_000L)
+            now = System.currentTimeMillis()
+        }
+    }
+    LifecycleResumeEffect(Unit) {
+        now = System.currentTimeMillis()
+        onPauseOrDispose { }
+    }
+    CityRow(stringResource(R.string.world_here), here, here, now, null, sub = Times.day(context, Times.date(now)), seconds = true)
+}
+
+@Composable
+private fun CityRow(name: String, zone: ZoneId, here: ZoneId, now: Long, onClick: (() -> Unit)?, sub: String? = null, seconds: Boolean = false) {
+    val context = LocalContext.current
+    val (time, ampm) = Times.split(context, now, zone, seconds)
     Column(
         Modifier
             .fillMaxWidth()

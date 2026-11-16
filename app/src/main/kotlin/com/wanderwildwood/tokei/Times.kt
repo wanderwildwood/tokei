@@ -42,8 +42,14 @@ object Times {
         return String.format(Locale.ROOT, "%d:%02d", h, t.minute) to ampm
     }
 
-    fun split(context: Context, at: Long, zone: ZoneId = ZoneId.systemDefault()): Pair<String, String> =
-        split(context, Instant.ofEpochMilli(at).atZone(zone).toLocalTime())
+    /** The same two parts for a moment in [zone]; with [seconds] the figures carry them: "9:41:07". */
+    fun split(context: Context, at: Long, zone: ZoneId = ZoneId.systemDefault(), seconds: Boolean = false): Pair<String, String> {
+        val t = Instant.ofEpochMilli(at).atZone(zone).toLocalTime()
+        val (figures, ampm) = split(context, t)
+        return (if (seconds) withSeconds(figures, t.second) else figures) to ampm
+    }
+
+    internal fun withSeconds(figures: String, second: Int): String = String.format(Locale.ROOT, "%s:%02d", figures, second)
 
     /** "Mon 5 Oct", or with the year when it is not this year's. */
     fun day(context: Context, date: LocalDate): String {
