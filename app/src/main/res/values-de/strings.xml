@@ -193,19 +193,19 @@
     <!-- ============================================================ -->
     <!-- Setup: only shown while something stands between an alarm and the person -->
 
-    <string name="setup_duraspeed">Ein Schritt, damit Wecker klingeln: Die DuraSpeed-Einstellung des Telefons kann Zeit beenden, und seine Wecker mit ihr. Öffne DuraSpeed, tippe auf Öffnen und schalte Zeit ein.</string>
+    <string name="setup_duraspeed">Ein Schritt, damit Wecker klingeln: Die DuraSpeed-Einstellung des Telefons kann Time beenden und damit seine Wecker. Öffne DuraSpeed, tippe auf Öffnen und schalte Time ein.</string>
     <string name="setup_duraspeed_open">DuraSpeed öffnen</string>
     <string name="setup_duraspeed_done">Es ist eingeschaltet</string>
-    <string name="setup_notifications">Benachrichtigungen sind für Zeit aus, deshalb kann der Klingelbildschirm nicht erscheinen.</string>
+    <string name="setup_notifications">Benachrichtigungen sind für Time aus, deshalb kann der Klingelbildschirm nicht erscheinen.</string>
     <string name="setup_turn_on">Einschalten</string>
-    <string name="setup_exact">Zeit darf keine Wecker stellen, deshalb kann ein Wecker bis zu eine Stunde zu spät klingeln.</string>
+    <string name="setup_exact">Time darf keine Wecker stellen, deshalb kann ein Wecker bis zu eine Stunde zu spät klingeln.</string>
     <string name="setup_allow">Wecker erlauben</string>
-    <string name="setup_full_screen">Zeit darf den Bildschirm nicht füllen, deshalb klingelt ein Wecker oder Timer nur mit einer Benachrichtigung, und der Bildschirm bleibt dunkel.</string>
+    <string name="setup_full_screen">Time darf den Bildschirm nicht füllen, deshalb klingelt ein Wecker oder Timer nur mit einer Benachrichtigung, und der Bildschirm bleibt dunkel.</string>
     <string name="setup_full_screen_allow">Vollbild erlauben</string>
-    <string name="setup_battery">Die Akkuschonung des Telefons kann Zeit nach einer Nacht im Schlaf zurückhalten, und Wecker klingeln dann Minuten zu spät. Lass sie ohne Einschränkung laufen.</string>
+    <string name="setup_battery">Die Akkuschonung des Telefons kann Time nach einer Nacht im Schlaf zurückhalten, und Wecker klingeln dann Minuten zu spät. Lass sie ohne Einschränkung laufen.</string>
     <string name="setup_battery_allow">Erlauben</string>
     <!-- %1$s is when, e.g. "14:02" or "Yesterday 14:02" -->
-    <string name="setup_stopped">Zeit wurde beendet (%1$s), und nichts konnte klingeln, bis die App wieder geöffnet wurde. Alles, was in dieser Zeit fällig war, steht als verpasst in der Liste.</string>
+    <string name="setup_stopped">Time wurde beendet (%1$s), und nichts konnte klingeln, bis die App wieder geöffnet wurde. Alles, was in dieser Zeit fällig war, steht als verpasst in der Liste.</string>
     <string name="setup_understood">Verstanden</string>
     <string name="setup_cannot_open">Dieses Telefon hat dafür keine Einstellungsseite.</string>
 
@@ -224,7 +224,7 @@
     <string name="settings_glance">Nächster Wecker auf dem Sperrbildschirm</string>
     <string name="settings_glance_note">Wird von Glance angezeigt, wenn es installiert ist.</string>
     <string name="settings_sky">Wetter, wenn ein Wecker klingelt</string>
-    <string name="settings_sky_note">Von Himmel, wenn es installiert ist: die Temperatur, der Himmel und das Tageshoch und -tief.</string>
+    <string name="settings_sky_note">Von Sky, wenn es installiert ist: die Temperatur, der Himmel und das Tageshoch und -tief.</string>
 
     <!-- ============================================================ -->
     <!-- Notifications -->
@@ -252,11 +252,11 @@
     <string name="about_ring">Wecker klingeln in der Wecklautstärke, deshalb klingelt auch ein Telefon, das auf lautlos steht. Während eines Anrufs klingelt ein Wecker leise und vibriert.</string>
     <string name="about_privacy_title">Datenschutz</string>
     <string name="about_privacy">Alles, was du in diese App eingibst, bleibt auf diesem Telefon. Sie hat keinen Internetzugang, deshalb wird nichts gesendet und nichts über dich gesammelt. Ihre Berechtigungen dienen alle dem pünktlichen Klingeln: exakte Wecker; Wecker nach einem Neustart erneut stellen; über dem Sperrbildschirm anzeigen; ein Vordergrunddienst, der den Ton abspielt; Vibrieren; das Telefon wach halten, während es klingelt; und Benachrichtigungen für Schlummern und Stopp. Auf ihrem ersten Bildschirm kann sie Android bitten, die App von der Akkuschonung auszunehmen, und nur, wenn du diese Schaltfläche drückst. Der Ton ist einer, den du aus denen auf dem Telefon auswählst. Die App ist von Androids Sicherungen ausgenommen. „Füttere die Lamas“ öffnet eine Spendenseite (square.link) in deinem Browser, nur wenn du darauf drückst. Die App sendet nichts dorthin; wenn du spendest, wickelt Square die Zahlung auf dieser Seite ab, nicht diese App.</string>
-    <string name="about_privacy_links">Nur wenn du sie in den Einstellungen einschaltest, teilt sie Glance deinen nächsten Wecker mit und fragt Himmel nach einer Zeile Wetter, beides auf diesem Telefon. Es gibt keine Werbung, keine Analysen und kein Tracking. Die Links unten öffnen deinen Browser nur, wenn du sie drückst.</string>
+    <string name="about_privacy_links">Nur wenn du sie in den Einstellungen einschaltest, teilt sie Glance deinen nächsten Wecker mit und fragt Sky nach einer Zeile Wetter, beides auf diesem Telefon. Es gibt keine Werbung, keine Analysen und kein Tracking. Die Links unten öffnen deinen Browser nur, wenn du sie drückst.</string>
     <string name="about_terms_title">Bedingungen</string>
     <string name="about_terms">Diese App ist freie Software unter der GNU General Public License v3. Sie kommt ohne Gewährleistung: Nutze sie auf eigenes Risiko. Eine Spende über „Füttere die Lamas“ ist freiwillig und schaltet nichts frei: Die App ist mit oder ohne Spende dieselbe.</string>
     <string name="about_terms_alarms">Ein Telefon kann einen Wecker verpassen: ein leerer Akku, ein ausgeschaltetes Telefon oder das System, das Apps beendet. Wo ein verpasster Wecker wichtig wäre, verlass dich nicht auf eine einzige Uhr.</string>
-    <string name="about_title">Zeit %1$s</string>
+    <string name="about_title">Time %1$s</string>
     <string name="about_what">Wecker, Timer, eine Stoppuhr und eine Weltzeit.</string>
     <string name="about_base">Aufgebaut auf Fossify Clock, GPL-3.0</string>
     <string name="about_feed_the_llamas">Füttere die Lamas</string>
@@ -269,7 +269,7 @@
     <string name="about_licences">Lizenzen</string>
     <string name="licences_title">Lizenzen</string>
     <string name="licences_source_head">Quellcode</string>
-    <string name="licences_licence">Zeit ist freie Software unter der GNU General Public License, ausschließlich Version 3 (GPL-3.0-only), Copyright wander wildwood, für das, was hier geschrieben steht. Sie begann als Fork von Fossify Clock (GPL-3.0). Die Arbeit, auf der sie aufbaut, behält ihre eigene Lizenz, und ihre Autoren behalten ihr Urheberrecht; sie sind unten aufgeführt.</string>
+    <string name="licences_licence">Time ist freie Software unter der GNU General Public License, ausschließlich Version 3 (GPL-3.0-only), Copyright wander wildwood, für das, was hier geschrieben steht. Sie begann als Fork von Fossify Clock (GPL-3.0). Die Arbeit, auf der sie aufbaut, behält ihre eigene Lizenz, und ihre Autoren behalten ihr Urheberrecht; sie sind unten aufgeführt.</string>
     <string name="licences_back">Zurück</string>
     <string name="licences_no_text">%s braucht hier keinen Lizenztext.</string>
     <string name="licences_full_head">Vollständige Texte</string>
