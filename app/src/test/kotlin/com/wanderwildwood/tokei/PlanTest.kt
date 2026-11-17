@@ -80,6 +80,14 @@ class PlanTest {
         assertEquals(listOf("2026-11-01T01:30", "2026-11-02T01:30"), dues.map { local(it) })
     }
 
+    @Test fun aClockThatJumpedYearsForwardStillRingsTodaysAlarm() {
+        // Caught up to a clock that read 1990; the real time comes back, 36 years on.
+        val a = Alarm(hour = 7, minute = 0, days = Plan.EVERY_DAY, from = at(1990, 1, 1, 12))
+        val due = Plan.catchUp(a, at(2026, 11, 17, 7, 5), ny)
+        assertEquals("2026-11-17T07:00", local(due.ring!!))
+        assertEquals("2026-10-18T07:00", local(due.missed.first()))
+    }
+
     @Test fun aTimeZoneChangeKeepsTheClockTime() {
         // Set for 07:00 in New York; the phone moves to Tokyo, where it is 01:00 the next day.
         // It rings at 07:00 Tokyo time, not at New York's 07:00.

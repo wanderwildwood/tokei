@@ -22,6 +22,9 @@ object Plan {
     /** At most this many missed times are written down for one alarm at once: a month away is not thirty notices. */
     const val MISSED_KEPT = 20
 
+    /** How far back a repeating alarm's missed times are looked for. */
+    const val LOOK_BACK_MS = 31L * 24 * 3600_000L
+
     const val EVERY_DAY = 127
     const val WEEKDAYS = 31
     const val WEEKEND = 96
@@ -49,7 +52,9 @@ object Plan {
     fun dues(a: Alarm, now: Long, zone: ZoneId, limit: Int = 500): List<Long> {
         if (!a.enabled) return emptyList()
         val out = ArrayList<Long>()
-        var t = a.from
+        // A repeating alarm looks back a month at most: after a clock that jumped years forward
+        // the walk would otherwise use up its limit long before it reached the time due now.
+        var t = if (a.repeats) maxOf(a.from, now - LOOK_BACK_MS) else a.from
         while (out.size < limit) {
             val n = next(a, t, zone) ?: break
             if (n > now) break
