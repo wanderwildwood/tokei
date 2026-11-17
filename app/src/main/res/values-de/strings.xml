@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Zeit</string>
 
     <!-- Read aloud by a screen reader -->
     <string name="cd_back">Zurück</string>
