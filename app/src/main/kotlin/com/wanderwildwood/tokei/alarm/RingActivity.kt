@@ -214,7 +214,8 @@ private fun skyLine(context: Context): String? = try {
         }
         val lead = c.getString(c.getColumnIndexOrThrow("lead")).orEmpty()
         val text = c.getString(c.getColumnIndexOrThrow("text")).orEmpty().trim()
-        listOf(lead, text).filter { it.isNotEmpty() }.joinToString(" · ").ifEmpty { null }
+        // One line on the ringing screen, however much another app hands back.
+        listOf(lead, text).filter { it.isNotEmpty() }.joinToString(" · ").take(200).ifEmpty { null }
     }
 } catch (e: Exception) {
     // Sky not installed, or too old to answer: no line.

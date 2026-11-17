@@ -1,12 +1,12 @@
 # Time — Privacy Policy
 
-Version 0.2.17. Last reviewed 4 November 2026.
+Version 0.2.29. Last reviewed 17 November 2026.
 
 ## The short version
 
 Time collects nothing and sends nothing anywhere. It has no internet permission, so no data can leave your phone through it. There is no account, no sign-up, no analytics, no advertising and no crash reporting. The developer never receives anything about you or your use of the app, and has no way to.
 
-Two other apps of the same author can exchange a line with it on your phone, but only when you switch them on, and only those two (see "Who else receives anything").
+Two other apps of the same author can exchange a line with it on your phone, but only when you switch them on, and only those two. It also follows Home's dark mode switch when Home is installed, and uses Cabinet to choose a sound file when Cabinet is installed (see "Who else receives anything").
 
 <!-- shared-about privacy section -->
 ## Who we are
@@ -53,7 +53,7 @@ The app is left out of Android's backups (`allowBackup="false"`), and uninstalli
 - `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`: so the first screen can ask for the phone's battery saving to leave the app alone. It is asked, never assumed.
 - `POST_NOTIFICATIONS`: for the notification that carries Snooze and Stop (Android 13 and later asks for this).
 
-There is no internet, location, contacts, storage, microphone or camera permission. The manifest also names two other apps it may look for, Sky (`com.wanderwildwood.soramoyo`) and DuraSpeed (`com.mediatek.duraspeed`, the Kompakt's background manager, only to say on the first screen whether it is there and whether it is switched on), and lists the apps that offer a text action, so the selection menu can show them.
+There is no internet, location, contacts, storage, microphone or camera permission. The manifest also names five other apps it may look for: Glance (`com.wanderwildwood.hitome`, so Settings shows its switch only when it is installed), Sky (`com.wanderwildwood.soramoyo`), Home (`com.wanderwildwood.iori`), Cabinet (`com.wanderwildwood.tana`) and DuraSpeed (`com.mediatek.duraspeed`, the Kompakt's background manager, only to say on the first screen whether it is there and whether it is switched on). It also lists the apps that offer a text action, so the selection menu can show them, and the browsers, so the links in About open in one.
 
 The store also lists `com.wanderwildwood.tokei.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` because it reads the APK. AndroidX declares it for its own internal receivers; it is signature-level and namespaced to this app, so nothing else can hold it and it grants no access to anything on the phone.
 
@@ -65,6 +65,8 @@ Other apps on the same phone:
 
 - **Glance** (`com.wanderwildwood.hitome`), only if you switch on Settings, "Next alarm on the lock screen". Time then answers Glance, and no other app, with the time and name of your next alarm and any running timer, for Glance to draw on the lock screen. While the switch is off it answers with nothing.
 - **Sky** (`com.wanderwildwood.soramoyo`), only if you switch on Settings, "Weather when an alarm rings". When an alarm rings, Time asks Sky for its current line of weather and shows it under the alarm. Time sends Sky nothing about you or the alarm. Sky fetches the forecast itself, and its own privacy policy covers that.
+- **Home** (`com.wanderwildwood.iori`), when it is installed. Time reads Home's dark mode switch, a yes or no, so it is light or dark with the rest of the phone, and sends Home nothing.
+- **Cabinet** (`com.wanderwildwood.tana`), when it is installed and you choose a sound from your files. The file is chosen in Cabinet, which hands back the address of that one file; Time sends it nothing else.
 - Alarms, timers and the stopwatch can be set, snoozed or stopped by other apps that hold Android's `SET_ALARM` permission, as with Android's own clock. They can ask the app to show alarms, timers and the clock; nothing is changed by showing.
 
 In About, "feed the llamas" opens a donation page (square.link) and wanderthe.dev opens the author's website, in your browser and only when you press them. The app does not fetch either page and learns nothing about whether you went.

@@ -219,7 +219,7 @@ class RingService : Service() {
             prepare()
         }
     } catch (e: Exception) {
-        Log.w("tokei", "cannot play $uri: ${e.message}")
+        Log.w("tokei", "cannot play ${uri.scheme}://${uri.authority ?: ""}: ${e.message}")
         null
     }
 
