@@ -58,7 +58,7 @@ fun ClockApp(opening: MainActivity.Opening?, onOpened: () -> Unit) {
         settings = false
         tab = o.tab.coerceIn(0, 3)
         if (o.newAlarm) {
-            alarmPreset = if (o.hour >= 0) o.hour to o.minute.coerceAtLeast(0) else null
+            alarmPreset = if (o.hour >= 0) o.hour.coerceAtMost(23) to o.minute.coerceIn(0, 59) else null
             alarm = NEW
         }
         onOpened()

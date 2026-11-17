@@ -164,9 +164,14 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
         if (seconds <= 0) return
         val base = existing ?: Timer(seconds = seconds, kept = !start)
         // A new length starts over; the same length keeps a running timer running.
-        val kept = if (existing != null && existing.seconds != seconds) Plan.reset(base) else base
-        val tid = Engine.saveTimer(context, kept.copy(seconds = seconds, label = label.trim(), sound = sound, soundTitle = soundTitle, vibrate = vibrate))
-        if (start) Engine.timerAction(context, tid) { x, n -> Plan.start(x, n) }
+        val newLength = existing != null && existing.seconds != seconds
+        var next = (if (newLength) Plan.reset(base) else base)
+            .copy(seconds = seconds, label = label.trim(), sound = sound, soundTitle = soundTitle, vibrate = vibrate)
+        // A timer started on the fly leaves the list once it is back at its start, which a new
+        // length is: so it is started in the same write, or, saved without starting, kept.
+        if (newLength) next = if (start) Plan.start(next, System.currentTimeMillis()) else next.copy(kept = true)
+        val tid = Engine.saveTimer(context, next)
+        if (start && !newLength) Engine.timerAction(context, tid) { x, n -> Plan.start(x, n) }
         onDone()
     }
 
