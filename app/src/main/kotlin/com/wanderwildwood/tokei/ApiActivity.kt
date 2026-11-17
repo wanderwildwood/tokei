@@ -21,7 +21,13 @@ import java.util.Calendar
  * launchers and assistants send to the clock by name. It draws nothing; it does the thing, or
  * opens the app at the right place, and closes.
  */
-class ApiActivity : Activity() {
+open class ApiActivity : Activity() {
+
+    /**
+     * Whether this entry may change anything. Only [SetAlarmApi], which Android opens only to
+     * apps holding SET_ALARM; this one is open to every app and only shows things.
+     */
+    protected open val mayChange: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +40,11 @@ class ApiActivity : Activity() {
     }
 
     private fun handle(intent: Intent) {
-        Log.i("tokei", "asked: ${intent.action}")
+        if (BuildConfig.DEBUG) Log.i("tokei", "asked: ${intent.action}")
+        if (!mayChange && intent.action !in SHOW_ACTIONS) {
+            open(MainActivity.TAB_ALARMS)
+            return
+        }
         when (intent.action) {
             AlarmClock.ACTION_SET_ALARM -> setAlarm(intent)
             AlarmClock.ACTION_SHOW_ALARMS -> open(MainActivity.TAB_ALARMS)
@@ -91,8 +101,10 @@ class ApiActivity : Activity() {
 
         // The same alarm asked for again is switched on, not made twice, as Android's clock does.
         val same = Store.get(this).alarms().firstOrNull { it.hour == hour && it.minute == minute && it.days == days && it.label == label }
-        val alarm = (same ?: Alarm(hour = hour, minute = minute, days = days, label = label, sound = sound, vibrate = vibrate))
-        Engine.save(this, alarm)
+        when {
+            same == null -> Engine.save(this, Alarm(hour = hour, minute = minute, days = days, label = label, sound = sound, vibrate = vibrate))
+            !same.enabled -> Engine.setEnabled(this, same.id, true)
+        }
         Toast.makeText(this, getString(R.string.alarm_set_for, Times.time(this, java.time.LocalTime.of(hour, minute))), Toast.LENGTH_SHORT).show()
         if (!intent.getBooleanExtra(AlarmClock.EXTRA_SKIP_UI, false)) open(MainActivity.TAB_ALARMS)
     }
@@ -141,5 +153,23 @@ class ApiActivity : Activity() {
         const val DESK_LAP_STOPWATCH = DESK + "LAP_STOPWATCH"
         const val DESK_RESET_STOPWATCH = DESK + "RESET_STOPWATCH"
         const val DESK_SHOW_CLOCK = DESK + "SHOW_CLOCK"
+
+        /** What any app may ask: these only open the app at a tab. */
+        private val SHOW_ACTIONS = setOf(
+            AlarmClock.ACTION_SHOW_ALARMS,
+            AlarmClock.ACTION_SHOW_TIMERS,
+            DESK_SHOW_TIMERS,
+            DESK_SHOW_STOPWATCH,
+            DESK_SHOW_CLOCK,
+        )
     }
+}
+
+/**
+ * The entry for what changes alarms, timers and the stopwatch. A class of its own, not an
+ * alias of [ApiActivity], so that knowing which one was opened is certain: only apps holding
+ * SET_ALARM can reach it.
+ */
+class SetAlarmApi : ApiActivity() {
+    override val mayChange: Boolean = true
 }

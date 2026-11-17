@@ -96,10 +96,13 @@
 
         <!-- What other apps ask a clock to do: set, snooze or stop an alarm or a timer, run the
              stopwatch. Only apps holding SET_ALARM may ask, as with Android's own clock. -->
-        <activity-alias
+        <activity
             android:name=".SetAlarmApi"
-            android:targetActivity=".ApiActivity"
             android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay"
             android:permission="com.android.alarm.permission.SET_ALARM">
             <intent-filter>
                 <action android:name="android.intent.action.SET_ALARM" />
@@ -113,7 +116,7 @@
                 <action android:name="com.android.deskclock.action.RESET_STOPWATCH" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity-alias>
+        </activity>
 
         <!-- The ringing screen over the lock screen. Its own task, out of Recents, so answering it
              leaves the phone where it was. -->
