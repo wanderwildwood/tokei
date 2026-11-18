@@ -123,6 +123,9 @@ object Engine {
         }
 
         schedule(context, store, now, zone)
+        // A change of the clock or the zone moves the wall clock end of a running timer that was
+        // not saved here, so an open screen reads the timers again.
+        Store.bump()
         GlanceProvider.changed(context)
     }
 
