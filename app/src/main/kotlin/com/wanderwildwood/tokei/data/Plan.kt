@@ -191,6 +191,28 @@ object Plan {
         else -> t
     }
 
+    /**
+     * A timer's edit screen saved: the length, name and sound set there, put on [live], the timer
+     * as it is stored now (null for a new one, or one gone meanwhile), so a ring, a stop or a
+     * minute more that came while the screen was open is kept, not written over. A new length
+     * starts over: started in the same write with [andStart], or else kept, since a timer started
+     * on the fly leaves the list once it is back at its start. The same length leaves its state.
+     */
+    fun edited(
+        live: Timer?, seconds: Int, label: String, sound: String, soundTitle: String, vibrate: Boolean,
+        andStart: Boolean, now: Long,
+    ): Timer {
+        val base = live ?: Timer(seconds = seconds, kept = !andStart)
+        val newLength = live != null && live.seconds != seconds
+        val next = (if (newLength) reset(base) else base)
+            .copy(seconds = seconds, label = label, sound = sound, soundTitle = soundTitle, vibrate = vibrate)
+        return when {
+            !newLength -> next
+            andStart -> start(next, now)
+            else -> next.copy(kept = true)
+        }
+    }
+
     fun due(t: Timer, now: Long): Boolean = t.state == Timer.RUNNING && t.endsAt <= now
 
     fun nextTimer(timers: List<Timer>): Long? = timers.filter { it.state == Timer.RUNNING }.minOfOrNull { it.endsAt }

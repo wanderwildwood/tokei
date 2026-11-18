@@ -263,6 +263,38 @@ class PlanTest {
     }
 
     @Test
+    fun savingATimersEditKeepsAStopThatCameMeanwhile() {
+        // Opened while running; it rang and was stopped on the ringing screen before Save.
+        val stopped = Plan.reset(Plan.start(Timer(id = 1, seconds = 300), 0L))
+        val saved = Plan.edited(stopped, 300, "Tea", "", "", true, andStart = false, now = 400_000L)
+        assertEquals(Timer.IDLE, saved.state)
+        assertEquals(0L, saved.endsAt)
+        assertEquals("Tea", saved.label)
+    }
+
+    @Test
+    fun savingATimersEditKeepsAMinuteMore() {
+        val more = Plan.addMinute(Plan.start(Timer(id = 1, seconds = 300), 0L), 100_000L)
+        val saved = Plan.edited(more, 300, "Tea", "", "", false, andStart = false, now = 200_000L)
+        assertEquals(Timer.RUNNING, saved.state)
+        assertEquals(360_000L, saved.endsAt)
+        assertFalse(saved.vibrate)
+    }
+
+    @Test
+    fun aNewLengthStartsOverAndAnOnTheFlyTimerIsKeptOrStarted() {
+        val running = Plan.start(Timer(id = 1, seconds = 300, kept = false), 0L)
+        val kept = Plan.edited(running, 600, "", "", "", true, andStart = false, now = 100_000L)
+        assertEquals(Timer.IDLE, kept.state)
+        assertTrue(kept.kept)
+        val started = Plan.edited(running, 600, "", "", "", true, andStart = true, now = 100_000L)
+        assertEquals(Timer.RUNNING, started.state)
+        assertEquals(700_000L, started.endsAt)
+        // Gone meanwhile: saved as a new one.
+        assertEquals(0L, Plan.edited(null, 600, "", "", "", true, andStart = true, now = 0L).id)
+    }
+
+    @Test
     fun ringingFromADeadProcessIsLeftOverEvenWithinItsTime() {
         val since = 1_000_000L
         val within = since + 2 * 60_000L
