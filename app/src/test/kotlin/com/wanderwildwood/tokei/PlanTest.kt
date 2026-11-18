@@ -252,4 +252,13 @@ class PlanTest {
         assertEquals("0:01.27", Times.clock(1_270L, fine = true))
         assertEquals("5:00", Times.clock(299_001L, roundUp = true))
     }
+
+    @Test
+    fun ringingLeftBehindIsOverOnlyAfterItsTime() {
+        val since = 1_000_000L
+        assertFalse(Plan.ringOver(since, 5, since + 4 * 60_000L))
+        assertTrue(Plan.ringOver(since, 5, since + 5 * 60_000L))
+        // No start written: nothing can be said to be still ringing.
+        assertTrue(Plan.ringOver(0L, 5, since))
+    }
 }

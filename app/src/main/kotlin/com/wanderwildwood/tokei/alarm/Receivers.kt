@@ -11,7 +11,7 @@ import com.wanderwildwood.tokei.data.Settings
 /** The alarm clock or the timer alarm going off: catch up, ring, set the next. */
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != ALARM && intent.action != TIMER) return
+        if (intent.action != ALARM && intent.action != TIMER && intent.action != RING_ENDED) return
         Log.i("tokei", "system alarm went off: ${intent.action}")
         Engine.sync(context)
     }
@@ -19,6 +19,9 @@ class AlarmReceiver : BroadcastReceiver() {
     companion object {
         const val ALARM = "com.wanderwildwood.tokei.ALARM"
         const val TIMER = "com.wanderwildwood.tokei.TIMER"
+
+        /** The ringing notification that sounds on its own went after its time. */
+        const val RING_ENDED = "com.wanderwildwood.tokei.RING_ENDED"
     }
 }
 

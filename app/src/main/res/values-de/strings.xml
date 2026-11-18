@@ -232,6 +232,9 @@
     <string name="channel_ringing">Klingeln</string>
     <string name="channel_ringing_about">Ein Wecker oder Timer klingelt gerade. Der Ton ist der eigene der App, in der Lautstärke für Wecker.</string>
     <string name="channel_missed">Verpasst</string>
+    <string name="channel_ringing_sound">Klingeln, wenn die App es nicht kann</string>
+    <string name="channel_ringing_sound_about">Nur, wenn das Telefon die App nicht selbst klingeln lässt, etwa wenn genaue Wecker nicht erlaubt sind. Der Weckton des Telefons, immer wieder, bis jemand reagiert oder die Klingelzeit um ist.</string>
+    <string name="channel_quiet">Start</string>
 
     <!-- ============================================================ -->
     <!-- Glance's lock-screen panel -->

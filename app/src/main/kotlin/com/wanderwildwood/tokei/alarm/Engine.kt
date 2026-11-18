@@ -51,6 +51,25 @@ object Engine {
         val rings = mutableListOf<Ring>()
         val missed = mutableListOf<Missed>()
 
+        // What was left ringing with no service ringing it: the process died while it rang, or
+        // the notification that sounds on its own was used. Past its time it is written down as
+        // rung and not answered, and is not rung again with the next alarm; still within its
+        // time, it is left to ring.
+        val left = settings.ringing
+        if (left.isNotEmpty() && !RingService.running && Plan.ringOver(settings.ringSince, settings.ringMinutes, now)) {
+            Log.w(TAG, "left ringing past its time: " + left.joinToString { it.encode() })
+            left.forEach { r ->
+                if (r.timer) {
+                    val t = store.timer(r.id)
+                    if (t != null && t.state == Timer.RINGING) store.save(Plan.reset(t))
+                    missed += Missed(timer = true, label = t?.let { timerLabel(context, it) }.orEmpty(), due = r.due, why = Why.UNANSWERED)
+                } else {
+                    missed += Missed(timer = false, label = store.alarm(r.id)?.label.orEmpty(), due = r.due, why = Why.UNANSWERED)
+                }
+            }
+            Ringer.clear(context)
+        }
+
         for (found in store.alarms()) {
             // A clock set back leaves an alarm caught up to a moment that has not come yet, and
             // nothing would ring until it did. Starting again from now is safe.

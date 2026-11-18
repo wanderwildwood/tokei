@@ -19,6 +19,10 @@ object Plan {
     /** An alarm or a timer found up to this late still rings. Later than this it is written down as missed. */
     const val RING_WITHIN_MS = 10 * 60_000L
 
+    /** Whether ringing that began at [since] has had its [minutes]; with no start known, it has. */
+    fun ringOver(since: Long, minutes: Int, now: Long): Boolean =
+        since <= 0L || now >= since + minutes * 60_000L
+
     /** At most this many missed times are written down for one alarm at once: a month away is not thirty notices. */
     const val MISSED_KEPT = 20
 

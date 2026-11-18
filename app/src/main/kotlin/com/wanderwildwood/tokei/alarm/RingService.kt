@@ -112,10 +112,16 @@ class RingService : Service() {
         val ringing = settings.ringing
         val top = ringing.lastOrNull()
         if (top == null) {
+            // Answered between the start and now. Started with startForegroundService, it must
+            // still go to the foreground before it stops, or Android ends the app: a silent
+            // placeholder, taken away at once.
+            startForeground(Notifier.RINGING_ID, Notifier.placeholder(this), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+            stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return START_NOT_STICKY
         }
         startForeground(Notifier.RINGING_ID, Notifier.build(this, top), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+        running = true
 
         if (wake == null) {
             wake = getSystemService(PowerManager::class.java)
@@ -235,12 +241,20 @@ class RingService : Service() {
     }
 
     override fun onDestroy() {
+        running = false
         handler.removeCallbacksAndMessages(null)
         stopSound()
         wake?.let { if (it.isHeld) it.release() }
         wake = null
         stopForeground(STOP_FOREGROUND_REMOVE)
         super.onDestroy()
+    }
+
+    companion object {
+        /** Whether the service is ringing in this process; false after the process died. */
+        @Volatile
+        var running = false
+            private set
     }
 }
 

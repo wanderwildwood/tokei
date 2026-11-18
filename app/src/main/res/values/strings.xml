@@ -233,6 +233,9 @@
     <string name="channel_ringing">Ringing</string>
     <string name="channel_ringing_about">An alarm or a timer ringing now. The sound is the app\'s own, on the alarm volume.</string>
     <string name="channel_missed">Missed</string>
+    <string name="channel_ringing_sound">Ringing, when the app cannot</string>
+    <string name="channel_ringing_sound_about">Used only when the phone will not let the app ring by itself, as when exact alarms are not allowed. The phone\'s alarm sound, over and over, until it is answered or the ringing time is up.</string>
+    <string name="channel_quiet">Starting</string>
 
     <!-- ============================================================ -->
     <!-- Glance's lock-screen panel -->

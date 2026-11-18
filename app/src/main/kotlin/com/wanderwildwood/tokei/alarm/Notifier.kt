@@ -26,6 +26,16 @@ object Notifier {
     const val RINGING = "ringing"
     const val MISSED = "missed_light"
 
+    /**
+     * The ringing notification when the service could not be started (the system would not let
+     * it, as when exact alarms are refused): this one makes the sound itself, the phone's alarm
+     * sound over and over, so the alarm is never silent.
+     */
+    const val RINGING_SOUND = "ringing_sound"
+
+    /** Silent, for the moment the service must show something before it finds nothing to ring. */
+    private const val QUIET = "quiet"
+
     // A channel's settings are frozen once it exists, the light among them, so the one made
     // before the light was asked for moves to a new id (LightChannel). Not the ringing one:
     // an alarm that is ringing has the screen on.
@@ -45,6 +55,28 @@ object Notifier {
                 setBypassDnd(true)
             },
         )
+        nm.createNotificationChannel(
+            NotificationChannel(RINGING_SOUND, context.getString(R.string.channel_ringing_sound), NotificationManager.IMPORTANCE_HIGH).apply {
+                description = context.getString(R.string.channel_ringing_sound_about)
+                setSound(
+                    android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM),
+                    android.media.AudioAttributes.Builder()
+                        .setUsage(android.media.AudioAttributes.USAGE_ALARM)
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build(),
+                )
+                enableVibration(true)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                setBypassDnd(true)
+            },
+        )
+        nm.createNotificationChannel(
+            NotificationChannel(QUIET, context.getString(R.string.channel_quiet), NotificationManager.IMPORTANCE_MIN).apply {
+                setSound(null, null)
+                enableVibration(false)
+                setShowBadge(false)
+            },
+        )
         LightChannel.ensure(
             nm,
             MISSED_NO_LIGHT,
@@ -52,7 +84,7 @@ object Notifier {
         )
     }
 
-    fun build(context: Context, r: Ring): Notification {
+    fun build(context: Context, r: Ring, channel: String = RINGING, more: (NotificationCompat.Builder) -> Unit = {}): Notification {
         channels(context)
         val store = Store.get(context)
         val title: String
@@ -66,7 +98,7 @@ object Notifier {
             title = Times.time(context, r.due)
             text = a?.label?.ifBlank { null } ?: context.getString(R.string.alarm)
         }
-        val b = NotificationCompat.Builder(context, RINGING)
+        val b = NotificationCompat.Builder(context, channel)
             .setSmallIcon(R.drawable.ic_notify)
             .setContentTitle(title)
             .setContentText(text)
@@ -90,13 +122,44 @@ object Notifier {
             b.addAction(0, context.getString(R.string.ring_snooze_for, Times.minutes(context, n)), action(context, ActionReceiver.SNOOZE, r.id))
             b.addAction(0, context.getString(R.string.ring_stop), action(context, ActionReceiver.DISMISS, r.id))
         }
+        more(b)
         return b.build()
     }
 
-    /** Posts the ringing notification without the service, when the service could not be started. */
+    /**
+     * Posts the ringing notification without the service, when the service could not be started.
+     * It sounds on its own channel, over and over, and goes after [Settings.ringMinutes] like the
+     * service's ringing; then the next catch-up writes it down as rung and not answered.
+     */
     fun ringing(context: Context, r: Ring) {
-        context.getSystemService(NotificationManager::class.java).notify(RINGING_ID, build(context, r))
+        val minutes = Settings(context).ringMinutes
+        val n = build(context, r, RINGING_SOUND) {
+            it.setTimeoutAfter(minutes * 60_000L)
+            it.setDeleteIntent(ended(context))
+        }
+        // Insistent: the sound goes on until it is answered or the notification goes.
+        n.flags = n.flags or Notification.FLAG_INSISTENT
+        context.getSystemService(NotificationManager::class.java).notify(RINGING_ID, n)
     }
+
+    /** What the service shows for the moment before it stops, when there was nothing to ring. */
+    fun placeholder(context: Context): Notification {
+        channels(context)
+        return NotificationCompat.Builder(context, QUIET)
+            .setSmallIcon(R.drawable.ic_notify)
+            .setContentTitle(context.getString(R.string.app_name))
+            .setSilent(true)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .build()
+    }
+
+    /** Sent when the sounding notification times out: catch up, and write it down. */
+    private fun ended(context: Context): PendingIntent = PendingIntent.getBroadcast(
+        context,
+        3,
+        Intent(context, AlarmReceiver::class.java).setAction(AlarmReceiver.RING_ENDED),
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+    )
 
     fun cancelRinging(context: Context) {
         context.getSystemService(NotificationManager::class.java).cancel(RINGING_ID)
