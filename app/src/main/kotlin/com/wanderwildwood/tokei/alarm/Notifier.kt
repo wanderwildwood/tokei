@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import com.wanderwildwood.tokei.MainActivity
 import com.wanderwildwood.tokei.R
 import com.wanderwildwood.tokei.Times
+import com.wanderwildwood.tokei.data.Alarm
 import com.wanderwildwood.tokei.data.Missed
 import com.wanderwildwood.tokei.data.Ring
 import com.wanderwildwood.tokei.data.Settings
@@ -32,6 +33,9 @@ object Notifier {
      * sound over and over, so the alarm is never silent.
      */
     const val RINGING_SOUND = "ringing_sound"
+
+    /** The same for an alarm or timer set to Silent with vibration: it buzzes, with no sound. */
+    const val RINGING_BUZZ = "ringing_buzz"
 
     /** Silent, for the moment the service must show something before it finds nothing to ring. */
     private const val QUIET = "quiet"
@@ -66,6 +70,16 @@ object Notifier {
                         .build(),
                 )
                 enableVibration(true)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                setBypassDnd(true)
+            },
+        )
+        nm.createNotificationChannel(
+            NotificationChannel(RINGING_BUZZ, context.getString(R.string.channel_ringing_buzz), NotificationManager.IMPORTANCE_HIGH).apply {
+                description = context.getString(R.string.channel_ringing_buzz_about)
+                setSound(null, null)
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 600, 600)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 setBypassDnd(true)
             },
@@ -128,13 +142,28 @@ object Notifier {
 
     /**
      * Posts the ringing notification without the service, when the service could not be started.
-     * It sounds on its own channel, over and over, and goes after [Settings.ringMinutes] like the
-     * service's ringing; then the next catch-up writes it down as rung and not answered.
+     * It sounds on its own channel, over and over, and goes at the end of the ringing time like
+     * the service's ringing; then the next catch-up writes it down as rung and not answered.
+     * An alarm or timer set to Silent keeps to that: it only buzzes, or with vibration off, only
+     * shows, as the service would have it.
      */
     fun ringing(context: Context, r: Ring) {
-        val minutes = Settings(context).ringMinutes
-        val n = build(context, r, RINGING_SOUND) {
-            it.setTimeoutAfter(minutes * 60_000L)
+        val settings = Settings(context)
+        val store = Store.get(context)
+        val (sound, vibrate) = if (r.timer) {
+            store.timer(r.id)?.let { it.sound to it.vibrate } ?: ("" to true)
+        } else {
+            store.alarm(r.id)?.let { it.sound to it.vibrate } ?: ("" to true)
+        }
+        val channel = when {
+            sound != Alarm.SILENT -> RINGING_SOUND
+            vibrate -> RINGING_BUZZ
+            else -> RINGING
+        }
+        val full = settings.ringMinutes * 60_000L
+        val left = if (settings.ringSince > 0L) settings.ringSince + full - System.currentTimeMillis() else full
+        val n = build(context, r, channel) {
+            it.setTimeoutAfter(left.coerceIn(1_000L, full.coerceAtLeast(1_000L)))
             it.setDeleteIntent(ended(context))
         }
         // Insistent: the sound goes on until it is answered or the notification goes.

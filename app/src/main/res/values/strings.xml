@@ -235,6 +235,8 @@
     <string name="channel_missed">Missed</string>
     <string name="channel_ringing_sound">Ringing, when the app cannot</string>
     <string name="channel_ringing_sound_about">Used only when the phone will not let the app ring by itself, as when exact alarms are not allowed. The phone\'s alarm sound, over and over, until it is answered or the ringing time is up.</string>
+    <string name="channel_ringing_buzz">Ringing silently, when the app cannot</string>
+    <string name="channel_ringing_buzz_about">Used only when the phone will not let the app ring by itself, for an alarm or a timer set to Silent with vibration. It vibrates, over and over, until it is answered or the ringing time is up.</string>
     <string name="channel_quiet">Starting</string>
 
     <!-- ============================================================ -->
