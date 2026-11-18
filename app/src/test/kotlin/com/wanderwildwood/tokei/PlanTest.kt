@@ -295,6 +295,28 @@ class PlanTest {
     }
 
     @Test
+    fun savingATimersEditWhileItRingsEndsTheRingOnlyIfTheStateChanges() {
+        val ringing = Plan.start(Timer(id = 1, seconds = 300), 0L).copy(state = Timer.RINGING)
+        // A new length: back at its start, or started again; either way the ring is over.
+        val reset = Plan.edited(ringing, 600, "", "", "", true, andStart = false, now = 400_000L)
+        assertEquals(Timer.IDLE, reset.state)
+        assertTrue(Plan.endsRing(ringing, reset))
+        val restarted = Plan.edited(ringing, 600, "", "", "", true, andStart = true, now = 400_000L)
+        assertEquals(Timer.RUNNING, restarted.state)
+        assertTrue(Plan.endsRing(ringing, restarted))
+        // The same length with Start: started again in the same write.
+        val same = Plan.edited(ringing, 300, "Tea", "", "", true, andStart = true, now = 400_000L)
+        assertEquals(Timer.RUNNING, same.state)
+        assertEquals(700_000L, same.endsAt)
+        assertTrue(Plan.endsRing(ringing, same))
+        // The same length, only a new name: still ringing.
+        val renamed = Plan.edited(ringing, 300, "Tea", "", "", true, andStart = false, now = 400_000L)
+        assertEquals(Timer.RINGING, renamed.state)
+        assertFalse(Plan.endsRing(ringing, renamed))
+        assertFalse(Plan.endsRing(null, restarted))
+    }
+
+    @Test
     fun ringingFromADeadProcessIsLeftOverEvenWithinItsTime() {
         val since = 1_000_000L
         val within = since + 2 * 60_000L

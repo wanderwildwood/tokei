@@ -279,9 +279,30 @@ object Engine {
     // ---------------------------------------------------------------- timers
 
     fun saveTimer(context: Context, t: Timer): Long = synchronized(lock) {
-        val id = Store.get(context).save(t)
+        val store = Store.get(context)
+        val old = if (t.id > 0) store.timer(t.id) else null
+        val id = store.save(t)
+        if (Plan.endsRing(old, t)) Ringer.remove(context, Ring(true, id, 0))
         changed(context)
         id
+    }
+
+    /**
+     * A timer's edit screen saved: reads the timer as it is now and puts the edit on it
+     * ([Plan.edited]) in one step, so nothing can come between, and stops its ring if the edit
+     * ended one. [id] is null for a new timer. Returns the timer's id.
+     */
+    fun editTimer(
+        context: Context, id: Long?, seconds: Int, label: String, sound: String, soundTitle: String,
+        vibrate: Boolean, andStart: Boolean,
+    ): Long = synchronized(lock) {
+        val store = Store.get(context)
+        val live = id?.let { store.timer(it) }
+        val next = Plan.edited(live, seconds, label, sound, soundTitle, vibrate, andStart, System.currentTimeMillis())
+        val saved = store.save(next)
+        if (Plan.endsRing(live, next)) Ringer.remove(context, Ring(true, saved, 0))
+        changed(context)
+        saved
     }
 
     fun deleteTimer(context: Context, id: Long) = synchronized(lock) {
@@ -296,7 +317,7 @@ object Engine {
         val now = System.currentTimeMillis()
         val next = action(t, now)
         store.save(next)
-        if (t.state == Timer.RINGING && next.state != Timer.RINGING) Ringer.remove(context, Ring(true, id, 0))
+        if (Plan.endsRing(t, next)) Ringer.remove(context, Ring(true, id, 0))
         changed(context)
     }
 

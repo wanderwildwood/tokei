@@ -162,13 +162,10 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
 
     fun save(start: Boolean) {
         if (seconds <= 0) return
-        // Read again: it may have rung, been stopped or been given a minute more while this
-        // screen was open (Plan.edited).
-        val live = existing?.let { Store.get(context).timer(it.id) }
-        val next = Plan.edited(live, seconds, label.trim(), sound, soundTitle, vibrate, start, System.currentTimeMillis())
-        val tid = Engine.saveTimer(context, next)
+        // Read again inside the engine: it may have rung, been stopped or been given a minute
+        // more while this screen was open (Plan.edited).
+        Engine.editTimer(context, existing?.id, seconds, label.trim(), sound, soundTitle, vibrate, start)
         Engine.releaseUnusedSounds(context)
-        if (start && next.state != Timer.RUNNING) Engine.timerAction(context, tid) { x, n -> Plan.start(x, n) }
         onDone()
     }
 

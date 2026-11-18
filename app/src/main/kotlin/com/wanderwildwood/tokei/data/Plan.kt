@@ -196,7 +196,8 @@ object Plan {
      * as it is stored now (null for a new one, or one gone meanwhile), so a ring, a stop or a
      * minute more that came while the screen was open is kept, not written over. A new length
      * starts over: started in the same write with [andStart], or else kept, since a timer started
-     * on the fly leaves the list once it is back at its start. The same length leaves its state.
+     * on the fly leaves the list once it is back at its start. The same length leaves its state,
+     * or starts it with [andStart] if it is not running.
      */
     fun edited(
         live: Timer?, seconds: Int, label: String, sound: String, soundTitle: String, vibrate: Boolean,
@@ -207,11 +208,14 @@ object Plan {
         val next = (if (newLength) reset(base) else base)
             .copy(seconds = seconds, label = label, sound = sound, soundTitle = soundTitle, vibrate = vibrate)
         return when {
-            !newLength -> next
+            !newLength -> if (andStart) start(next, now) else next
             andStart -> start(next, now)
             else -> next.copy(kept = true)
         }
     }
+
+    /** A write from [old] to [next] ends the timer's ring: the ringing screen and sound must go. */
+    fun endsRing(old: Timer?, next: Timer): Boolean = old?.state == Timer.RINGING && next.state != Timer.RINGING
 
     fun due(t: Timer, now: Long): Boolean = t.state == Timer.RUNNING && t.endsAt <= now
 
