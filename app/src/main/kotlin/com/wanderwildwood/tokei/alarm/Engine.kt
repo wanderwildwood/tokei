@@ -6,6 +6,7 @@ import android.app.ApplicationExitInfo
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Process
 import android.os.SystemClock
 import android.util.Log
 import com.wanderwildwood.tokei.MainActivity
@@ -51,13 +52,17 @@ object Engine {
         val rings = mutableListOf<Ring>()
         val missed = mutableListOf<Missed>()
 
-        // What was left ringing with no service ringing it: the process died while it rang, or
-        // the notification that sounds on its own was used. Past its time it is written down as
-        // rung and not answered, and is not rung again with the next alarm; still within its
-        // time, it is left to ring.
+        // What was left ringing with no service ringing it: the process died while it rang, the
+        // phone restarted, or the notification that sounds on its own was used. Past its time,
+        // or with nothing left that rings it, it is written down as rung and not answered, and
+        // is not rung again with the next alarm (Plan.leftOver). The notification that rings
+        // on its own is left to ring out its time.
         val left = settings.ringing
-        if (left.isNotEmpty() && !RingService.running && Plan.ringOver(settings.ringSince, settings.ringMinutes, now)) {
-            Log.w(TAG, "left ringing past its time: " + left.joinToString { it.encode() })
+        val processStart = now - (SystemClock.elapsedRealtime() - Process.getStartElapsedRealtime())
+        if (left.isNotEmpty() && !RingService.running &&
+            Plan.leftOver(settings.ringSince, settings.ringMinutes, now, processStart, Notifier.ringingShown(context))
+        ) {
+            Log.w(TAG, "left ringing with nothing ringing it: " + left.joinToString { it.encode() })
             left.forEach { r ->
                 if (r.timer) {
                     val t = store.timer(r.id)
@@ -166,6 +171,18 @@ object Engine {
             if (exact) am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, timerPi)
             else am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, timerPi)
             Log.i(TAG, "timer alarm set for $at")
+        }
+
+        // The end of the ringing time, so what is left ringing when the process dies is written
+        // down then, even if nothing else wakes the app.
+        val settings = Settings(context)
+        val endedPi = Notifier.ended(context)
+        if (settings.ringing.isEmpty() || settings.ringSince <= 0L) {
+            am.cancel(endedPi)
+        } else {
+            val at = maxOf(settings.ringSince + settings.ringMinutes * 60_000L, now + 1_000L)
+            if (exact) am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, endedPi)
+            else am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, endedPi)
         }
     }
 

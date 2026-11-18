@@ -153,13 +153,21 @@ object Notifier {
             .build()
     }
 
-    /** Sent when the sounding notification times out: catch up, and write it down. */
-    private fun ended(context: Context): PendingIntent = PendingIntent.getBroadcast(
+    /**
+     * Sent when the sounding notification times out, and set as a system alarm for the end of
+     * the ringing time: catch up, and write it down.
+     */
+    fun ended(context: Context): PendingIntent = PendingIntent.getBroadcast(
         context,
         3,
         Intent(context, AlarmReceiver::class.java).setAction(AlarmReceiver.RING_ENDED),
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
     )
+
+    /** Whether the ringing notification is up: the service's, or the one that rings on its own. */
+    fun ringingShown(context: Context): Boolean = runCatching {
+        context.getSystemService(NotificationManager::class.java).activeNotifications.any { it.id == RINGING_ID }
+    }.getOrDefault(false)
 
     fun cancelRinging(context: Context) {
         context.getSystemService(NotificationManager::class.java).cancel(RINGING_ID)

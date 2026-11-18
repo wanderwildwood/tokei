@@ -261,4 +261,18 @@ class PlanTest {
         // No start written: nothing can be said to be still ringing.
         assertTrue(Plan.ringOver(0L, 5, since))
     }
+
+    @Test
+    fun ringingFromADeadProcessIsLeftOverEvenWithinItsTime() {
+        val since = 1_000_000L
+        val within = since + 2 * 60_000L
+        // Begun before this process started, nothing ringing it: the process died, or the phone restarted.
+        assertTrue(Plan.leftOver(since, 5, within, processStart = since + 60_000L, shown = false))
+        // Its notification still rings on its own: left to ring out its time.
+        assertFalse(Plan.leftOver(since, 5, within, processStart = since + 60_000L, shown = true))
+        // Begun in this process: the service is starting.
+        assertFalse(Plan.leftOver(since, 5, within, processStart = since - 60_000L, shown = false))
+        // Past its time, it is over whatever rings it.
+        assertTrue(Plan.leftOver(since, 5, since + 5 * 60_000L, processStart = since - 60_000L, shown = true))
+    }
 }

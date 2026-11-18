@@ -57,8 +57,8 @@ class SystemReceiver : BroadcastReceiver() {
         Log.i("tokei", "system: ${intent.action}")
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED -> {
-                // Whatever was ringing when the phone went off is not ringing now.
-                Ringer.clear(context)
+                // Whatever was ringing when the phone went off is not ringing now: the catch-up
+                // writes it down as rung and not answered (it began before this process).
                 Notifier.channels(context)
                 Engine.sync(context)
             }

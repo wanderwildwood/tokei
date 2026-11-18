@@ -23,6 +23,16 @@ object Plan {
     fun ringOver(since: Long, minutes: Int, now: Long): Boolean =
         since <= 0L || now >= since + minutes * 60_000L
 
+    /**
+     * Whether what is stored as ringing, with no service ringing it, is left over and is written
+     * down as rung and not answered: past its time; or begun before this process started (the
+     * process died while it rang, or the phone restarted), unless its notification is still up
+     * and ringing on its own ([shown]). One begun in this process is the service starting, or
+     * the notification that rings by itself.
+     */
+    fun leftOver(since: Long, minutes: Int, now: Long, processStart: Long, shown: Boolean): Boolean =
+        ringOver(since, minutes, now) || (since < processStart && !shown)
+
     /** At most this many missed times are written down for one alarm at once: a month away is not thirty notices. */
     const val MISSED_KEPT = 20
 
