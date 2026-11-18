@@ -103,4 +103,18 @@ object Cities {
     )
 
     fun named(zone: String): City? = all.firstOrNull { it.zone == zone }
+
+    /**
+     * A zone's city as the phone's language names it. English keeps the list's own names;
+     * any other language takes ICU's (München, Moskau), and the English one where ICU has none.
+     */
+    fun localName(zone: String, english: String, locale: java.util.Locale = java.util.Locale.getDefault()): String {
+        if (locale.language == "en") return english
+        return runCatching {
+            android.icu.text.TimeZoneNames.getInstance(android.icu.util.ULocale.forLocale(locale)).getExemplarLocationName(zone)
+        }.getOrNull()?.takeIf { it.isNotBlank() } ?: english
+    }
+
+    /** [City.name] in the phone's language. */
+    fun localName(city: City): String = localName(city.zone, city.name)
 }

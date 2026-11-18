@@ -72,7 +72,7 @@ fun WorldScreen(onAdd: () -> Unit) {
             }
             cities.forEachIndexed { i, z ->
                 item(key = z) {
-                    val name = Cities.named(z)?.name ?: z.substringAfterLast('/').replace('_', ' ')
+                    val name = Cities.localName(z, Cities.named(z)?.name ?: z.substringAfterLast('/').replace('_', ' '))
                     CityRow(name, ZoneId.of(z), here, now, onClick = { removing = z })
                     if (i < cities.size - 1) Dotted()
                 }
@@ -81,7 +81,7 @@ fun WorldScreen(onAdd: () -> Unit) {
     }
 
     removing?.let { z ->
-        val name = Cities.named(z)?.name ?: z
+        val name = Cities.localName(z, Cities.named(z)?.name ?: z)
         EInkDialog(onDismiss = { removing = null }) {
             // The dialog is its own window, so its armed row needs a scope of its own.
             ArmedScope {
@@ -162,8 +162,12 @@ fun CityPicker(onDone: () -> Unit) {
     val chosen = remember { settings.cities.toSet() }
     val sorted = remember {
         Cities.all.sortedBy { ZoneId.of(it.zone).rules.getOffset(Instant.ofEpochMilli(now)).totalSeconds }
+            .map { it to Cities.localName(it) }
     }
-    val shown = sorted.filter { query.isBlank() || it.name.contains(query.trim(), ignoreCase = true) }
+    // Found by either name: the one shown, or the English one.
+    val shown = sorted.filter { (c, local) ->
+        query.isBlank() || local.contains(query.trim(), ignoreCase = true) || c.name.contains(query.trim(), ignoreCase = true)
+    }
     SubPage(stringResource(R.string.world_add), onDone) {
         item(key = "search") {
             TextFieldMMD(
@@ -178,7 +182,7 @@ fun CityPicker(onDone: () -> Unit) {
             TextMMD(text = stringResource(R.string.world_cue), style = helperStyle(), modifier = Modifier.padding(bottom = 6.dp))
             Dotted()
         }
-        for (c in shown) {
+        for ((c, local) in shown) {
             item(key = c.zone) {
                 val added = c.zone in chosen
                 Column(
@@ -190,7 +194,7 @@ fun CityPicker(onDone: () -> Unit) {
                         }
                         .padding(vertical = 10.dp),
                 ) {
-                    TextMMD(text = c.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    TextMMD(text = local, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     TextMMD(
                         text = if (added) stringResource(R.string.world_already) else Times.time(context, now, ZoneId.of(c.zone)) + ", " + dayAndOffset(context, ZoneId.of(c.zone), here, now),
                         style = MaterialTheme.typography.bodyMedium,
