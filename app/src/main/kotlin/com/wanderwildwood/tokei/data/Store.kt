@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.SystemClock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -17,6 +18,18 @@ import kotlinx.coroutines.flow.StateFlow
  */
 class Store private constructor(context: Context) :
     SQLiteOpenHelper(context, "tokei.db", null, Schema.VERSION) {
+
+    private val resolver = context.contentResolver
+
+    /**
+     * Which start of the phone this is, counted by the system; 0 when it cannot be read. A
+     * process never outlives a restart, so it is read once.
+     */
+    private val boot: Int by lazy {
+        runCatching {
+            android.provider.Settings.Global.getInt(resolver, android.provider.Settings.Global.BOOT_COUNT, 0)
+        }.getOrDefault(0)
+    }
 
     override fun onCreate(db: SQLiteDatabase) {
         Schema.CREATE.forEach(db::execSQL)
@@ -108,11 +121,21 @@ class Store private constructor(context: Context) :
      * A timer that was never kept and has gone back to its start — stopped, reset, rung out
      * unanswered or missed — is done with, so it is deleted rather than saved. Every way a timer
      * ends comes through here, which is why the rule lives here and not in each of them.
+     *
+     * A running timer is also stored with its end on the since-boot clock and the boot it
+     * belongs to, and read back from that while the phone stays on (see [Plan.wallEnd]), so a
+     * change of the clock does not move when it rings.
      */
     fun save(t: Timer): Long {
         if (!t.kept && t.id > 0 && t.state == Timer.IDLE) {
             deleteTimer(t.id)
             return t.id
+        }
+        val running = t.state == Timer.RUNNING && boot > 0
+        val endsElapsed = if (running) {
+            Plan.sinceBoot(t.endsAt, System.currentTimeMillis(), SystemClock.elapsedRealtime())
+        } else {
+            0L
         }
         val v = ContentValues().apply {
             put("seconds", t.seconds)
@@ -125,6 +148,8 @@ class Store private constructor(context: Context) :
             put("sound_title", t.soundTitle)
             put("vibrate", if (t.vibrate) 1 else 0)
             put("kept", if (t.kept) 1 else 0)
+            put("ends_elapsed", endsElapsed)
+            put("boot", if (running) boot else 0)
         }
         val id = if (t.id > 0) {
             writableDatabase.update("timer", v, "id = ?", arrayOf(t.id.toString()))
@@ -146,7 +171,14 @@ class Store private constructor(context: Context) :
         seconds = c.int("seconds"),
         label = c.str("label"),
         state = c.int("state"),
-        endsAt = c.long("ends_at"),
+        endsAt = if (c.int("state") == Timer.RUNNING) {
+            Plan.wallEnd(
+                c.long("ends_at"), c.long("ends_elapsed"), c.int("boot"), boot,
+                System.currentTimeMillis(), SystemClock.elapsedRealtime(),
+            )
+        } else {
+            c.long("ends_at")
+        },
         left = c.long("left_ms"),
         startedAt = c.long("started_at"),
         sound = c.str("sound"),

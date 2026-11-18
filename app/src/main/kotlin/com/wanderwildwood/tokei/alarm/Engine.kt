@@ -139,7 +139,11 @@ object Engine {
             .maxOfOrNull { it.timestamp } ?: 0L
     }
 
-    /** Sets the system's alarm clock for the next alarm, and an exact alarm for the next timer, or clears them. */
+    /**
+     * Sets the system's alarm clock for the next alarm, and an exact alarm for the next timer, or
+     * clears them. [now] is the wall clock as just read: a timer's end is turned into the
+     * since-boot clock against it.
+     */
     private fun schedule(context: Context, store: Store, now: Long, zone: ZoneId) {
         val am = context.getSystemService(AlarmManager::class.java)
         val exact = am.canScheduleExactAlarms()
@@ -167,10 +171,11 @@ object Engine {
         if (end == null) {
             am.cancel(timerPi)
         } else {
-            val at = maxOf(end, now + 500L)
-            if (exact) am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, timerPi)
-            else am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, timerPi)
-            Log.i(TAG, "timer alarm set for $at")
+            // Set on the since-boot clock, so a change of the wall clock does not move it.
+            val at = SystemClock.elapsedRealtime() + maxOf(end - now, 500L)
+            if (exact) am.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, at, timerPi)
+            else am.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, at, timerPi)
+            Log.i(TAG, "timer alarm set for $end (since boot $at)")
         }
 
         // The end of the ringing time, so what is left ringing when the process dies is written

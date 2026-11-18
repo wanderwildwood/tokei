@@ -217,6 +217,22 @@ object Plan {
     /** A write from [old] to [next] ends the timer's ring: the ringing screen and sound must go. */
     fun endsRing(old: Timer?, next: Timer): Boolean = old?.state == Timer.RINGING && next.state != Timer.RINGING
 
+    /**
+     * A running timer's end on the phone's since-boot clock, which no change of the clock moves:
+     * [endsAt] on the wall clock reading [now], with the since-boot clock reading [elapsed].
+     */
+    fun sinceBoot(endsAt: Long, now: Long, elapsed: Long): Long = elapsed + (endsAt - now)
+
+    /**
+     * A running timer's end on the wall clock as it reads [now]. While the phone has not
+     * restarted since it was stored ([storedBoot] is [boot], a known one) it is worked out from
+     * its since-boot end [endsElapsed], so a clock set forward or back neither makes it missed
+     * nor makes it late; after a restart the since-boot clock began again, and the stored wall
+     * clock end [endsAt] is all there is.
+     */
+    fun wallEnd(endsAt: Long, endsElapsed: Long, storedBoot: Int, boot: Int, now: Long, elapsed: Long): Long =
+        if (boot > 0 && storedBoot == boot) now + (endsElapsed - elapsed) else endsAt
+
     fun due(t: Timer, now: Long): Boolean = t.state == Timer.RUNNING && t.endsAt <= now
 
     fun nextTimer(timers: List<Timer>): Long? = timers.filter { it.state == Timer.RUNNING }.minOfOrNull { it.endsAt }

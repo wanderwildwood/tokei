@@ -220,6 +220,29 @@ class PlanTest {
         assertEquals(65_000L, t.endsAt)
     }
 
+    @Test fun aClockChangeWhileATimerRunsDoesNotMoveItsEnd() {
+        val now = 1_000_000_000L
+        val elapsed = 50_000L
+        val running = Plan.start(Timer(id = 1, seconds = 1_200), now)
+        val sinceBoot = Plan.sinceBoot(running.endsAt, now, elapsed)
+        assertEquals(elapsed + 1_200_000L, sinceBoot)
+        // Five minutes on, the clock is set an hour forward: 15 minutes are still left, not missed.
+        val forward = Plan.wallEnd(running.endsAt, sinceBoot, 7, 7, now + 300_000L + 3_600_000L, elapsed + 300_000L)
+        val t = running.copy(endsAt = forward)
+        assertEquals(900_000L, Plan.remaining(t, now + 300_000L + 3_600_000L))
+        assertFalse(Plan.due(t, now + 300_000L + 3_600_000L))
+        // Set an hour back instead: it still rings 15 minutes from then, not an hour late.
+        val back = Plan.wallEnd(running.endsAt, sinceBoot, 7, 7, now + 300_000L - 3_600_000L, elapsed + 300_000L)
+        assertEquals(now + 300_000L - 3_600_000L + 900_000L, back)
+    }
+
+    @Test fun afterARestartOrWithNoBootKnownATimerKeepsItsWallClockEnd() {
+        val endsAt = 1_001_200_000L
+        assertEquals(endsAt, Plan.wallEnd(endsAt, 1_250_000L, 7, 8, 1_000_500_000L, 20_000L))
+        assertEquals(endsAt, Plan.wallEnd(endsAt, 1_250_000L, 0, 0, 1_000_500_000L, 20_000L))
+        assertEquals(endsAt, Plan.wallEnd(endsAt, 0L, 0, 7, 1_000_500_000L, 20_000L))
+    }
+
     @Test fun twoTimersRunAtOnceAndTheSoonerIsNext() {
         val a = Plan.start(Timer(id = 1, seconds = 600), 0L)
         val b = Plan.start(Timer(id = 2, seconds = 120), 0L)

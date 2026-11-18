@@ -59,6 +59,7 @@ class SchemaTest {
         run(alarmV2)
         run(timerV1)
         if (version >= 2) run("ALTER TABLE timer ADD COLUMN kept INTEGER NOT NULL DEFAULT 1")
+        if (version >= 3) run("ALTER TABLE alarm ADD COLUMN grp TEXT NOT NULL DEFAULT ''")
         run(missed)
         run("INSERT INTO alarm (hour, minute, days, label, enabled, skip) VALUES (6, 30, 31, 'Wake up', 1, 0)")
         run("INSERT INTO alarm (hour, minute, days, label, enabled, skip) VALUES (21, 5, 0, '', 0, 0)")
@@ -82,6 +83,20 @@ class SchemaTest {
         c.run("INSERT INTO alarm (hour, minute, grp) VALUES (7, 0, 'Office')")
         c.createStatement().use { st ->
             st.executeQuery("SELECT grp FROM alarm WHERE hour = 7").use { r -> r.next(); assertEquals("Office", r.getString(1)) }
+        }
+    }
+
+    @Test fun fromVersionThreeARunningTimerKeepsItsEndAndHasNoSinceBootEnd() {
+        val c = old(3)
+        c.run("INSERT INTO timer (seconds, label, state, ends_at, started_at, kept) VALUES (300, 'Tea', 1, 1000300000, 1000000000, 0)")
+        Schema.upgrade(3).forEach { c.run(it) }
+        c.createStatement().use { st ->
+            st.executeQuery("SELECT seconds, label, state, ends_at, kept, ends_elapsed, boot FROM timer").use { r ->
+                r.next()
+                assertEquals(300, r.getInt("seconds")); assertEquals("Tea", r.getString("label")); assertEquals(1, r.getInt("state"))
+                assertEquals(1000300000L, r.getLong("ends_at")); assertEquals(0, r.getInt("kept"))
+                assertEquals(0L, r.getLong("ends_elapsed")); assertEquals(0, r.getInt("boot"))
+            }
         }
     }
 
