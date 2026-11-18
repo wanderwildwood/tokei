@@ -91,6 +91,7 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
             hour = hour, minute = minute, days = days, label = label.trim(), group = Groups.clean(group, groups), sound = sound, soundTitle = soundTitle, vibrate = vibrate,
         )
         val saved = Engine.save(context, a)
+        Engine.releaseUnusedSounds(context)
         Engine.skipNext(context, saved, skip && days != 0)
         Store.get(context).alarm(saved)?.let { s -> Plan.nextRing(s, zone)?.let { toastIn(context, it) } }
         onDone()
@@ -112,6 +113,7 @@ fun AlarmEditScreen(id: Long, preset: Pair<Int, Int>?, onDone: () -> Unit) {
                                 modifier = Modifier
                                     .clickable {
                                         Engine.delete(context, existing.id)
+                                        Engine.releaseUnusedSounds(context)
                                         onDone()
                                     }
                                     .padding(horizontal = 8.dp, vertical = 12.dp),

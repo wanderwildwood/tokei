@@ -171,6 +171,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
         // length is: so it is started in the same write, or, saved without starting, kept.
         if (newLength) next = if (start) Plan.start(next, System.currentTimeMillis()) else next.copy(kept = true)
         val tid = Engine.saveTimer(context, next)
+        Engine.releaseUnusedSounds(context)
         if (start && !newLength) Engine.timerAction(context, tid) { x, n -> Plan.start(x, n) }
         onDone()
     }
@@ -191,6 +192,7 @@ fun TimerEditScreen(id: Long, onDone: () -> Unit) {
                                 modifier = Modifier
                                     .clickable {
                                         Engine.deleteTimer(context, existing.id)
+                                        Engine.releaseUnusedSounds(context)
                                         onDone()
                                     }
                                     .padding(horizontal = 8.dp, vertical = 12.dp),

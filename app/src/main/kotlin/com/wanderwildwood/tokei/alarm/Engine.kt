@@ -306,6 +306,27 @@ object Engine {
     fun timerLabel(context: Context, t: Timer): String =
         t.label.ifBlank { com.wanderwildwood.tokei.Times.length(context, t.seconds) }
 
+    // ---------------------------------------------------------------- sounds
+
+    /**
+     * Gives back Android's permission to read each sound file that no alarm or timer uses any
+     * more: one replaced by another sound, one whose alarm or timer was deleted, one chosen and
+     * then left. Called by the edit screens after they save or delete, so a file just chosen is
+     * already stored; not from other apps' requests, which could come while a choice is still
+     * on an open edit screen.
+     */
+    fun releaseUnusedSounds(context: Context): Unit = synchronized(lock) {
+        val store = Store.get(context)
+        val used = (store.alarms().map { it.sound } + store.timers().map { it.sound }).toSet()
+        val resolver = context.contentResolver
+        runCatching {
+            resolver.persistedUriPermissions
+                .filter { it.isReadPermission && it.uri.toString() !in used }
+                .forEach { resolver.releasePersistableUriPermission(it.uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+        }.onFailure { Log.w(TAG, "sound file permissions not given back: ${it.message}") }
+        Unit
+    }
+
     // ---------------------------------------------------------------- unanswered
 
     /**

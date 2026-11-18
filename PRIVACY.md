@@ -36,7 +36,7 @@ Since Time keeps what it stores only on your phone, you can exercise most of the
 
 ## What the app stores, and where
 
-In its own private storage on the phone: your alarms (time, days, name, sound, vibration, on or off, snooze state), your timers, a list of alarms and timers that rang unanswered, the stopwatch, the cities on your world clock, and your settings (snooze length, how long an alarm rings, and the switches described below). If you choose a sound from your files, the app keeps the address of that one file and the permission Android gives it to read that file; it reads no other file.
+In its own private storage on the phone: your alarms (time, days, name, sound, vibration, on or off, snooze state), your timers, a list of alarms and timers that rang unanswered, the stopwatch, the cities on your world clock, and your settings (snooze length, how long an alarm rings, and the switches described below). If you choose a sound from your files, the app keeps the address of that one file and the permission Android gives it to read that file, and gives the permission back once no alarm or timer uses that file; it reads no other file.
 
 The app is left out of Android's backups (`allowBackup="false"`), and uninstalling it removes all of it. There is no cloud copy and no copy held by the developer.
 
