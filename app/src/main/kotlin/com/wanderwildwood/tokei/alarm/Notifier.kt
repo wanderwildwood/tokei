@@ -37,6 +37,9 @@ object Notifier {
     /** The same for an alarm or timer set to Silent with vibration: it buzzes, with no sound. */
     const val RINGING_BUZZ = "ringing_buzz"
 
+    /** The same for an alarm or timer with a sound and vibration off: the sound, no buzz. */
+    const val RINGING_SOUND_STILL = "ringing_sound_still"
+
     /** Silent, for the moment the service must show something before it finds nothing to ring. */
     private const val QUIET = "quiet"
 
@@ -70,6 +73,21 @@ object Notifier {
                         .build(),
                 )
                 enableVibration(true)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                setBypassDnd(true)
+            },
+        )
+        nm.createNotificationChannel(
+            NotificationChannel(RINGING_SOUND_STILL, context.getString(R.string.channel_ringing_sound_still), NotificationManager.IMPORTANCE_HIGH).apply {
+                description = context.getString(R.string.channel_ringing_sound_still_about)
+                setSound(
+                    android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_ALARM),
+                    android.media.AudioAttributes.Builder()
+                        .setUsage(android.media.AudioAttributes.USAGE_ALARM)
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build(),
+                )
+                enableVibration(false)
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 setBypassDnd(true)
             },
@@ -145,7 +163,7 @@ object Notifier {
      * It sounds on its own channel, over and over, and goes at the end of the ringing time like
      * the service's ringing; then the next catch-up writes it down as rung and not answered.
      * An alarm or timer set to Silent keeps to that: it only buzzes, or with vibration off, only
-     * shows, as the service would have it.
+     * shows; one with a sound and vibration off sounds without a buzz, as the service would have it.
      */
     fun ringing(context: Context, r: Ring) {
         val settings = Settings(context)
@@ -155,11 +173,7 @@ object Notifier {
         } else {
             store.alarm(r.id)?.let { it.sound to it.vibrate } ?: ("" to true)
         }
-        val channel = when {
-            sound != Alarm.SILENT -> RINGING_SOUND
-            vibrate -> RINGING_BUZZ
-            else -> RINGING
-        }
+        val channel = ringingChannel(sound, vibrate)
         val full = settings.ringMinutes * 60_000L
         val left = if (settings.ringSince > 0L) settings.ringSince + full - System.currentTimeMillis() else full
         val n = build(context, r, channel) {
@@ -169,6 +183,14 @@ object Notifier {
         // Insistent: the sound goes on until it is answered or the notification goes.
         n.flags = n.flags or Notification.FLAG_INSISTENT
         context.getSystemService(NotificationManager::class.java).notify(RINGING_ID, n)
+    }
+
+    /** The channel [ringing] uses, so it sounds and buzzes as the alarm or timer is set to. */
+    fun ringingChannel(sound: String, vibrate: Boolean): String = when {
+        sound != Alarm.SILENT && vibrate -> RINGING_SOUND
+        sound != Alarm.SILENT -> RINGING_SOUND_STILL
+        vibrate -> RINGING_BUZZ
+        else -> RINGING
     }
 
     /** What the service shows for the moment before it stops, when there was nothing to ring. */

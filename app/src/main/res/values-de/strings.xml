@@ -234,6 +234,8 @@
     <string name="channel_missed">Verpasst</string>
     <string name="channel_ringing_sound">Klingeln, wenn die App es nicht kann</string>
     <string name="channel_ringing_sound_about">Nur, wenn das Telefon die App nicht selbst klingeln lässt, etwa wenn genaue Wecker nicht erlaubt sind. Der Weckton des Telefons, immer wieder, bis jemand reagiert oder die Klingelzeit um ist.</string>
+    <string name="channel_ringing_sound_still">Klingeln ohne Vibration, wenn die App es nicht kann</string>
+    <string name="channel_ringing_sound_still_about">Nur, wenn das Telefon die App nicht selbst klingeln lässt, für einen Wecker oder Timer, der nicht vibrieren soll. Der Weckton des Telefons, immer wieder, bis jemand reagiert oder die Klingelzeit um ist.</string>
     <string name="channel_ringing_buzz">Lautlos klingeln, wenn die App es nicht kann</string>
     <string name="channel_ringing_buzz_about">Nur, wenn das Telefon die App nicht selbst klingeln lässt, für einen Wecker oder Timer, der auf Lautlos mit Vibration steht. Es vibriert immer wieder, bis jemand reagiert oder die Klingelzeit um ist.</string>
     <string name="channel_quiet">Start</string>
