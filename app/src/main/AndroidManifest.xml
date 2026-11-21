@@ -136,6 +136,12 @@
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
 
+        <!-- Sleep noise, played with the screen off; stopped when an alarm rings. -->
+        <service
+            android:name=".noise.NoiseService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
         <receiver
             android:name=".alarm.AlarmReceiver"
             android:exported="false" />

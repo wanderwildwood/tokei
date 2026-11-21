@@ -67,6 +67,16 @@ class Settings(context: Context) {
         get() = prefs.getLong("ring_since", 0L)
         set(v) = prefs.edit().putLong("ring_since", v).apply()
 
+    /** The sleep noise last chosen (a [com.wanderwildwood.tokei.noise.Preset] key). */
+    var noisePreset: String
+        get() = prefs.getString("noise_preset", "soft").orEmpty()
+        set(v) = prefs.edit().putString("noise_preset", v).apply()
+
+    /** How long the sleep noise plays before it fades out, in minutes; 0 until stopped. */
+    var noiseMinutes: Int
+        get() = prefs.getInt("noise_minutes", 60)
+        set(v) = prefs.edit().putInt("noise_minutes", v).apply()
+
     companion object {
         const val RISE_MS = 60_000L
     }

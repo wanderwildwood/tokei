@@ -51,6 +51,7 @@
     <string name="tab_timers">Timer</string>
     <string name="tab_stopwatch">Stoppuhr</string>
     <string name="tab_world">Weltzeit</string>
+    <string name="tab_noise">Rauschen</string>
 
     <!-- ============================================================ -->
     <!-- Alarms -->
@@ -173,6 +174,29 @@
     <string name="stopwatch_lap_n">Runde %1$d</string>
     <!-- %1$d is the lap\'s number, %2$s its time so far -->
     <string name="stopwatch_this_lap">Runde %1$d: %2$s</string>
+
+    <!-- ============================================================ -->
+    <!-- Sleep noise -->
+
+    <string name="noise_start">Abspielen</string>
+    <string name="noise_stop">Stopp</string>
+    <string name="noise_idle">Rauschen zum Einschlafen, beim Abspielen erzeugt.</string>
+    <string name="noise_ends_at">Blendet aus und endet um %1$s</string>
+    <string name="noise_until_stopped">Läuft, bis du es stoppst</string>
+    <string name="noise_sound">Klang</string>
+    <string name="noise_soft">Sanft</string>
+    <string name="noise_deep">Tief</string>
+    <string name="noise_fan">Ventilator</string>
+    <string name="noise_length">Stoppen nach</string>
+    <string name="noise_len_30">30 Minuten</string>
+    <string name="noise_len_60">1 Stunde</string>
+    <string name="noise_len_120">2 Stunden</string>
+    <string name="noise_len_stopped">Bis ich es stoppe</string>
+    <string name="noise_note">Es läuft mit der Medienlautstärke des Telefons weiter, auch bei ausgeschaltetem Bildschirm. Ein klingelnder Wecker beendet es. „Bis ich es stoppe“ endet nach 12 Stunden von selbst.</string>
+    <string name="channel_noise">Einschlafrauschen</string>
+    <string name="noise_notif_title">%1$s-Rauschen</string>
+    <string name="noise_notif_until">Endet um %1$s</string>
+    <string name="noise_notif_open">Läuft, bis es gestoppt wird</string>
 
     <!-- ============================================================ -->
     <!-- World clock -->

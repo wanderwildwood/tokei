@@ -43,6 +43,8 @@ object Ringer {
         val list = settings.ringing.filter { old -> rings.none { it.same(old) } } + rings
         settings.ringing = list
         settings.ringSince = now
+        // The alarm wins: sleep noise stops before it sounds.
+        com.wanderwildwood.tokei.noise.NoiseService.stop(context)
         start(context)
         RingActivity.show(context)
     }

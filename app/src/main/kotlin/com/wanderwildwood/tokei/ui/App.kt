@@ -37,7 +37,7 @@ const val NEW = 0L
 
 /**
  * The whole app: the stock Alarm app's list, with three more parts beside it under MMD's tabs
- * (timers, the stopwatch, the world clock), and a page that opens over them to make or change an
+ * (timers, the stopwatch, the world clock, sleep noise), and a page that opens over them to make or change an
  * alarm or a timer, to add a city, or for the settings.
  */
 @Composable
@@ -56,7 +56,7 @@ fun ClockApp(opening: MainActivity.Opening?, onOpened: () -> Unit) {
         timer = null
         addCity = false
         settings = false
-        tab = o.tab.coerceIn(0, 3)
+        tab = o.tab.coerceIn(0, 4)
         if (o.newAlarm) {
             alarmPreset = if (o.hour >= 0) o.hour.coerceAtMost(23) to o.minute.coerceIn(0, 59) else null
             alarm = NEW
@@ -120,12 +120,13 @@ private fun Main(
         },
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
-            StoneTabs(listOf(R.string.tab_alarms, R.string.tab_timers, R.string.tab_stopwatch, R.string.tab_world).map { stringResource(it) }, tab, onTab)
+            StoneTabs(listOf(R.string.tab_alarms, R.string.tab_timers, R.string.tab_stopwatch, R.string.tab_world, R.string.tab_noise).map { stringResource(it) }, tab, onTab)
             Box(Modifier.weight(1f)) {
                 when (tab) {
                     0 -> AlarmsScreen(onEdit = onAlarm)
                     1 -> TimersScreen(onEdit = onTimer)
                     2 -> StopwatchScreen()
+                    4 -> NoiseScreen()
                     else -> WorldScreen(onAdd = onAddCity)
                 }
             }

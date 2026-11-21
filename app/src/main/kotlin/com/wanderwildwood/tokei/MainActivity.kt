@@ -70,5 +70,6 @@ class MainActivity : ComponentActivity() {
         const val TAB_TIMERS = 1
         const val TAB_STOPWATCH = 2
         const val TAB_WORLD = 3
+        const val TAB_NOISE = 4
     }
 }

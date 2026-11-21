@@ -52,6 +52,7 @@
     <string name="tab_timers">Timer</string>
     <string name="tab_stopwatch">Stopwatch</string>
     <string name="tab_world">World</string>
+    <string name="tab_noise">Noise</string>
 
     <!-- ============================================================ -->
     <!-- Alarms -->
@@ -174,6 +175,32 @@
     <string name="stopwatch_lap_n">Lap %1$d</string>
     <!-- %1$d is the lap\'s number, %2$s its time so far -->
     <string name="stopwatch_this_lap">Lap %1$d: %2$s</string>
+
+    <!-- ============================================================ -->
+    <!-- Sleep noise -->
+
+    <string name="noise_start">Play</string>
+    <string name="noise_stop">Stop</string>
+    <string name="noise_idle">Noise for sleep, made as it plays.</string>
+    <!-- %1$s is a clock time -->
+    <string name="noise_ends_at">Fades out and stops at %1$s</string>
+    <string name="noise_until_stopped">Plays until you stop it</string>
+    <string name="noise_sound">Sound</string>
+    <string name="noise_soft">Soft</string>
+    <string name="noise_deep">Deep</string>
+    <string name="noise_fan">Fan</string>
+    <string name="noise_length">Stop after</string>
+    <string name="noise_len_30">30 minutes</string>
+    <string name="noise_len_60">1 hour</string>
+    <string name="noise_len_120">2 hours</string>
+    <string name="noise_len_stopped">Until I stop it</string>
+    <string name="noise_note">It plays at the phone\'s media volume and keeps going with the screen off. An alarm that rings stops it. Set to run until you stop it, it still ends after 12 hours.</string>
+    <string name="channel_noise">Sleep noise</string>
+    <!-- %1$s is the sound\'s name -->
+    <string name="noise_notif_title">%1$s noise</string>
+    <!-- %1$s is a clock time -->
+    <string name="noise_notif_until">Stops at %1$s</string>
+    <string name="noise_notif_open">Plays until stopped</string>
 
     <!-- ============================================================ -->
     <!-- World clock -->
