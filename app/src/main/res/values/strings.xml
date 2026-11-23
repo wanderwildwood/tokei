@@ -194,7 +194,7 @@
     <string name="noise_len_60">1 hour</string>
     <string name="noise_len_120">2 hours</string>
     <string name="noise_len_stopped">Until I stop it</string>
-    <string name="noise_note">It plays at the phone\'s media volume and keeps going with the screen off. An alarm that rings stops it. Set to run until you stop it, it still ends after 12 hours.</string>
+    <string name="noise_note">It plays at the phone\'s media volume and keeps going with the screen off. With Time open, the volume keys turn it up and down. An alarm that rings stops it. Set to run until you stop it, it still ends after 12 hours.</string>
     <string name="channel_noise">Sleep noise</string>
     <!-- Night clock -->
     <string name="cd_night_clock">Night clock</string>

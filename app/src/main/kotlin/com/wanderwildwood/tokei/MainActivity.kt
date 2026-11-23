@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
         Notifier.channels(this)
         if (savedInstanceState == null) opening.value = openingIn(intent)
         setContent {
+            com.wanderwildwood.tokei.noise.NoiseVolumeKeys(this)
             // A steady cursor: a blinking one repaints the e-ink panel twice a second for as long
             // as a field has focus.
             CompositionLocalProvider(LocalCursorBlinkEnabled provides false) {

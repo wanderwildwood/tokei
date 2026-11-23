@@ -192,7 +192,7 @@
     <string name="noise_len_60">1 Stunde</string>
     <string name="noise_len_120">2 Stunden</string>
     <string name="noise_len_stopped">Bis ich es stoppe</string>
-    <string name="noise_note">Es läuft mit der Medienlautstärke des Telefons weiter, auch bei ausgeschaltetem Bildschirm. Ein klingelnder Wecker beendet es. „Bis ich es stoppe“ endet nach 12 Stunden von selbst.</string>
+    <string name="noise_note">Es läuft mit der Medienlautstärke des Telefons weiter, auch bei ausgeschaltetem Bildschirm. Ist Zeit geöffnet, regeln die Lautstärketasten es. Ein klingelnder Wecker beendet es. „Bis ich es stoppe“ endet nach 12 Stunden von selbst.</string>
     <string name="channel_noise">Einschlafrauschen</string>
     <string name="noise_notif_title">%1$s-Rauschen</string>
     <string name="noise_notif_until">Endet um %1$s</string>

@@ -42,7 +42,7 @@ Android 12 device.
 - **A world clock** for the cities you choose, each with its day and how far ahead or behind.
 - **Noise for sleep.** The Noise tab plays a steady sound made as it plays, Soft, Deep or Fan,
   for 30 minutes, an hour, two hours, or until you stop it. It fades out at the end, plays at the
-  media volume and keeps going with the screen off.
+  media volume (the volume keys change it while Time is open) and keeps going with the screen off.
 - **A night clock.** The moon in the top bar turns the screen sideways and shows the day and the
   time as large as it fits, for a bedside table. Three words along the foot are its
   buttons: Backlight steps through as the phone has it, low and off; Black or White names the

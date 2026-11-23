@@ -28,6 +28,7 @@ class NightActivity : ComponentActivity() {
         val settings = Settings(this)
         light(NightLight.of(settings.nightLight))
         setContent {
+            com.wanderwildwood.tokei.noise.NoiseVolumeKeys(this)
             ThemeMMD(colorScheme = monochrome, typography = houseTypography) {
                 NightClock(settings = settings, onLight = ::light)
             }
