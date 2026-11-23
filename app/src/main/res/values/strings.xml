@@ -198,13 +198,9 @@
     <string name="channel_noise">Sleep noise</string>
     <!-- Night clock -->
     <string name="cd_night_clock">Night clock</string>
-    <string name="night_light_set">Backlight: as set</string>
-    <string name="night_light_low">Backlight: low</string>
-    <string name="night_light_off">Backlight: off</string>
-    <string name="night_page_black">Page: black</string>
-    <string name="night_page_white">Page: white</string>
-    <string name="night_noise_on">Noise: on</string>
-    <string name="night_noise_off">Noise: off</string>
+    <string name="night_backlight">Backlight</string>
+    <string name="night_page">Page</string>
+    <string name="night_noise">Noise</string>
     <!-- %1$s is the sound\'s name -->
     <string name="noise_notif_title">%1$s noise</string>
     <!-- %1$s is a clock time -->

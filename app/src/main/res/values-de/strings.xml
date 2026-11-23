@@ -199,13 +199,9 @@
     <string name="noise_notif_open">Läuft, bis es gestoppt wird</string>
     <!-- Night clock -->
     <string name="cd_night_clock">Nachtuhr</string>
-    <string name="night_light_set">Licht: normal</string>
-    <string name="night_light_low">Licht: schwach</string>
-    <string name="night_light_off">Licht: aus</string>
-    <string name="night_page_black">Seite: schwarz</string>
-    <string name="night_page_white">Seite: weiß</string>
-    <string name="night_noise_on">Rauschen: an</string>
-    <string name="night_noise_off">Rauschen: aus</string>
+    <string name="night_backlight">Licht</string>
+    <string name="night_page">Seite</string>
+    <string name="night_noise">Rauschen</string>
 
     <!-- ============================================================ -->
     <!-- World clock -->
