@@ -77,6 +77,16 @@ class Settings(context: Context) {
         get() = prefs.getInt("noise_minutes", 60)
         set(v) = prefs.edit().putInt("noise_minutes", v).apply()
 
+    /** The night clock's light as last left (a [com.wanderwildwood.tokei.ui.NightLight] by its place): the phone's own, low or off. */
+    var nightLight: Int
+        get() = prefs.getInt("night_light", 0)
+        set(v) = prefs.edit().putInt("night_light", v).apply()
+
+    /** The night clock's page as last left: white on black, or black on white. */
+    var nightBlack: Boolean
+        get() = prefs.getBoolean("night_black", true)
+        set(v) = prefs.edit().putBoolean("night_black", v).apply()
+
     companion object {
         const val RISE_MS = 60_000L
     }

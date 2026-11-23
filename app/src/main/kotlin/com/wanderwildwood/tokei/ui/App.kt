@@ -29,7 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.mudita.mmd.components.text.TextMMD
 import com.mudita.mmd.components.top_app_bar.TopAppBarMMD
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import com.wanderwildwood.tokei.MainActivity
+import com.wanderwildwood.tokei.NightActivity
 import com.wanderwildwood.tokei.R
 
 /** An alarm or a timer being made rather than changed. */
@@ -101,6 +104,7 @@ private fun Main(
     onAddCity: () -> Unit,
     onSettings: () -> Unit,
 ) {
+    val context = LocalContext.current
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
@@ -113,6 +117,10 @@ private fun Main(
                         0 -> BarButton(Icons.Add, stringResource(R.string.alarm_create)) { onAlarm(NEW) }
                         1 -> BarButton(Icons.Add, stringResource(R.string.timer_create)) { onTimer(NEW) }
                         3 -> BarButton(Icons.Add, stringResource(R.string.world_add), onAddCity)
+                    }
+                    // The night clock is its own sideways screen; back from it lands here again.
+                    BarButton(Icons.Moon, stringResource(R.string.cd_night_clock)) {
+                        context.startActivity(Intent(context, NightActivity::class.java))
                     }
                     BarButton(Icons.Settings, stringResource(R.string.cd_settings), onSettings)
                 },

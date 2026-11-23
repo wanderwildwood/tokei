@@ -40,6 +40,13 @@ Android 12 device.
   or the phone locked, until it is stopped or given a minute more.
 - **A stopwatch** with laps. It keeps counting with the app closed.
 - **A world clock** for the cities you choose, each with its day and how far ahead or behind.
+- **Noise for sleep.** The Noise tab plays a steady sound made as it plays, Soft, Deep or Fan,
+  for 30 minutes, an hour, two hours, or until you stop it. It fades out at the end, plays at the
+  media volume and keeps going with the screen off.
+- **A night clock.** The moon in the top bar turns the screen sideways and shows the day and the
+  time as large as it fits, for a bedside table. Three words along the foot are its keys: the
+  light (as the phone has it, low, or off), the page (white on black or black on white), and the
+  sleep noise on or off. The screen stays on while it is open and is drawn again once a minute.
 - **Never misses an alarm without saying so.** If an alarm or a timer could not ring — the app
   was stopped, the phone was off — the first screen and a notification say which one, when, and
   why, as far as the phone can tell: "10:53, Stopped: the app was stopped, so it could not ring".

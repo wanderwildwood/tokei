@@ -131,6 +131,14 @@
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize" />
 
+        <!-- The night clock: the time across the screen with the phone on its side, kept on
+             through the night. Opened from the moon in the app's top bar. -->
+        <activity
+            android:name=".NightActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+
         <service
             android:name=".alarm.RingService"
             android:exported="false"
