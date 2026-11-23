@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.view.WindowManager
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -65,10 +68,11 @@ internal fun nightFigureSize(width: Float, height: Float, ampm: Boolean): Float 
     minOf(width / if (ampm) 3.7f else 3.1f, height * 0.72f)
 
 /**
- * The day above, the time as large as the screen lets it be, and three plain words along the
- * foot that are its keys: the light, the page (white on black or black on white) and the sleep
- * noise. Nothing is boxed and nothing is bold: at night the time is the only loud thing. It is
- * drawn again once a minute, when the phone says the minute has turned, and at no other time.
+ * The day above, the time as large as the screen lets it be, and three buttons along the foot:
+ * the backlight, which a press steps through its three settings (as the phone has it, low,
+ * off); the page, black or white; and the sleep noise, on or off. Each says what it is set
+ * to; none is filled, so nothing at the foot is brighter than the time. It is drawn again once a minute, when the phone says the minute has
+ * turned, and at no other time.
  */
 @Composable
 fun NightClock(settings: Settings, onLight: (NightLight) -> Unit) {
@@ -135,7 +139,7 @@ fun NightClock(settings: Settings, onLight: (NightLight) -> Unit) {
                 }
             }
         }
-        Row(Modifier.fillMaxWidth()) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             NightKey(
                 text = stringResource(
                     when (light) {
@@ -145,6 +149,8 @@ fun NightClock(settings: Settings, onLight: (NightLight) -> Unit) {
                     },
                 ),
                 ink = ink,
+                page = page,
+                on = false,
                 modifier = Modifier.weight(1f),
             ) {
                 light = light.next()
@@ -154,6 +160,8 @@ fun NightClock(settings: Settings, onLight: (NightLight) -> Unit) {
             NightKey(
                 text = stringResource(if (black) R.string.night_page_black else R.string.night_page_white),
                 ink = ink,
+                page = page,
+                on = false,
                 modifier = Modifier.weight(1f),
             ) {
                 black = !black
@@ -162,6 +170,8 @@ fun NightClock(settings: Settings, onLight: (NightLight) -> Unit) {
             NightKey(
                 text = stringResource(if (noise.playing) R.string.night_noise_on else R.string.night_noise_off),
                 ink = ink,
+                page = page,
+                on = false,
                 modifier = Modifier.weight(1f),
             ) {
                 // The sound and the length are the ones chosen on the Noise tab.
@@ -178,18 +188,25 @@ internal fun nightDay(nowMs: Long, locale: java.util.Locale = java.util.Locale.g
         .format(java.time.format.DateTimeFormatter.ofPattern("EEEE d MMMM", locale))
 
 /**
- * A key at the foot of the night clock: what it is set to, as plain words. A press changes it.
- * No frame (chosen 23 Nov 2026); the touch area is still the full 48 dp and a third of the width.
+ * A button at the foot of the night clock, in the house button's shape (rounded, a thin rim):
+ * what it is set to, and a press changes it. [on] would fill it; at night nothing is, so the
+ * foot stays dimmer than the time. It is drawn in the clock's own two colours, since the page here can be black in day mode.
  */
 @Composable
-private fun NightKey(text: String, ink: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
+private fun NightKey(text: String, ink: Color, page: Color, on: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(8.dp)
     Box(
-        modifier = modifier.height(48.dp).clickable(onClick = onClick),
+        modifier = modifier
+            .height(52.dp)
+            .clip(shape)
+            .background(if (on) ink else page)
+            .border(2.dp, ink, shape)
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         TextMMD(
             text = text,
-            color = ink,
+            color = if (on) page else ink,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             maxLines = 1,

@@ -198,9 +198,9 @@
     <string name="channel_noise">Sleep noise</string>
     <!-- Night clock -->
     <string name="cd_night_clock">Night clock</string>
-    <string name="night_light_set">Light: as set</string>
-    <string name="night_light_low">Light: low</string>
-    <string name="night_light_off">Light: off</string>
+    <string name="night_light_set">Backlight: as set</string>
+    <string name="night_light_low">Backlight: low</string>
+    <string name="night_light_off">Backlight: off</string>
     <string name="night_page_black">Page: black</string>
     <string name="night_page_white">Page: white</string>
     <string name="night_noise_on">Noise: on</string>
