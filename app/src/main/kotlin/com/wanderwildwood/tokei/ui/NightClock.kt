@@ -66,9 +66,9 @@ internal fun nightFigureSize(width: Float, height: Float, ampm: Boolean): Float 
 
 /**
  * The day above, the time as large as the screen lets it be, and three words along the foot
- * that are its buttons: Backlight, Page, Noise. A press moves each to its next setting (the
- * backlight: as the phone has it, low, off; the page: black, white; the noise: on, off). They
- * carry no frame and do not say what they are set to: the screen and the sound show it. It is
+ * that are its buttons. "Backlight" steps through as the phone has it, low and off; the middle
+ * one names the page it is on, "Black" or "White", and a press turns it to the other; "Noise"
+ * turns the sleep noise on and off. They carry no frame and no other state. It is
  * drawn again once a minute, when the phone says the minute has turned, and at no other time.
  */
 @Composable
@@ -147,7 +147,7 @@ fun NightClock(settings: Settings, onLight: (NightLight) -> Unit) {
                 onLight(light)
             }
             NightKey(
-                text = stringResource(R.string.night_page),
+                text = stringResource(if (black) R.string.night_black else R.string.night_white),
                 ink = ink,
                 modifier = Modifier.weight(1f),
             ) {

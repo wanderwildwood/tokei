@@ -199,7 +199,8 @@
     <!-- Night clock -->
     <string name="cd_night_clock">Night clock</string>
     <string name="night_backlight">Backlight</string>
-    <string name="night_page">Page</string>
+    <string name="night_black">Black</string>
+    <string name="night_white">White</string>
     <string name="night_noise">Noise</string>
     <!-- %1$s is the sound\'s name -->
     <string name="noise_notif_title">%1$s noise</string>

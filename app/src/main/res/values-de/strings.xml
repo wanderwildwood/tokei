@@ -200,7 +200,8 @@
     <!-- Night clock -->
     <string name="cd_night_clock">Nachtuhr</string>
     <string name="night_backlight">Licht</string>
-    <string name="night_page">Seite</string>
+    <string name="night_black">Schwarz</string>
+    <string name="night_white">Weiß</string>
     <string name="night_noise">Rauschen</string>
 
     <!-- ============================================================ -->

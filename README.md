@@ -45,8 +45,8 @@ Android 12 device.
   media volume and keeps going with the screen off.
 - **A night clock.** The moon in the top bar turns the screen sideways and shows the day and the
   time as large as it fits, for a bedside table. Three words along the foot are its
-  buttons, and a press moves each to its next setting: Backlight (as the phone has it, low,
-  off), Page (black, white) and Noise (the sleep noise on, off). The screen stays on while it is open and is drawn again once a minute.
+  buttons: Backlight steps through as the phone has it, low and off; Black or White names the
+  page and a press turns it to the other; Noise turns the sleep noise on and off. The screen stays on while it is open and is drawn again once a minute.
 - **Never misses an alarm without saying so.** If an alarm or a timer could not ring — the app
   was stopped, the phone was off — the first screen and a notification say which one, when, and
   why, as far as the phone can tell: "10:53, Stopped: the app was stopped, so it could not ring".
