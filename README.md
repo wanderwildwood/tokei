@@ -9,10 +9,11 @@ Android 12 device.
 
 | | |
 |---|---|
-| ![The alarms](screenshots/1-alarms.png) | ![An alarm ringing over the lock screen, with the weather from Sky under it](screenshots/2-ringing.png) |
+| ![The alarms, in groups](screenshots/1-alarms.png) | ![An alarm ringing over the lock screen, with the weather from Sky under it](screenshots/2-ringing.png) |
 | ![Setting an alarm](screenshots/3-alarm.png) | ![Two timers running](screenshots/4-timers.png) |
 | ![The stopwatch with laps](screenshots/5-stopwatch.png) | ![The world clock](screenshots/6-world.png) |
 | ![Alarms in two groups, Home and Office](screenshots/7-groups.png) | ![What a group's name offers: skip the next one, or rename the group](screenshots/8-group.png) |
+| ![Noise for sleep, with when it stops](screenshots/9-noise.png) | ![The night clock, turned sideways](screenshots/10-night-clock.png) |
 
 ## What it does
 
